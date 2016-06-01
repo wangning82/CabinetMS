@@ -961,10 +961,12 @@
 	<!-- 开发者信息 -->
 	<developers>  
 		<developer>
-			<id>thinkgem</id>
-			<name>WangZhen</name>
-			<email>thinkgem at 163.com</email>
-			<roles><role>Project lead</role></roles>
+			<id>houyi</id>
+			<name>houyi</name>
+			<email>446902853 at qq.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
 			<timezone>+8</timezone>
 		</developer>
 	</developers>
