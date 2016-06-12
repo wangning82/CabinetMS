@@ -12,16 +12,14 @@
     <style>
         section {
             display: block;
-            float: right;
-            width: 40%;
+            float: left;
+            width: 98%;
+            height: 98%;
+            overflow: hidden;
             padding: 10px;
             margin: 0;
             border: 2px solid #ddd;
             cursor: pointer;
-        }
-
-        section img {
-            width: 100%;
         }
 
         section p {
@@ -32,47 +30,46 @@
 
         section:-webkit-full-screen {
             float: none;
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
+            width: 98%;
+            height: 98%;
+            padding: 10px;
+            margin: 10px;
             border: 0 none;
-            background-color: #f00;
         }
 
         section:-moz-full-screen {
             float: none;
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
+            width: 98%;
+            height: 98%;
+            padding: 10px;
+            margin: 10px;
             border: 0 none;
         }
 
         section:-ms-full-screen {
             float: none;
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
+            width: 98%;
+            height: 98%;
+            padding: 10px;
+            margin: 10px;
             border: 0 none;
         }
 
         section:-o-full-screen {
             float: none;
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
+            width: 98%;
+            height: 98%;
+            padding: 10px;
+            margin: 10px;
             border: 0 none;
         }
 
         section:full-screen {
             float: none;
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
+            width: 98%;
+            height: 98%;
+            padding: 10px;
+            margin: 10px;
             border: 0 none;
         }
     </style>
@@ -96,14 +93,15 @@
         }
 
         $(function () {
-            var e = document.getElementById("fullscreen");
-            if (RunPrefixMethod(document, "FullScreen") || RunPrefixMethod(document, "IsFullScreen")) {
-                RunPrefixMethod(document, "CancelFullScreen");
-            }
-            else {
-                RunPrefixMethod(e, "RequestFullScreen");
-            }
-
+            var f = document.getElementById("fullscreen");
+            f.onclick = function() {
+                if (RunPrefixMethod(document, "FullScreen") || RunPrefixMethod(document, "IsFullScreen")) {
+                    RunPrefixMethod(document, "CancelFullScreen");
+                }
+                else {
+                    RunPrefixMethod(f, "RequestFullScreen");
+                }
+            };
         });
 
 
@@ -111,7 +109,8 @@
 </head>
 <body>
 <section id="fullscreen">
-    <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="640" height="264"
+    <marquee direction="right" loop="40" width="640px"><span style="color: black">滚动新闻</span></marquee>
+    <video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="640px" height="264px"
            data-setup="{}" autoplay loop>
         <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
         <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
