@@ -44,40 +44,50 @@ public class FtpServiceImpl implements FtpService {
                     return ftpClient;
                 }
             } catch (Exception e) {
-                logger.debug("FTP 连接失败！" + e);
+                logger.error("FTP 连接失败！" + e);
                 return null;
             }
         } else return ftpClient;
     }
 
     @Override
-    public boolean upload(String path, String filename, File file) throws IOException {
+    public boolean upload(String path, String filename, File file) {
         ftpClient = getFtpClient();
         if (ftpClient != null) {
-            ftpClient.changeWorkingDirectory(path);
-            InputStream is = new FileInputStream(file);
-            ftpClient.storeFile(filename, is);
-            is.close();
-            return true;
+            try {
+                ftpClient.changeWorkingDirectory(path);
+                InputStream is = new FileInputStream(file);
+                ftpClient.storeFile(filename, is);
+                is.close();
+                return true;
+            } catch (Exception e) {
+                logger.error("FTP 上传文件失败。" + e);
+                return false;
+            }
         }
         return false;
     }
 
     @Override
-    public boolean download(String path, String filename, File file) throws IOException {
+    public boolean download(String path, String filename, File file) {
         ftpClient = getFtpClient();
         if (ftpClient != null) {
-            ftpClient.changeWorkingDirectory(path);
-            FTPFile[] fs = ftpClient.listFiles();
-            for (FTPFile ff : fs) {
-                if (ff.getName().equals(filename)) {
-                    OutputStream is = new FileOutputStream(file);
-                    ftpClient.retrieveFile(ff.getName(), is);
-                    is.close();
-                    break;
+            try {
+                ftpClient.changeWorkingDirectory(path);
+                FTPFile[] fs = ftpClient.listFiles();
+                for (FTPFile ff : fs) {
+                    if (ff.getName().equals(filename)) {
+                        OutputStream is = new FileOutputStream(file);
+                        ftpClient.retrieveFile(ff.getName(), is);
+                        is.close();
+                        break;
+                    }
                 }
+                return true;
+            } catch (Exception e) {
+                logger.error("FTP 下载文件失败。" + e);
+                return false;
             }
-            return true;
         }
         return false;
     }
