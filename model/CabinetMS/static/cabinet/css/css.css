@@ -2,7 +2,7 @@
 	margin: 0px;
 	padding: 0px;
 	 background:url(../images/top.jpg);
-	height: 105px;
+	height: 100px;
 	background-position: center top;
 	background-repeat: no-repeat;
 	margin-left: 0px;
@@ -40,7 +40,7 @@
 	clear:both;}
 	
 .admin_anniu{ width:200px;}
-.footer{ background:url(../images/footer.jpg) repeat-x; height:80px; line-height:80px; color:#FFF;}
+.footer{ background:url(../images/footer.jpg) repeat-x; height:60px; line-height:60px; color:#FFF;}
 .footer a{ color:#FFF;}
 .footer_jg{ height:100px;}
 
