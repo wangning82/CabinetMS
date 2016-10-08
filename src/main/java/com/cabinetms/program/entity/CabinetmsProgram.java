@@ -11,7 +11,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 /**
  * 节目管理Entity
  * @author 付殿东
- * @version 2016-10-08
+ * @version 2016-10-04
  */
 public class CabinetmsProgram extends DataEntity<CabinetmsProgram> {
 	

@@ -10,7 +10,7 @@ import com.cabinetms.program.entity.CabinetmsProgram;
 /**
  * 节目管理DAO接口
  * @author 付殿东
- * @version 2016-10-08
+ * @version 2016-10-04
  */
 @MyBatisDao
 public interface CabinetmsProgramDao extends CrudDao<CabinetmsProgram> {

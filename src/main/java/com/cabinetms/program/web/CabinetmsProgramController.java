@@ -25,7 +25,7 @@ import com.cabinetms.program.service.CabinetmsProgramService;
 /**
  * 节目管理Controller
  * @author 付殿东
- * @version 2016-10-08
+ * @version 2016-10-04
  */
 @Controller
 @RequestMapping(value = "${adminPath}/program/cabinetmsProgram")

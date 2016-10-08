@@ -16,7 +16,7 @@ import com.cabinetms.program.dao.CabinetmsProgramDao;
 /**
  * 节目管理Service
  * @author 付殿东
- * @version 2016-10-08
+ * @version 2016-10-04
  */
 @Service
 @Transactional(readOnly = true)
