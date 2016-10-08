@@ -11,23 +11,24 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 /**
  * 节目管理Entity
  * @author 付殿东
- * @version 2016-06-06
+ * @version 2016-10-08
  */
-public class Program extends DataEntity<Program> {
+public class CabinetmsProgram extends DataEntity<CabinetmsProgram> {
 	
 	private static final long serialVersionUID = 1L;
 	private String no;		// 节目编号
 	private String name;		// 节目名称
 	private String modelId;		// 模版ID
+	private String modelName;		// 模版名称
 	private String status;		// 状态
 	private Date beginCreateDate;		// 开始 创建时间
 	private Date endCreateDate;		// 结束 创建时间
 	
-	public Program() {
+	public CabinetmsProgram() {
 		super();
 	}
 
-	public Program(String id){
+	public CabinetmsProgram(String id){
 		super(id);
 	}
 
@@ -56,6 +57,15 @@ public class Program extends DataEntity<Program> {
 
 	public void setModelId(String modelId) {
 		this.modelId = modelId;
+	}
+	
+	@Length(min=0, max=128, message="模版名称长度必须介于 0 和 128 之间")
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
 	}
 	
 	@Length(min=1, max=1, message="状态长度必须介于 1 和 1 之间")
