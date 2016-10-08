@@ -27,10 +27,10 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/program/program/">节目管理列表</a></li>
-		<li class="active"><a href="${ctx}/program/program/form?id=${program.id}">节目管理<shiro:hasPermission name="program:program:edit">${not empty program.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="program:program:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/program/cabinetmsProgram/">节目管理列表</a></li>
+		<li class="active"><a href="${ctx}/program/cabinetmsProgram/form?id=${cabinetmsProgram.id}">节目管理<shiro:hasPermission name="program:cabinetmsProgram:edit">${not empty cabinetmsProgram.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="program:cabinetmsProgram:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="program" action="${ctx}/program/program/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="cabinetmsProgram" action="${ctx}/program/cabinetmsProgram/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
@@ -52,15 +52,21 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">状态：</label>
+			<label class="control-label">模版名称：</label>
 			<div class="controls">
-				<form:select path="status" class="input-xlarge required">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('program_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-				<span class="help-inline"><font color="red">*</font> </span>
+				<form:input path="modelName" htmlEscape="false" maxlength="128" class="input-xlarge "/>
 			</div>
 		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">状态：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:select path="status" class="input-xlarge required">--%>
+					<%--<form:option value="" label=""/>--%>
+					<%--<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>--%>
+				<%--</form:select>--%>
+				<%--<span class="help-inline"><font color="red">*</font> </span>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
@@ -68,7 +74,7 @@
 			</div>
 		</div>
 		<div class="form-actions">
-			<shiro:hasPermission name="program:program:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasPermission name="program:cabinetmsProgram:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

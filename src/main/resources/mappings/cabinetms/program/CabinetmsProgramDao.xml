@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabinetms.program.dao.ProgramDao">
+<mapper namespace="com.cabinetms.program.dao.CabinetmsProgramDao">
     
-	<sql id="programColumns">
+	<sql id="cabinetmsProgramColumns">
 		a.id AS "id",
 		a.no AS "no",
 		a.name AS "name",
 		a.model_id AS "modelId",
+		a.model_name AS "modelName",
 		a.status AS "status",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -16,22 +17,22 @@
 		a.del_flag AS "delFlag"
 	</sql>
 	
-	<sql id="programJoins">
+	<sql id="cabinetmsProgramJoins">
 	</sql>
     
-	<select id="get" resultType="Program">
+	<select id="get" resultType="CabinetmsProgram">
 		SELECT 
-			<include refid="programColumns"/>
+			<include refid="cabinetmsProgramColumns"/>
 		FROM cabinetms_program a
-		<include refid="programJoins"/>
+		<include refid="cabinetmsProgramJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="Program">
+	<select id="findList" resultType="CabinetmsProgram">
 		SELECT 
-			<include refid="programColumns"/>
+			<include refid="cabinetmsProgramColumns"/>
 		FROM cabinetms_program a
-		<include refid="programJoins"/>
+		<include refid="cabinetmsProgramJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="name != null and name != ''">
@@ -42,6 +43,12 @@
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by LIKE 
+					<if test="dbName == 'oracle'">'%'||#{createBy.id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{createBy.id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{createBy.id},'%')</if>
 			</if>
 			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
 				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
@@ -57,11 +64,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="Program">
+	<select id="findAllList" resultType="CabinetmsProgram">
 		SELECT 
-			<include refid="programColumns"/>
+			<include refid="cabinetmsProgramColumns"/>
 		FROM cabinetms_program a
-		<include refid="programJoins"/>
+		<include refid="cabinetmsProgramJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		
@@ -81,6 +88,7 @@
 			no,
 			name,
 			model_id,
+			model_name,
 			status,
 			create_by,
 			create_date,
@@ -93,6 +101,7 @@
 			#{no},
 			#{name},
 			#{modelId},
+			#{modelName},
 			#{status},
 			#{createBy.id},
 			#{createDate},
@@ -108,6 +117,7 @@
 			no = #{no},
 			name = #{name},
 			model_id = #{modelId},
+			model_name = #{modelName},
 			status = #{status},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
