@@ -17,10 +17,10 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/program/cabinetmsProgram/">节目管理列表</a></li>
-		<shiro:hasPermission name="program:cabinetmsProgram:edit"><li><a href="${ctx}/program/cabinetmsProgram/form">节目管理添加</a></li></shiro:hasPermission>
-	</ul>
+	<%--<ul class="nav nav-tabs">--%>
+		<%--<li class="active"><a href="${ctx}/program/cabinetmsProgram/">节目管理列表</a></li>--%>
+		<%--<shiro:hasPermission name="program:cabinetmsProgram:edit"><li><a href="${ctx}/program/cabinetmsProgram/form">节目管理添加</a></li></shiro:hasPermission>--%>
+	<%--</ul>--%>
 	<form:form id="searchForm" modelAttribute="cabinetmsProgram" action="${ctx}/program/cabinetmsProgram/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
