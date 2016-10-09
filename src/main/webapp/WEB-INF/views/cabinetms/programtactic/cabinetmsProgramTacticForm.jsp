@@ -26,10 +26,10 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略列表</a></li>
-		<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">节目策略<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit">${not empty cabinetmsProgramTactic.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="programtactic:cabinetmsProgramTactic:edit">查看</shiro:lacksPermission></a></li>
-	</ul><br/>
+	<%--<ul class="nav nav-tabs">--%>
+		<%--<li><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略列表</a></li>--%>
+		<%--<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">节目策略<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit">${not empty cabinetmsProgramTactic.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="programtactic:cabinetmsProgramTactic:edit">查看</shiro:lacksPermission></a></li>--%>
+	<%--</ul><br/>--%>
 	<form:form id="inputForm" modelAttribute="cabinetmsProgramTactic" action="${ctx}/programtactic/cabinetmsProgramTactic/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
