@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabinetms.programtactic.dao.ProgramTacticDao">
+<mapper namespace="com.cabinetms.programtactic.dao.CabinetmsProgramTacticDao">
     
-	<sql id="programTacticColumns">
+	<sql id="cabinetmsProgramTacticColumns">
 		a.id AS "id",
 		a.no AS "no",
 		a.name AS "name",
-		a.program_no AS "programNo",
-		a.program_name AS "programName",
 		a.starttime AS "starttime",
 		a.endtime AS "endtime",
 		a.create_by AS "createBy.id",
@@ -15,32 +13,45 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
-		a.del_flag AS "delFlag"
+		a.del_flag AS "delFlag",
+		a.status AS "status"
 	</sql>
 	
-	<sql id="programTacticJoins">
+	<sql id="cabinetmsProgramTacticJoins">
 	</sql>
     
-	<select id="get" resultType="ProgramTactic">
+	<select id="get" resultType="CabinetmsProgramTactic">
 		SELECT 
-			<include refid="programTacticColumns"/>
+			<include refid="cabinetmsProgramTacticColumns"/>
 		FROM cabinetms_program_tactic a
-		<include refid="programTacticJoins"/>
+		<include refid="cabinetmsProgramTacticJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="ProgramTactic">
+	<select id="findList" resultType="CabinetmsProgramTactic">
 		SELECT 
-			<include refid="programTacticColumns"/>
+			<include refid="cabinetmsProgramTacticColumns"/>
 		FROM cabinetms_program_tactic a
-		<include refid="programTacticJoins"/>
+		<include refid="cabinetmsProgramTacticJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="no != null and no != ''">
+				AND a.no LIKE 
+					<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
+			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
+				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
 			</if>
 		</where>
 		<choose>
@@ -53,11 +64,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="ProgramTactic">
+	<select id="findAllList" resultType="CabinetmsProgramTactic">
 		SELECT 
-			<include refid="programTacticColumns"/>
+			<include refid="cabinetmsProgramTacticColumns"/>
 		FROM cabinetms_program_tactic a
-		<include refid="programTacticJoins"/>
+		<include refid="cabinetmsProgramTacticJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		
@@ -76,8 +87,6 @@
 			id,
 			no,
 			name,
-			program_no,
-			program_name,
 			starttime,
 			endtime,
 			create_by,
@@ -85,13 +94,12 @@
 			update_by,
 			update_date,
 			remarks,
-			del_flag
+			del_flag,
+			status
 		) VALUES (
 			#{id},
 			#{no},
 			#{name},
-			#{programNo},
-			#{programName},
 			#{starttime},
 			#{endtime},
 			#{createBy.id},
@@ -99,7 +107,8 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{remarks},
-			#{delFlag}
+			#{delFlag},
+			#{status}
 		)
 	</insert>
 	
@@ -107,13 +116,12 @@
 		UPDATE cabinetms_program_tactic SET 	
 			no = #{no},
 			name = #{name},
-			program_no = #{programNo},
-			program_name = #{programName},
 			starttime = #{starttime},
 			endtime = #{endtime},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			status = #{status}
 		WHERE id = #{id}
 	</update>
 	
