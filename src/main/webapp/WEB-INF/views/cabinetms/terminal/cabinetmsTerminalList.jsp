@@ -1,0 +1,106 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+	<title>终端管理管理</title>
+	<meta name="decorator" content="default"/>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+		});
+		function page(n,s){
+			$("#pageNo").val(n);
+			$("#pageSize").val(s);
+			$("#searchForm").submit();
+        	return false;
+        }
+	</script>
+</head>
+<body>
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="${ctx}/terminal/cabinetmsTerminal/">终端管理列表</a></li>
+		<shiro:hasPermission name="terminal:cabinetmsTerminal:edit"><li><a href="${ctx}/terminal/cabinetmsTerminal/form">终端管理添加</a></li></shiro:hasPermission>
+	</ul>
+	<form:form id="searchForm" modelAttribute="cabinetmsTerminal" action="${ctx}/terminal/cabinetmsTerminal/" method="post" class="breadcrumb form-search">
+		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
+		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+		<ul class="ul-form">
+			<li><label>终端名称：</label>
+				<form:input path="terminalName" htmlEscape="false" maxlength="20" class="input-medium"/>
+			</li>
+			<li><label>终端IP：</label>
+				<form:input path="terminalIp" htmlEscape="false" maxlength="64" class="input-medium"/>
+			</li>
+			<li><label>机构ID：</label>
+				<sys:treeselect id="office" name="office.id" value="${cabinetmsTerminal.office.id}" labelName="office.name" labelValue="${cabinetmsTerminal.office.name}"
+					title="部门" url="/sys/office/treeData?type=2" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
+			</li>
+			<li><label>节目策略ID：</label>
+				<form:select path="programTactic.id" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</li>
+			<li><label>终端状态：</label>
+				<form:select path="status" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('terminal_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</li>
+			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
+			<li class="clearfix"></li>
+		</ul>
+	</form:form>
+	<sys:message content="${message}"/>
+	<table id="contentTable" class="table table-striped table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th>终端名称</th>
+				<th>终端IP</th>
+				<th>机构ID</th>
+				<th>节目策略ID</th>
+				<th>消息ID</th>
+				<th>终端状态</th>
+				<th>更新时间</th>
+				<th>备注信息</th>
+				<shiro:hasPermission name="terminal:cabinetmsTerminal:edit"><th>操作</th></shiro:hasPermission>
+			</tr>
+		</thead>
+		<tbody>
+		<c:forEach items="${page.list}" var="cabinetmsTerminal">
+			<tr>
+				<td><a href="${ctx}/terminal/cabinetmsTerminal/form?id=${cabinetmsTerminal.id}">
+					${cabinetmsTerminal.terminalName}
+				</a></td>
+				<td>
+					${cabinetmsTerminal.terminalIp}
+				</td>
+				<td>
+					${cabinetmsTerminal.office.name}
+				</td>
+				<td>
+					${fns:getDictLabel(cabinetmsTerminal.programTactic.id, '', '')}
+				</td>
+				<td>
+					${fns:getDictLabel(cabinetmsTerminal.notice.id, '', '')}
+				</td>
+				<td>
+					${fns:getDictLabel(cabinetmsTerminal.status, 'terminal_status', '')}
+				</td>
+				<td>
+					<fmt:formatDate value="${cabinetmsTerminal.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+				</td>
+				<td>
+					${cabinetmsTerminal.remarks}
+				</td>
+				<shiro:hasPermission name="terminal:cabinetmsTerminal:edit"><td>
+    				<a href="${ctx}/terminal/cabinetmsTerminal/form?id=${cabinetmsTerminal.id}">修改</a>
+					<a href="${ctx}/terminal/cabinetmsTerminal/delete?id=${cabinetmsTerminal.id}" onclick="return confirmx('确认要删除该终端管理吗？', this.href)">删除</a>
+				</td></shiro:hasPermission>
+			</tr>
+		</c:forEach>
+		</tbody>
+	</table>
+	<div class="pagination">${page}</div>
+</body>
+</html>
