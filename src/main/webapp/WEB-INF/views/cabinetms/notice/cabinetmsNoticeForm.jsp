@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>终端机构管理</title>
+	<title>消息信息管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -27,37 +27,31 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/unit/cabinetUnit/">终端机构列表</a></li>
-		<li class="active"><a href="${ctx}/unit/cabinetUnit/form?id=${cabinetUnit.id}">终端机构<shiro:hasPermission name="unit:cabinetUnit:edit">${not empty cabinetUnit.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="unit:cabinetUnit:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/notice/cabinetmsNotice/">消息信息列表</a></li>
+		<li class="active"><a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">消息信息<shiro:hasPermission name="notice:cabinetmsNotice:edit">${not empty cabinetmsNotice.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="notice:cabinetmsNotice:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="cabinetUnit" action="${ctx}/unit/cabinetUnit/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="cabinetmsNotice" action="${ctx}/notice/cabinetmsNotice/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">机构编号：</label>
+			<label class="control-label">消息名称：</label>
 			<div class="controls">
-				<form:input path="no" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="noticeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">机构名称：</label>
+			<label class="control-label">消息内容：</label>
 			<div class="controls">
-				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="noticeContent" htmlEscape="false" maxlength="200" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">机构类型：</label>
+			<label class="control-label">消息状态：</label>
 			<div class="controls">
-				<form:select path="type" class="input-xlarge ">
+				<form:select path="status" class="input-xlarge ">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('unit_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:options items="${fns:getDictList('notice_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">机构地址：</label>
-			<div class="controls">
-				<form:input path="address" htmlEscape="false" maxlength="128" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -67,7 +61,7 @@
 			</div>
 		</div>
 		<div class="form-actions">
-			<shiro:hasPermission name="unit:cabinetUnit:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasPermission name="notice:cabinetmsNotice:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>
