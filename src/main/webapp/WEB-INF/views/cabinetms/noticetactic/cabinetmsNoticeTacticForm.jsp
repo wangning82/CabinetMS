@@ -26,10 +26,10 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/noticetactic/cabinetmsNoticeTactic/">消息策略列表</a></li>
-		<li class="active"><a href="${ctx}/noticetactic/cabinetmsNoticeTactic/form?id=${cabinetmsNoticeTactic.id}">消息策略<shiro:hasPermission name="noticetactic:cabinetmsNoticeTactic:edit">${not empty cabinetmsNoticeTactic.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="noticetactic:cabinetmsNoticeTactic:edit">查看</shiro:lacksPermission></a></li>
-	</ul><br/>
+	<%--<ul class="nav nav-tabs">--%>
+		<%--<li><a href="${ctx}/noticetactic/cabinetmsNoticeTactic/">消息策略列表</a></li>--%>
+		<%--<li class="active"><a href="${ctx}/noticetactic/cabinetmsNoticeTactic/form?id=${cabinetmsNoticeTactic.id}">消息策略<shiro:hasPermission name="noticetactic:cabinetmsNoticeTactic:edit">${not empty cabinetmsNoticeTactic.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="noticetactic:cabinetmsNoticeTactic:edit">查看</shiro:lacksPermission></a></li>--%>
+	<%--</ul><br/>--%>
 	<form:form id="inputForm" modelAttribute="cabinetmsNoticeTactic" action="${ctx}/noticetactic/cabinetmsNoticeTactic/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
@@ -57,16 +57,16 @@
 				<form:input path="noticeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">状态：</label>
-			<div class="controls">
-				<form:select path="status" class="input-xlarge required">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-				<span class="help-inline"><font color="red">*</font> </span>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">状态：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:select path="status" class="input-xlarge required">--%>
+					<%--<form:option value="" label=""/>--%>
+					<%--<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>--%>
+				<%--</form:select>--%>
+				<%--<span class="help-inline"><font color="red">*</font> </span>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">

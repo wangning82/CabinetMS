@@ -17,10 +17,10 @@
 	</script>
 </head>
 <body>
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/noticetactic/cabinetmsNoticeTactic/">消息策略列表</a></li>
-		<shiro:hasPermission name="noticetactic:cabinetmsNoticeTactic:edit"><li><a href="${ctx}/noticetactic/cabinetmsNoticeTactic/form">消息策略添加</a></li></shiro:hasPermission>
-	</ul>
+	<%--<ul class="nav nav-tabs">--%>
+		<%--<li class="active"><a href="${ctx}/noticetactic/cabinetmsNoticeTactic/">消息策略列表</a></li>--%>
+		<%--<shiro:hasPermission name="noticetactic:cabinetmsNoticeTactic:edit"><li><a href="${ctx}/noticetactic/cabinetmsNoticeTactic/form">消息策略添加</a></li></shiro:hasPermission>--%>
+	<%--</ul>--%>
 	<form:form id="searchForm" modelAttribute="cabinetmsNoticeTactic" action="${ctx}/noticetactic/cabinetmsNoticeTactic/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
