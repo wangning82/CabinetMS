@@ -31,11 +31,11 @@
 			<li><label>终端IP：</label>
 				<form:input path="terminalIp" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>机构ID：</label>
+			<li><label>机构：</label>
 				<sys:treeselect id="office" name="office.id" value="${cabinetmsTerminal.office.id}" labelName="office.name" labelValue="${cabinetmsTerminal.office.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
-			<li><label>节目策略ID：</label>
+			<li><label>节目策略：</label>
 				<form:select path="programTactic.id" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
@@ -55,15 +55,17 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>终端名称</th>
-				<th>终端IP</th>
-				<th>机构ID</th>
-				<th>节目策略ID</th>
-				<th>消息ID</th>
-				<th>终端状态</th>
-				<th>更新时间</th>
-				<th>备注信息</th>
-				<shiro:hasPermission name="terminal:cabinetmsTerminal:edit"><th>操作</th></shiro:hasPermission>
+				<th style="width: 10%">终端名称</th>
+				<th style="width: 10%">终端IP</th>
+				<th style="width: 10%">机构</th>
+				<th style="width: 14%">节目策略</th>
+				<th style="width: 14%">消息</th>
+				<th style="width: 8%">终端状态</th>
+				<th style="width: 12%">更新时间</th>
+				<th style="width: 12%">备注</th>
+				<shiro:hasPermission name="terminal:cabinetmsTerminal:edit">
+					<th style="width: 10%">操作</th>
+				</shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>

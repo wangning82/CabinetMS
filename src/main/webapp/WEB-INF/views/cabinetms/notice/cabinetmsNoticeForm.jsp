@@ -42,7 +42,7 @@
 		<div class="control-group">
 			<label class="control-label">消息内容：</label>
 			<div class="controls">
-				<form:input path="noticeContent" htmlEscape="false" maxlength="200" class="input-xlarge "/>
+				<form:textarea path="noticeContent" htmlEscape="false" rows="4" maxlength="200" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">

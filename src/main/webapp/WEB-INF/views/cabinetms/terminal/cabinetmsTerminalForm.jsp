@@ -46,25 +46,16 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">机构ID：</label>
+			<label class="control-label">机构：</label>
 			<div class="controls">
 				<sys:treeselect id="office" name="office.id" value="${cabinetmsTerminal.office.id}" labelName="office.name" labelValue="${cabinetmsTerminal.office.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">节目策略ID：</label>
+			<label class="control-label">节目策略：</label>
 			<div class="controls">
 				<form:select path="programTactic.id" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">消息ID：</label>
-			<div class="controls">
-				<form:select path="notice.id" class="input-xlarge ">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>

@@ -45,11 +45,13 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>消息名称</th>
+				<th style="width: 20%;">消息名称</th>
 				<th>消息内容</th>
-				<th>消息状态</th>
-				<th>创建者</th>
-				<shiro:hasPermission name="notice:cabinetmsNotice:edit"><th>操作</th></shiro:hasPermission>
+				<th style="width: 8%;">消息状态</th>
+				<th style="width: 8%;">创建者</th>
+				<shiro:hasPermission name="notice:cabinetmsNotice:edit">
+					<th style="width: 8%;">操作</th>
+				</shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
@@ -65,11 +67,14 @@
 					${fns:getDictLabel(cabinetmsNotice.status, 'notice_status', '')}
 				</td>
 				<td>
-					${cabinetmsNotice.createBy.id}
+					${cabinetmsNotice.createBy.name}
 				</td>
 				<shiro:hasPermission name="notice:cabinetmsNotice:edit"><td>
     				<a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">修改</a>
 					<a href="${ctx}/notice/cabinetmsNotice/delete?id=${cabinetmsNotice.id}" onclick="return confirmx('确认要删除该消息信息吗？', this.href)">删除</a>
+					<br><a href="javascript:void(0);">发布</a>
+					<a href="javascript:void(0);">撤销</a>
+					<br><a href="javascript:void(0);">查看终端</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
