@@ -32,13 +32,13 @@ import com.cabinetms.terminal.service.CabinetmsTerminalService;
 public class CabinetmsTerminalController extends BaseController {
 
 	@Autowired
-	private CabinetmsTerminalService cabinetmsTerminalService;
+	private CabinetmsTerminalService terminalService;
 	
 	@ModelAttribute
 	public CabinetmsTerminal get(@RequestParam(required=false) String id) {
 		CabinetmsTerminal entity = null;
 		if (StringUtils.isNotBlank(id)){
-			entity = cabinetmsTerminalService.get(id);
+			entity = terminalService.get(id);
 		}
 		if (entity == null){
 			entity = new CabinetmsTerminal();
@@ -49,7 +49,7 @@ public class CabinetmsTerminalController extends BaseController {
 	@RequiresPermissions("terminal:cabinetmsTerminal:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CabinetmsTerminal cabinetmsTerminal, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CabinetmsTerminal> page = cabinetmsTerminalService.findPage(new Page<CabinetmsTerminal>(request, response), cabinetmsTerminal); 
+		Page<CabinetmsTerminal> page = terminalService.findPage(new Page<CabinetmsTerminal>(request, response), cabinetmsTerminal);
 		model.addAttribute("page", page);
 		return "cabinetms/terminal/cabinetmsTerminalList";
 	}
@@ -67,7 +67,7 @@ public class CabinetmsTerminalController extends BaseController {
 		if (!beanValidator(model, cabinetmsTerminal)){
 			return form(cabinetmsTerminal, model);
 		}
-		cabinetmsTerminalService.save(cabinetmsTerminal);
+		terminalService.save(cabinetmsTerminal);
 		addMessage(redirectAttributes, "保存终端管理成功");
 		return "redirect:"+Global.getAdminPath()+"/terminal/cabinetmsTerminal/?repage";
 	}
@@ -75,7 +75,7 @@ public class CabinetmsTerminalController extends BaseController {
 	@RequiresPermissions("terminal:cabinetmsTerminal:edit")
 	@RequestMapping(value = "delete")
 	public String delete(CabinetmsTerminal cabinetmsTerminal, RedirectAttributes redirectAttributes) {
-		cabinetmsTerminalService.delete(cabinetmsTerminal);
+		terminalService.delete(cabinetmsTerminal);
 		addMessage(redirectAttributes, "删除终端管理成功");
 		return "redirect:"+Global.getAdminPath()+"/terminal/cabinetmsTerminal/?repage";
 	}

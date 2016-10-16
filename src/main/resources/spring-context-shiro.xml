@@ -24,6 +24,12 @@
 				/act/rest/service/model/** = perms[act:model:edit]
 				/act/rest/service/** = user
 				/ReportServer/** = user
+				${clientPath}/client/** = anon
+				/websocket/** = anon
+				/cabinet/** = anon
+				/topic/** = anon
+				/queue/** = anon
+
 			</value>
 		</constructor-arg>
 	</bean>

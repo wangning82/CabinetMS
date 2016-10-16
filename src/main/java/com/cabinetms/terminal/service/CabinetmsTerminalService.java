@@ -5,6 +5,7 @@ package com.cabinetms.terminal.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +19,12 @@ import com.cabinetms.terminal.dao.CabinetmsTerminalDao;
  * @author houyi
  * @version 2016-10-11
  */
-@Service
+@Service(value = "terminalService")
 @Transactional(readOnly = true)
 public class CabinetmsTerminalService extends CrudService<CabinetmsTerminalDao, CabinetmsTerminal> {
+
+	@Autowired
+	private CabinetmsTerminalDao cabinetmsTerminalDao;
 
 	public CabinetmsTerminal get(String id) {
 		return super.get(id);
@@ -42,6 +46,11 @@ public class CabinetmsTerminalService extends CrudService<CabinetmsTerminalDao, 
 	@Transactional(readOnly = false)
 	public void delete(CabinetmsTerminal cabinetmsTerminal) {
 		super.delete(cabinetmsTerminal);
+	}
+
+	@Transactional(readOnly = false)
+	public void updateStatus(CabinetmsTerminal cabinetmsTerminal){
+		cabinetmsTerminalDao.updateStatus(cabinetmsTerminal);
 	}
 	
 }

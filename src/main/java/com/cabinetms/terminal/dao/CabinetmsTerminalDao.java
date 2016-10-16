@@ -9,10 +9,18 @@ import com.cabinetms.terminal.entity.CabinetmsTerminal;
 
 /**
  * 终端管理DAO接口
+ *
  * @author houyi
  * @version 2016-10-11
  */
 @MyBatisDao
 public interface CabinetmsTerminalDao extends CrudDao<CabinetmsTerminal> {
-	
+
+    /**
+     * 更新终端状态
+     * @param entity
+     * @return
+     */
+    int updateStatus(CabinetmsTerminal entity);
+
 }

@@ -134,5 +134,10 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+	<update id="updateStatus">
+		UPDATE cabinetms_terminal SET status = #{status}
+		WHERE terminal_ip = #{terminalIp}
+	</update>
 	
 </mapper>
