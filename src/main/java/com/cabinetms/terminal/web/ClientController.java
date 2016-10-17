@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * Created by houyi on 2016/6/12.
@@ -55,13 +56,19 @@ public class ClientController {
         return request.getRemoteAddr();
     }
 
+    /**
+     * 更新终端状态
+     * @param mediaCommand
+     */
     @MessageMapping("/queue")
     public void updateTerminalStatus(MediaCommand mediaCommand) {
         CabinetmsTerminal terminal = new CabinetmsTerminal();
         terminal.setTerminalIp(mediaCommand.getClientIp());
         terminal.setStatus(mediaCommand.getStatus());
+        terminal.setUpdateDate(new Date());
         terminalService.updateStatus(terminal);
     }
+
 
 
 }

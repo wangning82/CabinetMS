@@ -136,7 +136,7 @@
 	</update>
 
 	<update id="updateStatus">
-		UPDATE cabinetms_terminal SET status = #{status}
+		UPDATE cabinetms_terminal SET status = #{status}, update_date = #{updateDate}
 		WHERE terminal_ip = #{terminalIp}
 	</update>
 	

@@ -6,6 +6,8 @@ package com.cabinetms.notice.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cabinetms.terminal.entity.CabinetmsTerminal;
+import com.cabinetms.terminal.service.CabinetmsTerminalService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.cabinetms.notice.entity.CabinetmsNotice;
 import com.cabinetms.notice.service.CabinetmsNoticeService;
 
+import java.util.List;
+
 /**
  * 消息信息Controller
  * @author houyi
@@ -33,6 +37,9 @@ public class CabinetmsNoticeController extends BaseController {
 
 	@Autowired
 	private CabinetmsNoticeService cabinetmsNoticeService;
+
+	@Autowired
+	private CabinetmsTerminalService terminalService;
 	
 	@ModelAttribute
 	public CabinetmsNotice get(@RequestParam(required=false) String id) {
@@ -78,6 +85,28 @@ public class CabinetmsNoticeController extends BaseController {
 		cabinetmsNoticeService.delete(cabinetmsNotice);
 		addMessage(redirectAttributes, "删除消息信息成功");
 		return "redirect:"+Global.getAdminPath()+"/notice/cabinetmsNotice/?repage";
+	}
+
+	@RequiresPermissions("notice:cabinetmsNotice:edit")
+	@RequestMapping(value = {"terminalListForm"})
+	public String terminalListForm(HttpServletRequest request, HttpServletResponse response, Model model){
+		List<CabinetmsTerminal> terminalList = terminalService.findList(new CabinetmsTerminal());
+		model.addAttribute("terminalList", terminalList);
+		return "cabinetms/notice/terminalListForm";
+	}
+
+	/**
+	 * 消息发布
+	 * @param noticeId
+	 * @param terminalId
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("notice:cabinetmsNotice:edit")
+	@RequestMapping(value = "publish")
+	public String publish(String noticeId, String[] terminalId, Model model, RedirectAttributes redirectAttributes){
+		return null;
 	}
 
 }

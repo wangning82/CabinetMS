@@ -151,7 +151,6 @@
 			<div class="navbar-inner">
 				<div class="brand"><span id="productName">${fns:getConfig('productName')}</span></div>
 				<ul id="userControl" class="nav pull-right">
-					<li><a href="${pageContext.request.contextPath}${fns:getFrontPath()}/index-${fnc:getCurrentSiteId()}.html" target="_blank" title="访问网站主页"><i class="icon-home"></i></a></li>
 					<li id="themeSwitch" class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="主题切换"><i class="icon-th-large"></i></a>
 						<ul class="dropdown-menu">
@@ -187,10 +186,10 @@
 							<c:if test="${menu.parent.id eq '1'&&menu.isShow eq '1'}">
 								<li class="menu ${not empty firstMenu && firstMenu ? ' active' : ''}">
 									<c:if test="${empty menu.href}">
-										<a class="menu" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}"><span>${menu.name}</span></a>
+										<a class="menu" style="display: none;" href="javascript:" data-href="${ctx}/sys/menu/tree?parentId=${menu.id}" data-id="${menu.id}"><span>${menu.name}</span></a>
 									</c:if>
 									<c:if test="${not empty menu.href}">
-										<a class="menu" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" target="mainFrame"><span>${menu.name}</span></a>
+										<a class="menu" style="display: none;" href="${fn:indexOf(menu.href, '://') eq -1 ? ctx : ''}${menu.href}" data-id="${menu.id}" target="mainFrame"><span>${menu.name}</span></a>
 									</c:if>
 								</li>
 								<c:if test="${firstMenu}">
