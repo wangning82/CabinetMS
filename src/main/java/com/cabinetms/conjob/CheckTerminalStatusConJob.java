@@ -29,8 +29,11 @@ public class CheckTerminalStatusConJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        List<CabinetmsTerminal> list = terminalService.findList(null);
+        List<CabinetmsTerminal> list = terminalService.findList(new CabinetmsTerminal());
         for(CabinetmsTerminal terminal : list){
+            terminal.setStatus("3"); // 关闭
+            terminalService.updateStatus(terminal);
+
             String dest = queuePrefix + terminal.getTerminalIp();
             MediaCommand mediaCommand = new MediaCommand();
             mediaCommand.setCommand(COMMAND_PING);

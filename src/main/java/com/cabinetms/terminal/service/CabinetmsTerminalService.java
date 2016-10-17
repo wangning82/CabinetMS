@@ -19,7 +19,7 @@ import com.cabinetms.terminal.dao.CabinetmsTerminalDao;
  * @author houyi
  * @version 2016-10-11
  */
-@Service(value = "terminalService")
+@Service("terminalService")
 @Transactional(readOnly = true)
 public class CabinetmsTerminalService extends CrudService<CabinetmsTerminalDao, CabinetmsTerminal> {
 

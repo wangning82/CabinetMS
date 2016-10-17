@@ -18,7 +18,7 @@
         function connect() {
             var socket = new SockJS("/websocket");
             stompClient = Stomp.over(socket);
-            stompClient.connect("", "", function (frame) {
+            stompClient.connect({}, function (frame) {
                 console.log("Connected: " + frame);
                 stompClient.subscribe("/queue/${ip}", function (message) {
                     var command = decodeURIComponent(JSON.parse(message.body).command);
@@ -26,15 +26,14 @@
                         sendStatus();
                     }
                 });
-            }, function () {
-                connect();
             });
         }
         
         function sendStatus() {
+            // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
             stompClient.send("/cabinet/queue", {}, JSON.stringify({
                 'clientIp': encodeURIComponent("${ip}"),
-                'status': encodeURIComponent("连接成功")
+                'status': encodeURIComponent("1")
             }));
         }
 
