@@ -100,13 +100,13 @@ public class CabinetmsNoticeController extends BaseController {
 	 * @param noticeId
 	 * @param terminalId
 	 * @param model
-	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequiresPermissions("notice:cabinetmsNotice:edit")
 	@RequestMapping(value = "publish")
-	public String publish(String noticeId, String[] terminalId, Model model, RedirectAttributes redirectAttributes){
-		return null;
+	public String publish(String noticeId, String[] terminalId, String beginDate, String endDate, Model model, RedirectAttributes redirectAttributes){
+		addMessage(redirectAttributes, "发布消息信息成功");
+		return "redirect:"+Global.getAdminPath()+"/notice/cabinetmsNotice/?repage";
 	}
 
 }

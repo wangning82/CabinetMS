@@ -11,9 +11,17 @@
 	</script>
 </head>
 <body>
-	<sys:message content="${message}"/>
-	<form:form id="terminalForm" action="${ctx}/terminal/cabinetmsTerminal/save" method="post" class="form-horizontal">
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
+	<form:form id="terminalForm" action="${ctx}/notice/cabinetmsNotice/publish" method="post" class="form-horizontal">
+		<ul class="ul-form">
+			<li><label>播放时间：</label>
+				<input name="beginDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					   value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> -
+				<input name="endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
+					   value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+			</li>
+			<li class="clearfix"></li>
+		</ul>
+		<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
 				<th>终端名称</th>
