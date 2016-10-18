@@ -80,4 +80,9 @@ public class CabinetmsProgramTacticController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/programtactic/cabinetmsProgramTactic/?repage";
 	}
 
+	public String delete1(CabinetmsProgramTactic cabinetmsProgramTactic, RedirectAttributes redirectAttributes) {
+		cabinetmsProgramTacticService.delete(cabinetmsProgramTactic);
+		addMessage(redirectAttributes, "删除节目策略成功");
+		return "redirect:"+Global.getAdminPath()+"/programtactic/cabinetmsProgramTactic/?repage";
+	}
 }
