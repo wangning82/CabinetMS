@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabinetms.program.dao.CabinetmsProgramDao">
+<mapper namespace="com.cabinetms.program.dao.ProgramDao">
     
-	<sql id="cabinetmsProgramColumns">
+	<sql id="programColumns">
 		a.id AS "id",
 		a.no AS "no",
 		a.name AS "name",
@@ -17,22 +17,22 @@
 		a.del_flag AS "delFlag"
 	</sql>
 	
-	<sql id="cabinetmsProgramJoins">
+	<sql id="programJoins">
 	</sql>
     
-	<select id="get" resultType="CabinetmsProgram">
+	<select id="get" resultType="Program">
 		SELECT 
-			<include refid="cabinetmsProgramColumns"/>
+			<include refid="programColumns"/>
 		FROM cabinetms_program a
-		<include refid="cabinetmsProgramJoins"/>
+		<include refid="programJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="CabinetmsProgram">
+	<select id="findList" resultType="Program">
 		SELECT 
-			<include refid="cabinetmsProgramColumns"/>
+			<include refid="programColumns"/>
 		FROM cabinetms_program a
-		<include refid="cabinetmsProgramJoins"/>
+		<include refid="programJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="name != null and name != ''">
@@ -41,14 +41,11 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
+			<if test="modelName != null and modelName != ''">
+				AND a.model_name = #{modelName}
+			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
-			</if>
-			<if test="createBy != null and createBy.id != null and createBy.id != ''">
-				AND a.create_by LIKE 
-					<if test="dbName == 'oracle'">'%'||#{createBy.id}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{createBy.id}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{createBy.id},'%')</if>
 			</if>
 			<if test="beginCreateDate != null and endCreateDate != null and beginCreateDate != '' and endCreateDate != ''">
 				AND a.create_date BETWEEN #{beginCreateDate} AND #{endCreateDate}
@@ -64,11 +61,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="CabinetmsProgram">
+	<select id="findAllList" resultType="Program">
 		SELECT 
-			<include refid="cabinetmsProgramColumns"/>
+			<include refid="programColumns"/>
 		FROM cabinetms_program a
-		<include refid="cabinetmsProgramJoins"/>
+		<include refid="programJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>		

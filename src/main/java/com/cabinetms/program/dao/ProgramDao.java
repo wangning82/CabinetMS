@@ -5,14 +5,14 @@ package com.cabinetms.program.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.cabinetms.program.entity.CabinetmsProgram;
+import com.cabinetms.program.entity.Program;
 
 /**
  * 节目管理DAO接口
- * @author 付殿东
- * @version 2016-10-04
+ * @author 朱广成
+ * @version 2016-10-18
  */
 @MyBatisDao
-public interface CabinetmsProgramDao extends CrudDao<CabinetmsProgram> {
+public interface ProgramDao extends CrudDao<Program> {
 	
 }

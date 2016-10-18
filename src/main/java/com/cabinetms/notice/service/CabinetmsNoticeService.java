@@ -43,5 +43,11 @@ public class CabinetmsNoticeService extends CrudService<CabinetmsNoticeDao, Cabi
 	public void delete(CabinetmsNotice cabinetmsNotice) {
 		super.delete(cabinetmsNotice);
 	}
+
+    @Transactional(readOnly = false)
+    public void publish(CabinetmsNotice cabinetmsNotice){
+        // TODO 修改消息状态
+        // TODO 添加中间表
+    }
 	
 }

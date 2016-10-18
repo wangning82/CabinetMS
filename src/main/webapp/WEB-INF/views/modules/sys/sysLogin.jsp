@@ -39,16 +39,15 @@
 		}
 	</script>
 </head>
-<body style="height: auto;width: auto">
-<div >
+<body>
 	<!--[if lte IE 6]><br/><div class='alert alert-block' style="text-align:left;padding-bottom:10px;"><a class="close" data-dismiss="alert">x</a><h4>温馨提示：</h4><p>你使用的浏览器版本过低。为了获得更好的浏览体验，我们强烈建议您 <a href="http://browsehappy.com" target="_blank">升级</a> 到最新版本的IE浏览器，或者使用较新版本的 Chrome、Firefox、Safari 等。</p></div><![endif]-->
 	<div class="header">
-		<div  id="messageBox" class="alert alert-error ${empty message ? 'hide' : ''}"><button data-dismiss="alert" class="close">×</button>
+		<div id="messageBox" class="alert alert-error ${empty message ? 'hide' : ''}"><button data-dismiss="alert" class="close">×</button>
 			<label id="loginError" class="error">${message}</label>
 		</div>
 	</div>
-	<h1  class="form-signin-heading">${fns:getConfig('productName')}</h1>
-	<form  id="loginForm" class="form-signin" action="${ctx}/login" method="post">
+	<h1 class="form-signin-heading">${fns:getConfig('productName')}</h1>
+	<form id="loginForm" class="form-signin" action="${ctx}/login" method="post">
 		<label class="input-label" for="username">登录名</label>
 		<input type="text" id="username" name="username" class="input-block-level required" value="${username}">
 		<label class="input-label" for="password">密码</label>
@@ -68,10 +67,9 @@
 			<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
 		</div>
 	</form>
-	<div class="footer" >
+	<div class="footer">
 		Copyright &copy; 2012-${fns:getConfig('copyrightYear')} <a href="${pageContext.request.contextPath}${fns:getFrontPath()}">${fns:getConfig('productName')}</a> - Powered By <a href="http://jeesite.com" target="_blank">JeeSite</a> ${fns:getConfig('version')} 
 	</div>
 	<script src="${ctxStatic}/flash/zoom.min.js" type="text/javascript"></script>
-</div>
 </body>
 </html>

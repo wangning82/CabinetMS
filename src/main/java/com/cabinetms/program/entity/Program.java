@@ -10,10 +10,10 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 节目管理Entity
- * @author 付殿东
- * @version 2016-10-04
+ * @author 朱广成
+ * @version 2016-10-18
  */
-public class CabinetmsProgram extends DataEntity<CabinetmsProgram> {
+public class Program extends DataEntity<Program> {
 	
 	private static final long serialVersionUID = 1L;
 	private String no;		// 节目编号
@@ -24,11 +24,11 @@ public class CabinetmsProgram extends DataEntity<CabinetmsProgram> {
 	private Date beginCreateDate;		// 开始 创建时间
 	private Date endCreateDate;		// 结束 创建时间
 	
-	public CabinetmsProgram() {
+	public Program() {
 		super();
 	}
 
-	public CabinetmsProgram(String id){
+	public Program(String id){
 		super(id);
 	}
 

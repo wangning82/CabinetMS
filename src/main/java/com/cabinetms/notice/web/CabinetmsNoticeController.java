@@ -40,7 +40,7 @@ public class CabinetmsNoticeController extends BaseController {
 
 	@Autowired
 	private CabinetmsTerminalService terminalService;
-	
+
 	@ModelAttribute
 	public CabinetmsNotice get(@RequestParam(required=false) String id) {
 		CabinetmsNotice entity = null;
@@ -52,11 +52,11 @@ public class CabinetmsNoticeController extends BaseController {
 		}
 		return entity;
 	}
-	
+
 	@RequiresPermissions("notice:cabinetmsNotice:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CabinetmsNotice cabinetmsNotice, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<CabinetmsNotice> page = cabinetmsNoticeService.findPage(new Page<CabinetmsNotice>(request, response), cabinetmsNotice); 
+		Page<CabinetmsNotice> page = cabinetmsNoticeService.findPage(new Page<CabinetmsNotice>(request, response), cabinetmsNotice);
 		model.addAttribute("page", page);
 		return "cabinetms/notice/cabinetmsNoticeList";
 	}
@@ -78,7 +78,7 @@ public class CabinetmsNoticeController extends BaseController {
 		addMessage(redirectAttributes, "保存消息信息成功");
 		return "redirect:"+Global.getAdminPath()+"/notice/cabinetmsNotice/?repage";
 	}
-	
+
 	@RequiresPermissions("notice:cabinetmsNotice:edit")
 	@RequestMapping(value = "delete")
 	public String delete(CabinetmsNotice cabinetmsNotice, RedirectAttributes redirectAttributes) {
@@ -97,16 +97,16 @@ public class CabinetmsNoticeController extends BaseController {
 
 	/**
 	 * 消息发布
-	 * @param noticeId
-	 * @param terminalId
+	 * @param cabinetmsNotice
 	 * @param model
-	 * @param redirectAttributes
 	 * @return
 	 */
 	@RequiresPermissions("notice:cabinetmsNotice:edit")
 	@RequestMapping(value = "publish")
-	public String publish(String noticeId, String[] terminalId, Model model, RedirectAttributes redirectAttributes){
-		return null;
+	public String publish(CabinetmsNotice cabinetmsNotice, Model model, RedirectAttributes redirectAttributes){
+		cabinetmsNoticeService.publish(cabinetmsNotice);
+		addMessage(redirectAttributes, "发布消息信息成功");
+		return "redirect:"+Global.getAdminPath()+"/notice/cabinetmsNotice/?repage";
 	}
 
 }
