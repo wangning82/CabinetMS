@@ -19,12 +19,17 @@
         }
 
         function publish(id) {
-            top.$.jBox.open("iframe:${ctx}/notice/cabinetmsNotice/terminalForm", "发布消息", $(top.document).width() - 200, $(top.document).height() - 240, {
+            top.$.jBox.open("iframe:${ctx}/notice/cabinetmsNotice/terminalListForm", "发布消息", $(top.document).width() - 200, $(top.document).height() - 240, {
                 ajaxData: {id: id}, buttons: {"确定": "ok", "取消": "cancel"}, submit: function (v, h, f) {
                     if (v == 'ok') {
                         loading('正在提交，请稍等...');
                         // 执行保存
-                        $("#terminalForm").submit();
+                        var formwin = h.find("#jbox-iframe")[0].contentWindow;
+                        $("#id").val(id);
+                        $("#beginDate").val(formwin.beginDate.value);
+                        $("#endDate").val(formwin.endDate.value);
+                        $("#terminalIds").val(formwin.getTerminals());
+                        $("#publishForm").submit();
                         return true;
                     }
                     else if (v == 'cancel') {
@@ -45,6 +50,12 @@
         <li><a href="${ctx}/notice/cabinetmsNotice/form">消息信息添加</a></li>
     </shiro:hasPermission>
 </ul>
+<form:form id="publishForm" modelAttribute="cabin1etmsNotice" action="${ctx}/notice/cabinetmsNotice/publish" method="post">
+    <input id="id" name="id" type="hidden">
+    <input id="beginDate" name="beginDate" type="hidden">
+    <input id="endDate" name="endDate" type="hidden">
+    <input id="terminalIds" name="terminalIds" type="hidden">
+</form:form>
 <form:form id="searchForm" modelAttribute="cabinetmsNotice" action="${ctx}/notice/cabinetmsNotice/" method="post"
            class="breadcrumb form-search">
     <input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -100,7 +111,7 @@
                     <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">修改</a>
                     <a href="${ctx}/notice/cabinetmsNotice/delete?id=${cabinetmsNotice.id}"
                        onclick="return confirmx('确认要删除该消息信息吗？', this.href)">删除</a>
-                    <br><a href="javascript:void(0);">发布</a>
+                    <br><a href="javascript:publish('${cabinetmsNotice.id}');">发布</a>
                     <a href="javascript:void(0);">撤销</a>
                     <br><a href="javascript:void(0);">查看终端</a>
                 </td>
