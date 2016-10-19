@@ -7,7 +7,7 @@
 	<meta name="decorator" content="blank"/>
 	<style type="text/css">
       html,body,table{background-color:#f5f5f5;width:100%;text-align:center;}.form-signin-heading{font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:36px;margin-bottom:20px;color:#0663a2;}
-      .form-signin{position:relative;text-align:left;width:300px;padding:25px 29px 29px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
+      .form-signin{position:relative;text-align:left;width:300px;padding:40px 29px 29px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
         	-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.05);-moz-box-shadow:0 1px 2px rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.05);}
       .form-signin .checkbox{margin-bottom:10px;color:#0663a2;} .form-signin .input-label{font-size:16px;line-height:23px;color:#999;}
       .form-signin .input-block-level{font-size:16px;height:auto;margin-bottom:15px;padding:7px;*width:283px;*padding-bottom:0;_padding:7px 7px 9px 7px;}
@@ -48,7 +48,7 @@
 		</div>
 	</div>
 	<h1 class="form-signin-heading">${fns:getConfig('productName')}</h1>
-	<form style="background: url(/CabinetMS/static/cabinet/images/login_bj.jpg);background-size: cover" id="loginForm" class="form-signin" action="${ctx}/login" method="post">
+	<form style="background: url(/CabinetMS/static/cabinet/images/login_kuang.jpg);background-size: cover" id="loginForm" class="form-signin" action="${ctx}/login" method="post">
 		<label class="input-label" for="username">登录名</label>
 		<input type="text" id="username" name="username" class="input-block-level required" value="${username}">
 		<label class="input-label" for="password">密码</label>
