@@ -14,5 +14,19 @@ import com.cabinetms.notice.entity.CabinetmsNotice;
  */
 @MyBatisDao
 public interface CabinetmsNoticeDao extends CrudDao<CabinetmsNotice> {
+
+    /**
+     * 添加消息终端关系表
+     * @param entity
+     * @return
+     */
+    int insertNoticeToTerminal(CabinetmsNotice entity);
+
+    /**
+     * 删除消息终端关系表
+     * @param entity
+     * @return
+     */
+    int deleteNoticeToTerminal(CabinetmsNotice entity);
 	
 }

@@ -17,11 +17,13 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		o5.name AS "office.name"
+		o5.name AS "office.name",
+		n.notice_name AS "notice.noticeName"
 	</sql>
 	
 	<sql id="cabinetmsTerminalJoins">
 		LEFT JOIN sys_office o5 ON o5.id = a.office_id
+		LEFT JOIN cabinetms_notice n on n.id = a.notice_id
 	</sql>
     
 	<select id="get" resultType="CabinetmsTerminal">

@@ -39,6 +39,7 @@
         <th>终端IP</th>
         <th>机构</th>
         <th>终端状态</th>
+        <th>终端消息</th>
         <th>选择</th>
     </tr>
     </thead>
@@ -56,6 +57,9 @@
             </td>
             <td>
                     ${fns:getDictLabel(cabinetmsTerminal.status, 'terminal_status', '')}
+            </td>
+            <td>
+                &nbsp;
             </td>
             <td>
                 <input type="checkbox" name="terminalId" value="${cabinetmsTerminal.id}">
