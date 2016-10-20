@@ -119,5 +119,24 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+	<insert id="insertNoticeToTerminal">
+		INSERT INTO cabinetms_notice_tactic_detail(
+		notice_id,
+		terminal_id,
+		starttime,
+		endtime
+		) VALUES (
+		#{id},
+		#{terminalId},
+		#{beginDate},
+		#{endDate}
+		)
+	</insert>
+
+	<delete id="deleteNoticeToTerminal">
+		DELETE FROM cabinetms_notice_tactic_detail
+		WHERE notice_id = #{id}
+	</delete>
 	
 </mapper>

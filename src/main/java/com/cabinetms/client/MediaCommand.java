@@ -7,14 +7,16 @@ import java.io.Serializable;
  * 客户端传输通用对象
  */
 public class MediaCommand implements Serializable{
-    private String command;
-    private String clientIp;
-    private String destination;
-    private String status;
-    private String mediaType;
-    private String title;
-    private String content;
-    private String url;
+    private String command;  // 指令
+    private String clientIp; // 终端IP地址
+    private String destination; // 终端队列地址
+    private String status; // 终端状态
+    private String mediaType; // 媒体类型
+    private String title; // 媒体标题
+    private String content; // 媒体内容
+    private String url; // 媒体地址
+    private String startTime; // 开始时间
+    private String endTime; // 结束时间
 
     public String getCommand() {
         return command;

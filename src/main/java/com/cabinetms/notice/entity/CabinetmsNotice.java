@@ -4,6 +4,7 @@
 package com.cabinetms.notice.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -25,7 +26,8 @@ public class CabinetmsNotice extends DataEntity<CabinetmsNotice> {
 
 	private Date beginDate;
 	private Date endDate;
-	private String terminalIds;
+	private String[] terminalIds;
+	private String terminalId;
 
 	public CabinetmsNotice() {
 		super();
@@ -89,11 +91,21 @@ public class CabinetmsNotice extends DataEntity<CabinetmsNotice> {
 		this.endDate = endDate;
 	}
 
-	public String getTerminalIds() {
+	public String[] getTerminalIds() {
 		return terminalIds;
 	}
 
 	public void setTerminalIds(String terminalIds) {
-		this.terminalIds = terminalIds;
+		if(StringUtils.isNotEmpty(terminalIds)){
+			this.terminalIds = terminalIds.split(",");
+		}
+	}
+
+	public String getTerminalId() {
+		return terminalId;
+	}
+
+	public void setTerminalId(String terminalId) {
+		this.terminalId = terminalId;
 	}
 }

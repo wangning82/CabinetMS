@@ -41,6 +41,7 @@
                 }
             });
         }
+
     </script>
 </head>
 <body>
@@ -94,11 +95,15 @@
     <tbody>
     <c:forEach items="${page.list}" var="cabinetmsNotice">
         <tr>
-            <td><a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">
-                    ${cabinetmsNotice.noticeName}
-            </a></td>
             <td>
+                <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">
+                    ${cabinetmsNotice.noticeName}
+                </a>
+            </td>
+            <td>
+                <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">
                     ${cabinetmsNotice.noticeContent}
+                </a>
             </td>
             <td>
                     ${fns:getDictLabel(cabinetmsNotice.status, 'notice_status', '')}
@@ -108,12 +113,17 @@
             </td>
             <shiro:hasPermission name="notice:cabinetmsNotice:edit">
                 <td>
-                    <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">修改</a>
-                    <a href="${ctx}/notice/cabinetmsNotice/delete?id=${cabinetmsNotice.id}"
-                       onclick="return confirmx('确认要删除该消息信息吗？', this.href)">删除</a>
-                    <br><a href="javascript:publish('${cabinetmsNotice.id}');">发布</a>
-                    <a href="javascript:void(0);">撤销</a>
-                    <br><a href="javascript:void(0);">查看终端</a>
+                    <c:if test="${cabinetmsNotice.status == '1'}">
+                        <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">修改</a>
+                        <a href="${ctx}/notice/cabinetmsNotice/delete?id=${cabinetmsNotice.id}"
+                           onclick="return confirmx('确认要删除该消息信息吗？', this.href)">删除</a>
+                        <a href="javascript:publish('${cabinetmsNotice.id}');">发布</a>
+                    </c:if>
+                    <c:if test="${cabinetmsNotice.status == '2'}">
+                        <a href="${ctx}/notice/cabinetmsNotice/undoPublish?id=${cabinetmsNotice.id}"
+                           onclick="return confirmx('确认要撤销该消息信息吗？', this.href)">撤销</a>
+                    </c:if>
+                    <a href="javascript:void(0);">查看终端</a>
                 </td>
             </shiro:hasPermission>
         </tr>
