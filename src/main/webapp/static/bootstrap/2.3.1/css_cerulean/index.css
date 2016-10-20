@@ -20,7 +20,7 @@ img {border:none;}
 .dgs11{ margin: 0px;
 padding:0px;
  background:url(../../../cabinet/images/dl_bj.jpg);
-
+	background-size: cover;
 	background-position: center top; 
     background-repeat: no-repeat;
 	margin-left: 0px;
@@ -47,5 +47,5 @@ padding:0px;
 
 	 .an{ background:url(../../../cabinet/images/anniu.png); width:305px;height:40px; border:0px; margin:0 auto; color:#FFFFFF; font-size:16px; font-family:"微软雅黑"; cursor: pointer;}
 	 
-.footer{ background:url(../../../cabinet/images/footer.png) repeat-x; height:91px; z-index:1; bottom:0px; position: absolute; width:100%; line-height:91px; text-align:center; color:#FFFFFF;}
+.footer{ background:url(../../../cabinet/images/footer.png) repeat-x; height:91px; z-index:1;  position: absolute; width:100%; line-height:91px; text-align:center; color:#FFFFFF;}
 	

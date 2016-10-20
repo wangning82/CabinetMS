@@ -3,7 +3,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>${fns:getConfig('productName')} 登录</title>
+	<title>${fns:getConfig('productName')}</title>
 	<meta name="decorator" content="blank"/>
     <script src="/CabinetMS/static/jquery/jquery-1.8.3.min.js" type="text/javascript"></script>
     <link href="${ctxStatic}/bootstrap/2.3.1/css_cerulean/index.css" type="text/css" rel="stylesheet" />
@@ -11,7 +11,7 @@
 	<link rel="Stylesheet" href="${ctxStatic}/jerichotab/css/jquery.jerichotab.css" />
 
 	<style type="text/css">
-  .form-signin-heading{font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:36px;margin-bottom:20px;color:#0663a2;}
+		html,body,table{text-align:center;}.form-signin-heading{font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:36px;margin-bottom:20px;color:#0663a2;}
       .form-signin{position:relative;text-align:left;width:300px;padding:40px 29px 29px;margin:0 auto 20px;background-color:#fff;border:1px solid #e5e5e5;
         	-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;-webkit-box-shadow:0 1px 2px rgba(0,0,0,.05);-moz-box-shadow:0 1px 2px rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.05);}
       .form-signin .checkbox{margin-bottom:10px;color:#0663a2;} .form-signin .input-label{font-size:16px;line-height:23px;color:#999;}
@@ -53,7 +53,7 @@
 			<label id="loginError" class="error">${message}</label>
 		</div>
 	</div>
-	<h1 class="form-signin-heading">${fns:getConfig('productName')}</h1>
+	<%--<h1 class="form-signin-heading">${fns:getConfig('productName')}</h1>--%>
     <div class="dgs12" >
    <div class="denglu_s" style=" padding-top:220px;">
 	<form  id="loginForm" class=" " action="${ctx}/login" method="post">
@@ -74,7 +74,8 @@
 			</div>
 		</c:if>
 
-        <input class="btn btn-large btn-primary an" type="submit"  style="width:305px;" value="登 录"/>&nbsp;&nbsp;
+        <input class="btn btn-large btn-primary an" type="submit"  style="width:300px; margin-top:13px;
+" value="登 录"/>&nbsp;&nbsp;
 	
 	</form>
     </div>
