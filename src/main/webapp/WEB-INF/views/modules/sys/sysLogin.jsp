@@ -81,7 +81,7 @@
     </div>
     </div>
 	<div class="footer">
-	技术支持：${fns:getConfig('copyrightYear')}    &nbsp;&nbsp;   &nbsp;&nbsp;     版权所有：${fns:getConfig('copyrightYear')}
+	技术支持：${fns:getConfig('copyrightYear')}    &nbsp;&nbsp;   &nbsp;&nbsp;     版权所有：${fns:getConfig('version')}
 	</div>
 	<script src="${ctxStatic}/flash/zoom.min.js" type="text/javascript"></script>
 	</div>
