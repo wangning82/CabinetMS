@@ -1,7 +1,7 @@
 ﻿/*-------jericho tab-------------------*/
 .jericho_tab {width:100%;}
 /*-------jericho tabpages-------------------*/
-.jericho_tab .tab_pages {width:100%;float:left;clear:both;background:url(../images/tabline.gif) left bottom repeat-x;}
+.jericho_tab .tab_pages {width:100%;float:left;clear:both;background:url(../images/tabline.gif) left bottom repeat-x;background:#1E90FF }
 .jericho_tab .tab_pages .tabs {height:26px;overflow :hidden;display:block;position:relative;float:left;}
 .jericho_tab .tab_pages div {float:left;}
 /*-------jericho each tab -------------------*/
