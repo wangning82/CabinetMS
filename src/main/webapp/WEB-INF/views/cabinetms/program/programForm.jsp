@@ -113,7 +113,7 @@
 		<div class="control-group">
 			<label class="control-label">模板内容：</label>
 			<div class="controls">
-				<textarea id="templateContent" rows="4" maxlength="255" class="input-xxlarge "></textarea>
+				<textarea id="templateContent" rows="4" maxlength="5000" class="input-xxlarge "></textarea>
 			</div>
 		</div>
 
