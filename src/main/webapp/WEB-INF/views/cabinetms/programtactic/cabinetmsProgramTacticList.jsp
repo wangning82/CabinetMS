@@ -17,17 +17,14 @@
 	</script>
 </head>
 <body>
-	<%--<ul class="nav nav-tabs">--%>
-		<%--<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略列表</a></li>--%>
-		<%--<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><li><a href="${ctx}/programtactic/cabinetmsProgramTactic/form">节目策略添加</a></li></shiro:hasPermission>--%>
-	<%--</ul>--%>
+	<ul class="nav nav-tabs">
+		<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略列表</a></li>
+		<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><li><a href="${ctx}/programtactic/cabinetmsProgramTactic/form">节目策略添加</a></li></shiro:hasPermission>
+	</ul>
 	<form:form id="searchForm" modelAttribute="cabinetmsProgramTactic" action="${ctx}/programtactic/cabinetmsProgramTactic/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>策略编号：</label>
-				<form:input path="no" htmlEscape="false" maxlength="64" class="input-medium"/>
-			</li>
 			<li><label>策略名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
@@ -42,7 +39,7 @@
 			<li><label>策略状态：</label>
 				<form:select path="status" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:options items="${fns:getDictList('programStrategyType')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
@@ -54,8 +51,11 @@
 		<thead>
 			<tr>
 				<th>策略名称</th>
-				<th>更新时间</th>
+				<th>开始时间</th>
+				<th>结束时间</th>
+				<th>创建时间</th>
 				<th>备注信息</th>
+				<th>策略状态</th>
 				<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -66,14 +66,27 @@
 					${cabinetmsProgramTactic.name}
 				</a></td>
 				<td>
-					<fmt:formatDate value="${cabinetmsProgramTactic.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					${cabinetmsProgramTactic.starttime}
+				</td>
+				<td>
+					${cabinetmsProgramTactic.endtime}
+				</td>
+				<td>
+					<fmt:formatDate value="${cabinetmsProgramTactic.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
 					${cabinetmsProgramTactic.remarks}
 				</td>
+				<td>
+					${fns:getDictLabel(cabinetmsProgramTactic.status, 'programStrategyType', '')}
+				</td>
 				<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><td>
     				<a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">修改</a>
 					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要删除该节目策略吗？', this.href)">删除</a>
+					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要提交该节目策略吗？', this.href)">提交</a>
+					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要发布该节目策略吗？', this.href)">发布</a>
+					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要撤销该节目策略吗？', this.href)">撤销</a>
+					<a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">预览</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

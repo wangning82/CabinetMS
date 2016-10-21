@@ -3,6 +3,8 @@
  */
 package com.cabinetms.programtactic.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,13 +21,14 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.cabinetms.common.func.FuncUtil;
 import com.cabinetms.programtactic.entity.CabinetmsProgramTactic;
 import com.cabinetms.programtactic.service.CabinetmsProgramTacticService;
 
 /**
- * 节目策略Controller
- * @author 付殿东
- * @version 2016-10-09
+ * 节目策略一对多生成Controller
+ * @author 于滨
+ * @version 2016-10-19
  */
 @Controller
 @RequestMapping(value = "${adminPath}/programtactic/cabinetmsProgramTactic")
@@ -56,19 +59,21 @@ public class CabinetmsProgramTacticController extends BaseController {
 
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:view")
 	@RequestMapping(value = "form")
-	public String form(CabinetmsProgramTactic cabinetmsProgramTactic, Model model) {
+	public String form(CabinetmsProgramTactic cabinetmsProgramTactic, Model model) throws InstantiationException, IllegalAccessException {
+		List<?> programList = FuncUtil.getAll(FuncUtil.PROGRAM_KEY_NAME);
+		model.addAttribute("programList", programList);
 		model.addAttribute("cabinetmsProgramTactic", cabinetmsProgramTactic);
 		return "cabinetms/programtactic/cabinetmsProgramTacticForm";
 	}
 
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:edit")
 	@RequestMapping(value = "save")
-	public String save(CabinetmsProgramTactic cabinetmsProgramTactic, Model model, RedirectAttributes redirectAttributes) {
+	public String save(CabinetmsProgramTactic cabinetmsProgramTactic, Model model, RedirectAttributes redirectAttributes) throws InstantiationException, IllegalAccessException {
 		if (!beanValidator(model, cabinetmsProgramTactic)){
 			return form(cabinetmsProgramTactic, model);
 		}
 		cabinetmsProgramTacticService.save(cabinetmsProgramTactic);
-		addMessage(redirectAttributes, "保存节目策略成功");
+		addMessage(redirectAttributes, "保存节目策略一对多生成成功");
 		return "redirect:"+Global.getAdminPath()+"/programtactic/cabinetmsProgramTactic/?repage";
 	}
 	
@@ -76,13 +81,8 @@ public class CabinetmsProgramTacticController extends BaseController {
 	@RequestMapping(value = "delete")
 	public String delete(CabinetmsProgramTactic cabinetmsProgramTactic, RedirectAttributes redirectAttributes) {
 		cabinetmsProgramTacticService.delete(cabinetmsProgramTactic);
-		addMessage(redirectAttributes, "删除节目策略成功");
+		addMessage(redirectAttributes, "删除节目策略一对多生成成功");
 		return "redirect:"+Global.getAdminPath()+"/programtactic/cabinetmsProgramTactic/?repage";
 	}
 
-	public String delete1(CabinetmsProgramTactic cabinetmsProgramTactic, RedirectAttributes redirectAttributes) {
-		cabinetmsProgramTacticService.delete(cabinetmsProgramTactic);
-		addMessage(redirectAttributes, "删除节目策略成功");
-		return "redirect:"+Global.getAdminPath()+"/programtactic/cabinetmsProgramTactic/?repage";
-	}
 }
