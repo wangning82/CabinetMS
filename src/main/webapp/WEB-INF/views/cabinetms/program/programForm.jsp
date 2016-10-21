@@ -23,6 +23,27 @@
 				}
 			});
 		});
+
+
+		function templateChanged() {
+			var modelName = $('#modelName').val();
+
+			$.ajax({
+				type: 'POST',
+				url: "${ctx}/program/program/template",
+				dataType: "json",
+				data: {
+					modelName: modelName
+				},
+				success: function(data, textStatus) {
+					$('#templateContent').val(data.templateContent);
+				}
+
+			});
+
+
+		}
+
 	</script>
 </head>
 <body>
@@ -39,28 +60,40 @@
 				<form:input path="no" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label">节目名称：</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">模版ID：</label>
-			<div class="controls">
-				<form:input path="modelId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
+
 		<div class="control-group">
 			<label class="control-label">模版名称：</label>
 			<div class="controls">
-				<form:select path="modelName" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				<form:select path="modelName" class="input-xlarge " onchange="templateChanged();">
+					<form:option value="" label="" />
+					<form:options items="${fns:getDictList('template_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</div>
 		</div>
+
 		<div class="control-group">
+			<label class="control-label">节目标题：</label>
+			<div class="controls">
+				<form:input path="title" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label">节目文件：</label>
+			<div class="controls">
+				<form:hidden id="programFile" path="programFile" htmlEscape="false" maxlength="255" class="input-xlarge" />
+				<sys:ckfinder input="programFile" type="files" uploadPath="/programFile" selectMultiple="true" />
+			</div>
+		</div>
+
+		<%--<div class="control-group">
 			<label class="control-label">状态：</label>
 			<div class="controls">
 				<form:select path="status" class="input-xlarge required">
@@ -69,13 +102,21 @@
 				</form:select>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
-		</div>
+		</div>--%>
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
+
+		<div class="control-group">
+			<label class="control-label">模板内容：</label>
+			<div class="controls">
+				<textarea id="templateContent" rows="4" maxlength="255" class="input-xxlarge "></textarea>
+			</div>
+		</div>
+
 		<div class="form-actions">
 			<shiro:hasPermission name="program:program:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

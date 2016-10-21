@@ -16,7 +16,7 @@ import com.cabinetms.program.dao.ProgramDao;
 /**
  * 节目管理Service
  * @author 朱广成
- * @version 2016-10-18
+ * @version 2016-10-19
  */
 @Service
 @Transactional(readOnly = true)

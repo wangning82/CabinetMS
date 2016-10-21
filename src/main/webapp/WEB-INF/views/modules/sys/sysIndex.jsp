@@ -224,7 +224,7 @@
 				</div>
 			</div>
 		    <div id="footer" class="row-fluid">
-	           技术支持： ${fns:getConfig('productName')} - Powered By <a href="" target="_blank">JeeSite</a> ${fns:getConfig('version')}
+	           技术支持： ${fns:getConfig('copyrightYear')}
 			</div>
 		</div>
 	</div>

@@ -6,6 +6,12 @@ package com.cabinetms.program.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
@@ -22,10 +29,19 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.cabinetms.program.entity.Program;
 import com.cabinetms.program.service.ProgramService;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.net.URLDecoder;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 节目管理Controller
  * @author 朱广成
- * @version 2016-10-18
+ * @version 2016-10-19
  */
 @Controller
 @RequestMapping(value = "${adminPath}/program/program")
@@ -67,6 +83,7 @@ public class ProgramController extends BaseController {
 		if (!beanValidator(model, program)){
 			return form(program, model);
 		}
+		program.setStatus("0");
 		programService.save(program);
 		addMessage(redirectAttributes, "保存节目管理成功");
 		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
@@ -78,6 +95,49 @@ public class ProgramController extends BaseController {
 		programService.delete(program);
 		addMessage(redirectAttributes, "删除节目管理成功");
 		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
+	}
+
+	@RequiresPermissions("program:program:view")
+	@RequestMapping(value = "template")
+	@ResponseBody
+	public Program template(Program program, Model model, HttpServletRequest request) throws IOException {
+
+		String path = request.getSession().getServletContext().getRealPath("/WEB-INF/views/cabinetms/program/template/");
+		String templateFilePath = path + program.getModelName() + ".ftl";
+		String templateContent = FileUtils.readFileToString(new File(templateFilePath));
+
+		program.setTemplateContent(templateContent);
+		return program;
+	}
+
+	@RequiresPermissions("program:program:view")
+	@RequestMapping(value = "preview")
+	@ResponseBody
+	public void preview(Program program, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateException {
+
+		String path = request.getSession().getServletContext().getRealPath("/WEB-INF/views/cabinetms/program/template/");
+		String templateFilePath = path + program.getModelName() + ".ftl";
+		String templateContent = FileUtils.readFileToString(new File(templateFilePath));
+
+		String programFileRoot = request.getSession().getServletContext().getRealPath("/");
+		String programFile = program.getProgramFile().substring(program.getProgramFile().indexOf("userfiles"));
+		String programFileContent = FileUtils.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
+
+		Configuration configuration = new Configuration();
+		StringTemplateLoader stringLoader = new StringTemplateLoader();
+		stringLoader.putTemplate("myTemplate", templateContent);
+
+		configuration.setTemplateLoader(stringLoader);
+
+		Template temp = configuration.getTemplate("myTemplate","utf-8");
+        /* 创建数据模型 */
+		Map map = new HashMap();
+		map.put("title", program.getTitle());
+		map.put("content", programFileContent);
+
+		temp.process(map, response.getWriter());
+//		System.out.println(writer.toString().replaceAll("[\\n\\r]", ""));
+		response.flushBuffer();
 	}
 
 }
