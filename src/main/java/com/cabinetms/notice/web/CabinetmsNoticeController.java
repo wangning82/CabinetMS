@@ -87,10 +87,23 @@ public class CabinetmsNoticeController extends BaseController {
     }
 
     @RequiresPermissions("notice:cabinetmsNotice:edit")
-    @RequestMapping(value = {"terminalListForm"})
-    public String terminalListForm(HttpServletRequest request, HttpServletResponse response, Model model) {
-        List<CabinetmsTerminal> terminalList = terminalService.findList(new CabinetmsTerminal());
+    @RequestMapping(value = {"terminalListFormEdit"})
+    public String terminalListFormEdit(HttpServletRequest request, HttpServletResponse response, Model model) {
+        List<CabinetmsTerminal> terminalList = terminalService.findAllConnectedList(new CabinetmsTerminal());
         model.addAttribute("terminalList", terminalList);
+        model.addAttribute("type", "edit");
+        return "cabinetms/notice/terminalListForm";
+    }
+
+    @RequiresPermissions("notice:cabinetmsNotice:edit")
+    @RequestMapping(value = {"terminalListFormView"})
+    public String terminalListFormView(CabinetmsNotice cabinetmsNotice, HttpServletRequest request, HttpServletResponse response, Model model) {
+        CabinetmsTerminal param = new CabinetmsTerminal();
+        param.setNotice(cabinetmsNotice);
+        List<CabinetmsTerminal> terminalList = terminalService.findList(param);
+        model.addAttribute("terminalList", terminalList);
+        model.addAttribute("type", "view");
+        model.addAttribute("notice", cabinetmsNotice);
         return "cabinetms/notice/terminalListForm";
     }
 

@@ -33,7 +33,11 @@ public class CabinetmsTerminalService extends CrudService<CabinetmsTerminalDao, 
 	public List<CabinetmsTerminal> findList(CabinetmsTerminal cabinetmsTerminal) {
 		return super.findList(cabinetmsTerminal);
 	}
-	
+
+	public List<CabinetmsTerminal> findAllConnectedList(CabinetmsTerminal cabinetmsTerminal) {
+		return cabinetmsTerminalDao.findAllConnectedList(cabinetmsTerminal);
+	}
+
 	public Page<CabinetmsTerminal> findPage(Page<CabinetmsTerminal> page, CabinetmsTerminal cabinetmsTerminal) {
 		return super.findPage(page, cabinetmsTerminal);
 	}

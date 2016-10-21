@@ -19,22 +19,45 @@
         }
 
         function publish(id) {
-            top.$.jBox.open("iframe:${ctx}/notice/cabinetmsNotice/terminalListForm", "发布消息", $(top.document).width() - 200, $(top.document).height() - 240, {
+            top.$.jBox.open("iframe:${ctx}/notice/cabinetmsNotice/terminalListFormEdit", "发布消息", $(top.document).width() - 800, $(top.document).height() - 400, {
                 ajaxData: {id: id}, buttons: {"确定": "ok", "取消": "cancel"}, submit: function (v, h, f) {
                     if (v == 'ok') {
-                        loading('正在提交，请稍等...');
-                        // 执行保存
                         var formwin = h.find("#jbox-iframe")[0].contentWindow;
-                        $("#id").val(id);
-                        $("#beginDate").val(formwin.beginDate.value);
-                        $("#endDate").val(formwin.endDate.value);
-                        $("#terminalIds").val(formwin.getTerminals());
-                        $("#publishForm").submit();
-                        return true;
+                        if(formwin.getTerminals() == ""){
+                            alertx("您没有选择消息发布的终端");
+                            return false;
+                        }if(formwin.beginDate.value == ""){
+                            alertx("请选择消息播放的开始时间");
+                            return false;
+                        }if(formwin.endDate.value == ""){
+                            alertx("请选择消息播放的结束时间");
+                            return false;
+                        } else{
+                            loading('正在提交，请稍等...');
+                            // 执行保存
+                            $("#id").val(id);
+                            $("#beginDate").val(formwin.beginDate.value);
+                            $("#endDate").val(formwin.endDate.value);
+                            $("#terminalIds").val(formwin.getTerminals());
+                            $("#publishForm").submit();
+                            return true;
+                        }
                     }
                     else if (v == 'cancel') {
                         top.$.jBox.close(true);
                         return false;
+                    }
+                }, loaded: function (h) {
+                    $(".jbox-content", top.document).css("overflow-y", "hidden");
+                }
+            });
+        }
+
+        function view(id) {
+            top.$.jBox.open("iframe:${ctx}/notice/cabinetmsNotice/terminalListFormView", "查看终端", $(top.document).width() - 800, $(top.document).height() - 400, {
+                ajaxData: {id: id}, buttons: {"确定": "ok"}, submit: function (v, h, f) {
+                    if (v == 'ok') {
+                        return true;
                     }
                 }, loaded: function (h) {
                     $(".jbox-content", top.document).css("overflow-y", "hidden");
@@ -88,7 +111,7 @@
         <th style="width: 8%;">消息状态</th>
         <th style="width: 8%;">创建者</th>
         <shiro:hasPermission name="notice:cabinetmsNotice:edit">
-            <th style="width: 8%;">操作</th>
+            <th style="width: 12%;">操作</th>
         </shiro:hasPermission>
     </tr>
     </thead>
@@ -122,8 +145,8 @@
                     <c:if test="${cabinetmsNotice.status == '2'}">
                         <a href="${ctx}/notice/cabinetmsNotice/undoPublish?id=${cabinetmsNotice.id}"
                            onclick="return confirmx('确认要撤销该消息信息吗？', this.href)">撤销</a>
+                        <a href="javascript:view('${cabinetmsNotice.id}');">查看终端</a>
                     </c:if>
-                    <a href="javascript:void(0);">查看终端</a>
                 </td>
             </shiro:hasPermission>
         </tr>

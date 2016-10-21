@@ -18,12 +18,14 @@
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		o5.name AS "office.name",
-		n.notice_name AS "notice.noticeName"
+		n.notice_name AS "notice.noticeName",
+		p.name AS "programTactic.name"
 	</sql>
 	
 	<sql id="cabinetmsTerminalJoins">
 		LEFT JOIN sys_office o5 ON o5.id = a.office_id
 		LEFT JOIN cabinetms_notice n on n.id = a.notice_id
+		LEFT JOIN cabinetms_program_tactic p on p.id = a.program_tactic_id
 	</sql>
     
 	<select id="get" resultType="CabinetmsTerminal">
@@ -52,6 +54,9 @@
 			</if>
 			<if test="programTactic != null and programTactic.id != null and programTactic.id != ''">
 				AND a.program_tactic_id = #{programTactic.id}
+			</if>
+			<if test="notice != null and notice.id != null and notice.id != ''">
+				AND a.notice_id = #{notice.id}
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
@@ -84,7 +89,26 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
+	<select id="findAllConnectedList" resultType="CabinetmsTerminal">
+		SELECT
+		<include refid="cabinetmsTerminalColumns"/>
+		FROM cabinetms_terminal a
+		<include refid="cabinetmsTerminalJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.status != '3'
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
 	<insert id="insert">
 		INSERT INTO cabinetms_terminal(
 			id,
