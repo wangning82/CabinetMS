@@ -5,7 +5,7 @@ package com.cabinetms.programtactic.dao;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.cabinetms.programtactic.entity.CabinetmsProgramTactic;
+import com.cabinetms.programtactic.entity.CabinetmsProgramTacticDetail;
 
 /**
  * 节目策略一对多生成DAO接口
@@ -13,6 +13,6 @@ import com.cabinetms.programtactic.entity.CabinetmsProgramTactic;
  * @version 2016-10-19
  */
 @MyBatisDao
-public interface CabinetmsProgramTacticDao extends CrudDao<CabinetmsProgramTactic> {
+public interface CabinetmsProgramTacticDetailDao extends CrudDao<CabinetmsProgramTacticDetail> {
 	
 }

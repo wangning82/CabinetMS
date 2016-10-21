@@ -35,12 +35,6 @@
 		<include refid="cabinetmsProgramTacticJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="no != null and no != ''">
-				AND a.no LIKE 
-					<if test="dbName == 'oracle'">'%'||#{no}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{no}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{no},'%')</if>
-			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>

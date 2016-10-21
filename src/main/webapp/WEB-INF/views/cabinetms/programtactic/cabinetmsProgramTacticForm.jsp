@@ -23,42 +23,51 @@
 				}
 			});
 		});
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			}
+		}
 	</script>
 </head>
 <body>
-	<%--<ul class="nav nav-tabs">--%>
-		<%--<li><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略列表</a></li>--%>
-		<%--<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">节目策略<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit">${not empty cabinetmsProgramTactic.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="programtactic:cabinetmsProgramTactic:edit">查看</shiro:lacksPermission></a></li>--%>
-	<%--</ul><br/>--%>
+	<ul class="nav nav-tabs">
+		<li><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略一对多生成列表</a></li>
+		<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">节目策略一对多生成<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit">${not empty cabinetmsProgramTactic.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="programtactic:cabinetmsProgramTactic:edit">查看</shiro:lacksPermission></a></li>
+	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cabinetmsProgramTactic" action="${ctx}/programtactic/cabinetmsProgramTactic/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">策略编号：</label>
-			<div class="controls">
-				<form:input path="no" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">策略名称：</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">开始时间：</label>
-			<div class="controls">
-				<input name="starttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${cabinetmsProgramTactic.starttime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">结束时间：</label>
-			<div class="controls">
-				<input name="endtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${cabinetmsProgramTactic.endtime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -67,15 +76,65 @@
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
-		<%--<div class="control-group">--%>
-			<%--<label class="control-label">策略状态：</label>--%>
-			<%--<div class="controls">--%>
-				<%--<form:select path="status" class="input-xlarge ">--%>
-					<%--<form:option value="" label=""/>--%>
-					<%--<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>--%>
-				<%--</form:select>--%>
-			<%--</div>--%>
-		<%--</div>--%>
+			<div class="control-group">
+				<label class="control-label">节目策略明细表：</label>
+				<div class="controls">
+					<table id="contentTable" class="table table-striped table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th class="hide"></th>
+								<th>节目</th>
+								<th>开始时间</th>
+								<th>结束时间</th>
+								<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
+							</tr>
+						</thead>
+						<tbody id="cabinetmsProgramTacticDetailList">
+						</tbody>
+						<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><tfoot>
+							<tr><td colspan="8"><a href="javascript:" onclick="addRow('#cabinetmsProgramTacticDetailList', cabinetmsProgramTacticDetailRowIdx, cabinetmsProgramTacticDetailTpl);cabinetmsProgramTacticDetailRowIdx = cabinetmsProgramTacticDetailRowIdx + 1;" class="btn">新增</a></td></tr>
+						</tfoot></shiro:hasPermission>
+					</table>
+					
+					<script type="text/template" id="cabinetmsProgramTacticDetailTpl">//<!--
+						<tr id="cabinetmsProgramTacticDetailList{{idx}}">
+							<td class="hide">
+								<input id="cabinetmsProgramTacticDetailList{{idx}}_id" name="cabinetmsProgramTacticDetailList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+								<input id="cabinetmsProgramTacticDetailList{{idx}}_delFlag" name="cabinetmsProgramTacticDetailList[{{idx}}].delFlag" type="hidden" value="0"/>
+							</td>
+							<td>
+								<select id="cabinetmsProgramTacticDetailList{{idx}}_program" name="cabinetmsProgramTacticDetailList[{{idx}}].program.id" class="input-medium ">
+									<option value="">请选择</option>
+									<c:forEach items="${programList }" var="program">
+										<option value="${program.id }">${program.name }</option>
+									</c:forEach>
+								</select>
+							</td>
+							<td>
+								<input id="cabinetmsProgramTacticDetailList{{idx}}_starttime" name="cabinetmsProgramTacticDetailList[{{idx}}].starttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+									value="{{row.starttime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+							</td>
+							<td>
+								<input id="cabinetmsProgramTacticDetailList{{idx}}_endtime" name="cabinetmsProgramTacticDetailList[{{idx}}].endtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+									value="{{row.endtime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+							</td>
+							<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><td class="text-center" width="10">
+								{{#delBtn}}<span class="close" onclick="delRow(this, '#cabinetmsProgramTacticDetailList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+							</td></shiro:hasPermission>
+						</tr>//-->
+					</script>
+					<script type="text/javascript">
+						var cabinetmsProgramTacticDetailRowIdx = 0, cabinetmsProgramTacticDetailTpl = $("#cabinetmsProgramTacticDetailTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+						$(document).ready(function() {
+							var data = ${fns:toJson(cabinetmsProgramTactic.cabinetmsProgramTacticDetailList)};
+							for (var i=0; i<data.length; i++){
+								addRow('#cabinetmsProgramTacticDetailList', cabinetmsProgramTacticDetailRowIdx, cabinetmsProgramTacticDetailTpl, data[i]);
+								cabinetmsProgramTacticDetailRowIdx = cabinetmsProgramTacticDetailRowIdx + 1;
+							}
+						});
+					</script>
+				</div>
+			</div>
 		<div class="form-actions">
 			<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

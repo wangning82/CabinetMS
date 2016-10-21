@@ -5,25 +5,27 @@ package com.cabinetms.programtactic.entity;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
+import com.google.common.collect.Lists;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
- * 节目策略Entity
- * @author 付殿东
- * @version 2016-10-09
+ * 节目策略一对多生成Entity
+ * @author 于滨
+ * @version 2016-10-19
  */
 public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 	
 	private static final long serialVersionUID = 1L;
 	private String no;		// 策略编号
 	private String name;		// 策略名称
-	private Date starttime;		// 开始时间
-	private Date endtime;		// 结束时间
+	private String starttime;		// 开始时间
+	private String endtime;		// 结束时间
 	private String status;		// 策略状态
 	private Date beginCreateDate;		// 开始 创建时间
 	private Date endCreateDate;		// 结束 创建时间
+	private List<CabinetmsProgramTacticDetail> cabinetmsProgramTacticDetailList = Lists.newArrayList();		// 子表列表
 	
 	public CabinetmsProgramTactic() {
 		super();
@@ -51,21 +53,19 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 		this.name = name;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getStarttime() {
+	public String getStarttime() {
 		return starttime;
 	}
 
-	public void setStarttime(Date starttime) {
+	public void setStarttime(String starttime) {
 		this.starttime = starttime;
 	}
 	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getEndtime() {
+	public String getEndtime() {
 		return endtime;
 	}
 
-	public void setEndtime(Date endtime) {
+	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
 	
@@ -94,4 +94,11 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 		this.endCreateDate = endCreateDate;
 	}
 		
+	public List<CabinetmsProgramTacticDetail> getCabinetmsProgramTacticDetailList() {
+		return cabinetmsProgramTacticDetailList;
+	}
+
+	public void setCabinetmsProgramTacticDetailList(List<CabinetmsProgramTacticDetail> cabinetmsProgramTacticDetailList) {
+		this.cabinetmsProgramTacticDetailList = cabinetmsProgramTacticDetailList;
+	}
 }
