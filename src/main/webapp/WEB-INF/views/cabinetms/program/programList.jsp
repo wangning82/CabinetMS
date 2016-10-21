@@ -52,7 +52,7 @@
 			<li><label>模版名称：</label>
 				<form:select path="modelName" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:options items="${fns:getDictList('template_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
 			<li><label>状态：</label>
