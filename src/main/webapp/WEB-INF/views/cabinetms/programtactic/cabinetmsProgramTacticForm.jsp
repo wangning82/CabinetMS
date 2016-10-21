@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -63,11 +63,28 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cabinetmsProgramTactic" action="${ctx}/programtactic/cabinetmsProgramTactic/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
+		<input type="hidden" name="status" value="1"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">策略名称：</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">开始时间：</label>
+			<div class="controls">
+				<input name="starttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="${cabinetmsProgramTactic.starttime}"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">结束时间：</label>
+			<div class="controls">
+				<input name="endtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="${cabinetmsProgramTactic.endtime}"
+					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -103,7 +120,7 @@
 								<input id="cabinetmsProgramTacticDetailList{{idx}}_delFlag" name="cabinetmsProgramTacticDetailList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
-								<select id="cabinetmsProgramTacticDetailList{{idx}}_program" name="cabinetmsProgramTacticDetailList[{{idx}}].program.id" class="input-medium ">
+								<select id="cabinetmsProgramTacticDetailList{{idx}}_program" data-value="{{row.program.id}}" name="cabinetmsProgramTacticDetailList[{{idx}}].program.id" class="input-medium ">
 									<option value="">请选择</option>
 									<c:forEach items="${programList }" var="program">
 										<option value="${program.id }">${program.name }</option>
@@ -112,11 +129,11 @@
 							</td>
 							<td>
 								<input id="cabinetmsProgramTacticDetailList{{idx}}_starttime" name="cabinetmsProgramTacticDetailList[{{idx}}].starttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-									value="{{row.starttime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+									value="{{row.starttime}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 							</td>
 							<td>
 								<input id="cabinetmsProgramTacticDetailList{{idx}}_endtime" name="cabinetmsProgramTacticDetailList[{{idx}}].endtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-									value="{{row.endtime}}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+									value="{{row.endtime}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 							</td>
 							<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><td class="text-center" width="10">
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#cabinetmsProgramTacticDetailList{{idx}}')" title="删除">&times;</span>{{/delBtn}}

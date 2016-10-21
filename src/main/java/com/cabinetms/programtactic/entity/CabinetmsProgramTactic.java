@@ -6,6 +6,8 @@ package com.cabinetms.programtactic.entity;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import java.util.List;
+
+import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.google.common.collect.Lists;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -16,7 +18,6 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
  * @version 2016-10-19
  */
 public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
-	
 	private static final long serialVersionUID = 1L;
 	private String no;		// 策略编号
 	private String name;		// 策略名称
@@ -26,6 +27,7 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 	private Date beginCreateDate;		// 开始 创建时间
 	private Date endCreateDate;		// 结束 创建时间
 	private List<CabinetmsProgramTacticDetail> cabinetmsProgramTacticDetailList = Lists.newArrayList();		// 子表列表
+	private List<CabinetmsTerminal> termList = Lists.newArrayList();//策略发布时使用的终端收集列表
 	
 	public CabinetmsProgramTactic() {
 		super();
@@ -101,4 +103,13 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 	public void setCabinetmsProgramTacticDetailList(List<CabinetmsProgramTacticDetail> cabinetmsProgramTacticDetailList) {
 		this.cabinetmsProgramTacticDetailList = cabinetmsProgramTacticDetailList;
 	}
+
+	public List<CabinetmsTerminal> getTermList() {
+		return termList;
+	}
+
+	public void setTermList(List<CabinetmsTerminal> termList) {
+		this.termList = termList;
+	}
+	
 }

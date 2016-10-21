@@ -81,11 +81,27 @@
 					${fns:getDictLabel(cabinetmsProgramTactic.status, 'programStrategyType', '')}
 				</td>
 				<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><td>
-    				<a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">修改</a>
-					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要删除该节目策略吗？', this.href)">删除</a>
-					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要提交该节目策略吗？', this.href)">提交</a>
-					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要发布该节目策略吗？', this.href)">发布</a>
-					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要撤销该节目策略吗？', this.href)">撤销</a>
+					<!-- 待提交状态可以编辑 -->
+					<c:if test="${cabinetmsProgramTactic.status eq '1' }">
+    					<a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">修改</a>
+					</c:if>
+					<!-- 待提交状态和待发布状态可以删除 -->
+					<c:if test="${cabinetmsProgramTactic.status eq '1' or cabinetmsProgramTactic.status eq '2'}">
+    					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要删除该节目策略吗？', this.href)">删除</a>
+					</c:if>
+					<!-- 待提交状态可以提交 -->
+					<c:if test="${cabinetmsProgramTactic.status eq '1' }">
+    					<a href="${ctx}/programtactic/cabinetmsProgramTactic/updateStatus?id=${cabinetmsProgramTactic.id}&&status=2" onclick="return confirmx('确认要提交该节目策略吗？', this.href)">提交</a>
+					</c:if>
+					<!-- 待发布状态可以发布 -->
+					<c:if test="${cabinetmsProgramTactic.status eq '2' }">
+    					<a href="${ctx}/programtactic/cabinetmsProgramTactic/updateStatus?id=${cabinetmsProgramTactic.id}&&status=3" onclick="return confirmx('确认要发布该节目策略吗？', this.href)">发布</a>
+					</c:if>
+					<!-- 已发布状态可以撤销 和查看终端-->
+					<c:if test="${cabinetmsProgramTactic.status eq '3' }">
+						<a href="${ctx}/programtactic/cabinetmsProgramTactic/updateStatus?id=${cabinetmsProgramTactic.id}&&status=2" onclick="return confirmx('确认要撤销该节目策略吗？', this.href)">撤销</a>
+						<a href="${ctx}/programtactic/cabinetmsProgramTactic/seeTerm?id=${cabinetmsProgramTactic.id}">查看终端</a>
+					</c:if>
 					<a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">预览</a>
 				</td></shiro:hasPermission>
 			</tr>
