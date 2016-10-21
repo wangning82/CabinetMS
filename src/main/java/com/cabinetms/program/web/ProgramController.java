@@ -115,8 +115,8 @@ public class ProgramController extends BaseController {
 	@ResponseBody
 	public void preview(Program program, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateException {
 
-		String path = request.getSession().getServletContext().getRealPath("/WEB-INF/views/cabinetms/program/template/");
-		String templateFilePath = path + program.getModelName() + ".ftl";
+		String path = request.getSession().getServletContext().getRealPath("/WEB-INF/views/cabinetms/program/template");
+		String templateFilePath = path + File.separator + program.getModelName() + ".ftl";
 		String templateContent = FileUtils.readFileToString(new File(templateFilePath));
 
 		String programFileRoot = request.getSession().getServletContext().getRealPath("/");
