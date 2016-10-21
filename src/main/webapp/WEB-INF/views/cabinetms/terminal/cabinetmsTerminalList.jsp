@@ -84,7 +84,7 @@
 					${fns:getDictLabel(cabinetmsTerminal.programTactic.id, '', '')}
 				</td>
 				<td>
-					cabinetmsTerminal.notice.noticeName
+					${cabinetmsTerminal.notice.noticeName}
 				</td>
 				<td>
 					${fns:getDictLabel(cabinetmsTerminal.status, 'terminal_status', '')}

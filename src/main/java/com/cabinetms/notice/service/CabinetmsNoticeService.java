@@ -11,7 +11,6 @@ import com.cabinetms.terminal.service.CabinetmsTerminalService;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,12 +63,8 @@ public class CabinetmsNoticeService extends CrudService<CabinetmsNoticeDao, Cabi
 		cabinetmsNotice.setStatus(Constants.NOTICE_STATUS_PUBLISHING);
 		cabinetmsNoticeDao.update(cabinetmsNotice);
 
-		// 添加中间表
+		// 更新终端表
 		for(String terminalId : cabinetmsNotice.getTerminalIds()){
-			cabinetmsNotice.setTerminalId(terminalId);
-			cabinetmsNoticeDao.insertNoticeToTerminal(cabinetmsNotice);
-
-			// 更新终端表
 			CabinetmsTerminal terminal = terminalService.get(terminalId);
 			terminal.setNotice(cabinetmsNotice);
 			terminalService.save(terminal);
@@ -87,15 +82,14 @@ public class CabinetmsNoticeService extends CrudService<CabinetmsNoticeDao, Cabi
 	public void undoPublish(CabinetmsNotice cabinetmsNotice){
 		// 修改消息状态
 		cabinetmsNotice.setStatus(Constants.NOTICE_STATUS_UNPUBLISHED);
+		cabinetmsNotice.setBeginDate(null);
+		cabinetmsNotice.setEndDate(null);
 		cabinetmsNoticeDao.update(cabinetmsNotice);
 
-		// 删除中间表
-		for(String terminalId : cabinetmsNotice.getTerminalIds()){
-			cabinetmsNotice.setTerminalId(terminalId);
-			cabinetmsNoticeDao.deleteNoticeToTerminal(cabinetmsNotice);
-
-			// 更新终端表
-			CabinetmsTerminal terminal = terminalService.get(terminalId);
+		CabinetmsTerminal param = new CabinetmsTerminal();
+		param.setNotice(cabinetmsNotice);
+		List<CabinetmsTerminal> terminalList = terminalService.findList(param);
+		for(CabinetmsTerminal terminal : terminalList){
 			terminal.setNotice(null);
 			terminalService.save(terminal);
 

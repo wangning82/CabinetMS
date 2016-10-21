@@ -8,6 +8,8 @@
 		a.notice_name AS "noticeName",
 		a.notice_content AS "noticeContent",
 		a.status AS "status",
+		a.starttime AS "beginDate",
+		a.endtime AS "endDate",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -83,6 +85,8 @@
 			notice_name,
 			notice_content,
 			status,
+			starttime,
+			endtime,
 			create_by,
 			create_date,
 			update_by,
@@ -94,6 +98,8 @@
 			#{noticeName},
 			#{noticeContent},
 			#{status},
+			#{beginDate},
+			#{endDate},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -108,6 +114,8 @@
 			notice_name = #{noticeName},
 			notice_content = #{noticeContent},
 			status = #{status},
+			starttime = #{beginDate},
+			endtime = #{endDate},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks}
@@ -120,23 +128,4 @@
 		WHERE id = #{id}
 	</update>
 
-	<insert id="insertNoticeToTerminal">
-		INSERT INTO cabinetms_notice_tactic_detail(
-		notice_id,
-		terminal_id,
-		starttime,
-		endtime
-		) VALUES (
-		#{id},
-		#{terminalId},
-		#{beginDate},
-		#{endDate}
-		)
-	</insert>
-
-	<delete id="deleteNoticeToTerminal">
-		DELETE FROM cabinetms_notice_tactic_detail
-		WHERE notice_id = #{id}
-	</delete>
-	
 </mapper>

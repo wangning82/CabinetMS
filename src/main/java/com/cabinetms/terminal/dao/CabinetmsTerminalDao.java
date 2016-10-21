@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.cabinetms.terminal.entity.CabinetmsTerminal;
 
+import java.util.List;
+
 /**
  * 终端管理DAO接口
  *
@@ -22,5 +24,19 @@ public interface CabinetmsTerminalDao extends CrudDao<CabinetmsTerminal> {
      * @return
      */
     int updateStatus(CabinetmsTerminal entity);
+
+    /**
+     * 查找所有连接终端
+     * @param entity
+     * @return
+     */
+    List<CabinetmsTerminal> findAllConnectedList(CabinetmsTerminal entity);
+
+    /**
+     * 查找所有播放的终端
+     * @param entity
+     * @return
+     */
+    List<CabinetmsTerminal> findAllPublishedList(CabinetmsTerminal entity);
 
 }
