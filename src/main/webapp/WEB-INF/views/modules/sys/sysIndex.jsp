@@ -6,8 +6,17 @@
 	<meta name="decorator" content="blank"/><c:set var="tabmode" value="${empty cookie.tabmode.value ? '1' : cookie.tabmode.value}"/>
     <c:if test="${tabmode eq '1'}"><link rel="Stylesheet" href="${ctxStatic}/jerichotab/css/jquery.jerichotab.css" />
     <script type="text/javascript" src="${ctxStatic}/jerichotab/js/jquery.jerichotab.js"></script></c:if>
+     <link href="${ctxStatic}/bootstrap/2.3.1/css_cerulean/index.css" type="text/css" rel="stylesheet" />
+   
 	<style type="text/css">
 		#main {padding:0;margin:0;} #main .container-fluid{padding:0 4px 0 6px;}
+		.img-circle {
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+     height: 80px;
+      width: 80px;}
 		#header {margin:0 0 8px;position:static;} #header li {font-size:14px;_font-size:12px;}
 		#header .brand {font-family:Helvetica, Georgia, Arial, sans-serif, 黑体;font-size:26px;padding-left:33px;line-height: 60px}
 		#footer {margin:8px 0 0 0;padding:3px 0 0 0;font-size:11px;text-align:center;border-top:2px solid #0663A2;}
@@ -147,21 +156,17 @@
 </head>
 <body>
 	<div id="main">
-		<div id="header" class="navbar navbar-fixed-top">
+		<div id="header" class="navbar navbar-fixed-top ">
 			<div class="navbar-inner">
-				<div class="brand"><span id="productName">${fns:getConfig('productName')}</span></div>
-				<ul id="userControl" class="nav pull-right">
-					<li id="themeSwitch" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="主题切换"><i class="icon-th-large"></i></a>
-						<ul class="dropdown-menu">
-							<c:forEach items="${fns:getDictList('theme')}" var="dict"><li><a href="#" onclick="location='${pageContext.request.contextPath}/theme/${dict.value}?url='+location.href">${dict.label}</a></li></c:forEach>
-							<li><a href="javascript:cookie('tabmode','${tabmode eq '1' ? '0' : '1'}');location=location.href">${tabmode eq '1' ? '关闭' : '开启'}页签模式</a></li>
-						</ul>
-						<!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
-					</li>
-					<li><a href="${ctx}/logout" title="退出登录">退出</a></li>
-					<li>&nbsp;</li>
-				</ul>
+				<div class="dgs13" >
+                
+                <div class="logo"><img src="${ctxStatic}/cabinet/images/logo.png"></div>
+<div  class="anniu1"><a href="${ctx}/logout"><img src="/CabinetMS/static/cabinet/images/anniu1.png"></a></div>
+<div class=" clear"></div>
+                
+                
+              </div>
+			
 
 				<%-- <c:if test="${cookie.theme.value eq 'cerulean'}">
 					<div id="user" style="position:absolute;top:0;right:0;"></div>
@@ -206,7 +211,7 @@
 	    <div class="container-fluid">
 			<div id="content" class="row-fluid">
 				<div id="left">
-					<div style="height: 120px;background: url(/CabinetMS/static/cabinet/images/touxiang.jpg);background-size: cover"></div>
+					<div style="background: url(${ctxStatic}/cabinet/images/touxiang.jpg);background-size: cover;height:120px;width: 160px"></div>
 					<div style="padding-left: 30px;height: 30px" ><li id="userInfo" class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="个人信息">您好, ${fns:getUser().name}&nbsp;<span id="notifyNum" class="label label-info hide"></span></a>
 						<ul class="dropdown-menu">
@@ -224,7 +229,7 @@
 				</div>
 			</div>
 		    <div id="footer" class="row-fluid">
-	           技术支持： ${fns:getConfig('copyrightYear')}
+	           技术支持： ${fns:getConfig('productName')} - Powered By <a href="" target="_blank">JeeSite</a> ${fns:getConfig('version')}
 			</div>
 		</div>
 	</div>
