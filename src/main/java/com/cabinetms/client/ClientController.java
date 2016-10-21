@@ -1,6 +1,5 @@
-package com.cabinetms.terminal.web;
+package com.cabinetms.client;
 
-import com.cabinetms.client.MediaCommand;
 import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.cabinetms.terminal.service.CabinetmsTerminalService;
 import org.apache.commons.lang3.StringUtils;
