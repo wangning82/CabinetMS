@@ -115,13 +115,20 @@ public class ProgramController extends BaseController {
 	@ResponseBody
 	public void preview(Program program, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateException {
 
-		String path = request.getSession().getServletContext().getRealPath("/WEB-INF/views/cabinetms/program/template/");
-		String templateFilePath = path + program.getModelName() + ".ftl";
+		String path = request.getSession().getServletContext().getRealPath("/WEB-INF/views/cabinetms/program/template");
+		String templateFilePath = path + File.separator + program.getModelName() + ".ftl";
 		String templateContent = FileUtils.readFileToString(new File(templateFilePath));
 
 		String programFileRoot = request.getSession().getServletContext().getRealPath("/");
 		String programFile = program.getProgramFile().substring(program.getProgramFile().indexOf("userfiles"));
-		String programFileContent = FileUtils.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
+
+
+		String programFileContent = "";
+		if (org.apache.commons.lang3.StringUtils.equals("txt", program.getModelName())) {
+			programFileContent = FileUtils.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
+		} if (org.apache.commons.lang3.StringUtils.equals("video", program.getModelName())) {
+			programFileContent = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
+		}
 
 		Configuration configuration = new Configuration();
 		StringTemplateLoader stringLoader = new StringTemplateLoader();
@@ -132,6 +139,7 @@ public class ProgramController extends BaseController {
 		Template temp = configuration.getTemplate("myTemplate","utf-8");
         /* 创建数据模型 */
 		Map map = new HashMap();
+		map.put("ctxStatic", request.getContextPath());
 		map.put("title", program.getTitle());
 		map.put("content", programFileContent);
 

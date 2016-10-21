@@ -17,7 +17,7 @@
 
 		function openPreview(id) {
 
-			top.$.jBox.open("iframe:${ctx}/program/program/preview", "预览界面内容", $(top.document).width()-200,$(top.document).height()-240, {
+			top.$.jBox.open("iframe:${ctx}/program/program/preview", "预览界面内容", $(top.document).width(), $(top.document).height(), {
 				ajaxData: {id: id},
 				buttons: {"确定":"ok","取消":"cancel" },
 				submit: function(v, h, f) {
@@ -52,7 +52,7 @@
 			<li><label>模版名称：</label>
 				<form:select path="modelName" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<form:options items="${fns:getDictList('template_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
 			<li><label>状态：</label>
@@ -111,7 +111,7 @@
     				<a href="${ctx}/program/program/form?id=${program.id}">修改</a>
 					<a href="${ctx}/program/program/delete?id=${program.id}" onclick="return confirmx('确认要删除该节目管理吗？', this.href)">删除</a>
 					<a href="${ctx}/program/program/preview?id=${program.id}">预览</a>
-					<a href="javascript:openPreview('${program.id}');">预览111</a>
+					<a href="javascript:openPreview('${program.id}');">弹出预览</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cabinetms.terminal.dao.CabinetmsTerminalDao">
+<mapper namespace="com.cabinetms.cabinetstatistics.dao.CabinetmsTerminalDao">
     
 	<sql id="cabinetmsTerminalColumns">
 		a.id AS "id",
@@ -17,15 +17,11 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		o5.name AS "office.name",
-		n.notice_name AS "notice.noticeName",
-		p.name AS "programTactic.name"
+		o5.name AS "office.name"
 	</sql>
 	
 	<sql id="cabinetmsTerminalJoins">
 		LEFT JOIN sys_office o5 ON o5.id = a.office_id
-		LEFT JOIN cabinetms_notice n on n.id = a.notice_id
-		LEFT JOIN cabinetms_program_tactic p on p.id = a.program_tactic_id
 	</sql>
     
 	<select id="get" resultType="CabinetmsTerminal">
@@ -54,9 +50,6 @@
 			</if>
 			<if test="programTactic != null and programTactic.id != null and programTactic.id != ''">
 				AND a.program_tactic_id = #{programTactic.id}
-			</if>
-			<if test="notice != null and notice.id != null and notice.id != ''">
-				AND a.notice_id = #{notice.id}
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
@@ -89,29 +82,10 @@
 			</otherwise>
 		</choose>
 	</select>
-
-	<select id="findAllConnectedList" resultType="CabinetmsTerminal">
-		SELECT
-		<include refid="cabinetmsTerminalColumns"/>
-		FROM cabinetms_terminal a
-		<include refid="cabinetmsTerminalJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			AND a.status != '3'
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-
+	
 	<insert id="insert">
 		INSERT INTO cabinetms_terminal(
-			id,
+			terminal_no,
 			terminal_name,
 			terminal_ip,
 			office_id,
@@ -125,7 +99,7 @@
 			remarks,
 			del_flag
 		) VALUES (
-			#{id},
+			#{terminalNo},
 			#{terminalName},
 			#{terminalIp},
 			#{office.id},
@@ -149,8 +123,7 @@
 			program_tactic_id = #{programTactic.id},
 			notice_id = #{notice.id},
 			status = #{status},
-			update_by = #{updateBy.id},
-			update_date = #{updateDate},
+			create_by = #{createBy.id},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
@@ -159,11 +132,6 @@
 		UPDATE cabinetms_terminal SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
-	</update>
-
-	<update id="updateStatus">
-		UPDATE cabinetms_terminal SET status = #{status}, update_date = #{updateDate}
-		WHERE terminal_ip = #{terminalIp}
 	</update>
 	
 </mapper>

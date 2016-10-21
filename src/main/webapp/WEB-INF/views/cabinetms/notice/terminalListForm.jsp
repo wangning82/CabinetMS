@@ -27,9 +27,9 @@
 <ul class="ul-form">
     <li><label>播放时间：</label>
         <input id="beginDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-               value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> -
+               value="<fmt:formatDate value='${notice.beginDate}' pattern='yyyy-MM-dd HH:mm:ss'/>" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> -
         <input id="endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-               value="" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+               value="<fmt:formatDate value='${notice.endDate}' pattern='yyyy-MM-dd HH:mm:ss'/>" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
     </li>
 </ul>
 <table class="table table-striped table-bordered table-condensed">
@@ -39,31 +39,31 @@
         <th>终端IP</th>
         <th>机构</th>
         <th>终端状态</th>
-        <th>终端消息</th>
-        <th>选择</th>
+        <c:if test="${type == 'edit'}">
+            <th>选择</th>
+        </c:if>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="cabinetmsTerminal" items="${terminalList}">
+    <c:forEach var="terminal" items="${terminalList}">
         <tr>
             <td>
-                    ${cabinetmsTerminal.terminalName}
+                    ${terminal.terminalName}
             </td>
             <td>
-                    ${cabinetmsTerminal.terminalIp}
+                    ${terminal.terminalIp}
             </td>
             <td>
-                    ${cabinetmsTerminal.office.name}
+                    ${terminal.office.name}
             </td>
             <td>
-                    ${fns:getDictLabel(cabinetmsTerminal.status, 'terminal_status', '')}
+                    ${fns:getDictLabel(terminal.status, 'terminal_status', '')}
             </td>
-            <td>
-                &nbsp;
-            </td>
-            <td>
-                <input type="checkbox" name="terminalId" value="${cabinetmsTerminal.id}">
-            </td>
+            <c:if test="${type == 'edit'}">
+                <td>
+                    <input type="checkbox" name="terminalId" value="${terminal.id}">
+                </td>
+            </c:if>
         </tr>
     </c:forEach>
     </tbody>

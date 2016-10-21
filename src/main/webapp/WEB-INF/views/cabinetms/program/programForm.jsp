@@ -71,7 +71,7 @@
 		<div class="control-group">
 			<label class="control-label">模版名称：</label>
 			<div class="controls">
-				<form:select path="modelName" class="input-xlarge " onchange="templateChanged();">
+				<form:select path="modelName" class="input-xlarge ">
 					<form:option value="" label="" />
 					<form:options items="${fns:getDictList('template_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
@@ -110,12 +110,12 @@
 			</div>
 		</div>
 
-		<div class="control-group">
+		<%--<div class="control-group">
 			<label class="control-label">模板内容：</label>
 			<div class="controls">
-				<textarea id="templateContent" rows="4" maxlength="255" class="input-xxlarge "></textarea>
+				<textarea id="templateContent" rows="4" maxlength="5000" class="input-xxlarge "></textarea>
 			</div>
-		</div>
+		</div>--%>
 
 		<div class="form-actions">
 			<shiro:hasPermission name="program:program:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
