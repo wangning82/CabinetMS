@@ -39,17 +39,17 @@ padding:0px;
 	margin-right: 0px;
 	margin-bottom: 0px;}
 	.dgs13{ margin: 0px;
-padding:0px;
- background:url(../../../cabinet/images/top.jpg);
+        padding:0px;
+        background:url(../../../cabinet/images/top.jpg);
 		background-size: cover;
-  height:90px;
-	background-position: center top; 
-    background-repeat: no-repeat;
-	margin-left: 0px;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;}
-	.logo{ float:left; padding-top:15px;background-size: cover;}
+        height:90px;
+	    background-position: center top;
+        background-repeat: no-repeat;
+	    margin-left: 0px;
+	    margin-top: 0px;
+	    margin-right: 0px;
+	    margin-bottom: 0px;}
+	.logo{ float:left; padding-top:15px; background-size: cover;}
 	.anniu1{ width:150px; float:right;  padding-top:25px;}
 	.denglu_s{ width:305px; margin:0 auto;
 }

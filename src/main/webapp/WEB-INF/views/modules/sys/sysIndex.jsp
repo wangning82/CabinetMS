@@ -159,13 +159,11 @@
 		<div id="header" class="navbar navbar-fixed-top ">
 			<div class="navbar-inner">
 				<div class="dgs13" >
+                    <div class="logo"><img src="${ctxStatic}/cabinet/images/logo.png"></div>
+                    <div  class="anniu1"><a href="${ctx}/logout"><img src="/CabinetMS/static/cabinet/images/anniu1.png"></a></div>
+                    <div class=" clear"></div>
                 
-                <div class="logo"><img src="${ctxStatic}/cabinet/images/logo.png"></div>
-<div  class="anniu1"><a href="${ctx}/logout"><img src="/CabinetMS/static/cabinet/images/anniu1.png"></a></div>
-<div class=" clear"></div>
-                
-                
-              </div>
+                </div>
 			
 
 				<%-- <c:if test="${cookie.theme.value eq 'cerulean'}">
