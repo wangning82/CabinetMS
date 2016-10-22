@@ -222,12 +222,14 @@
 					<iframe id="menuFrame" name="menuFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe> --%>
 				</div>
 				<div id="openClose" class="close">&nbsp;</div>
+
 				<div id="right">
+
 					<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe>
 				</div>
 			</div>
 		    <div id="footer" class="row-fluid">
-	           技术支持： ${fns:getConfig('productName')} - Powered By <a href="" target="_blank">JeeSite</a> ${fns:getConfig('version')}
+	           技术支持： ${fns:getConfig('productName')} &nbsp;&nbsp;&nbsp;版权所有：  ${fns:getConfig('version')}
 			</div>
 		</div>
 	</div>
