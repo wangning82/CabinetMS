@@ -92,6 +92,8 @@
 							$(this).parent().addClass("active");
 							$(this).children("i").addClass("icon-white");
 						});
+						// 取消默认打开的三级菜单
+						$(menuId + " .accordion-body").removeClass("in");
 						// 展现三级
 						$(menuId + " .accordion-inner a").click(function(){
 							var href = $(this).attr("data-href");
@@ -103,8 +105,8 @@
 							return addTab($(this)); // </c:if>
 						});
 						// 默认选中第一个菜单
-						$(menuId + " .accordion-body a:first i").click();
-						$(menuId + " .accordion-body li:first li:first a:first i").click();
+						//$(menuId + " .accordion-body a:first i").click();
+						//$(menuId + " .accordion-body li:first li:first a:first i").click();
 					});
 				}
 				// 大小宽度调整
@@ -117,6 +119,7 @@
 			$("#userInfo .dropdown-menu a").mouseup(function(){
 				return addTab($(this), true);
 			});// </c:if>
+			$("#userInfo .dropdown-menu:last a").click();
 			// 鼠标移动到边界自动弹出左侧菜单
 			$("#openClose").mouseover(function(){
 				if($(this).hasClass("open")){
@@ -160,7 +163,7 @@
 			<div class="navbar-inner">
 				<div class="dgs13" >
                     <div class="logo"><img src="${ctxStatic}/cabinet/images/logo.png"></div>
-                    <div  class="anniu1"><a href="${ctx}/logout"><img src="/CabinetMS/static/cabinet/images/anniu1.png"></a></div>
+                    <div  class="anniu1"><a href="${ctx}/logout"><img src="${ctxStatic}/cabinet/images/anniu1.png"></a></div>
                     <div class=" clear"></div>
                 
                 </div>
@@ -210,21 +213,25 @@
 			<div id="content" class="row-fluid">
 				<div id="left">
 					<div style="background: url(${ctxStatic}/cabinet/images/touxiang.jpg);background-size: cover;height:120px;width: 160px"></div>
-					<div style="padding-left: 30px;height: 30px;background-color: ivory" ><li id="userInfo" class="dropdown">
+					<div style="padding-left: 30px;height: 30px;background-color: ivory" >
+						<li id="userInfo" class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#" title="个人信息">您好, ${fns:getUser().name}&nbsp;<span id="notifyNum" class="label label-info hide"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="${ctx}/sys/user/info" target="mainFrame"><i class="icon-user"></i>&nbsp; 个人信息</a></li>
 							<li><a href="${ctx}/sys/user/modifyPwd" target="mainFrame"><i class="icon-lock"></i>&nbsp;  修改密码</a></li>
 							<li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i class="icon-bell"></i>&nbsp;  我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
+							<li style="display: none;">
+								<a href="${ctx}/terminal/cabinetmsTerminal/statistics" target="mainFrame" onclick="javascript:addTab($(this), true);"><i class="icon-lock"></i>&nbsp;  默认页面</a>
+							</li>
 						</ul>
-					</li></div>
+						</li>
+					</div>
 				<%--
 					<iframe id="menuFrame" name="menuFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe> --%>
 				</div>
 				<div id="openClose" class="close">&nbsp;</div>
 
 				<div id="right">
-
 					<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe>
 				</div>
 			</div>

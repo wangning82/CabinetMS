@@ -80,4 +80,9 @@ public class CabinetmsTerminalController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/terminal/cabinetmsTerminal/?repage";
 	}
 
+	@RequestMapping(value = "statistics")
+	public String statistics(Model model) {
+		return "cabinetms/terminal/cabinetmsStatistics";
+	}
+
 }
