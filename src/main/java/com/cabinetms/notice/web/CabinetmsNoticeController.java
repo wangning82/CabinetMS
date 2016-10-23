@@ -3,6 +3,8 @@
  */
 package com.cabinetms.notice.web;
 
+import com.cabinetms.client.MediaCommand;
+import com.cabinetms.common.Constants;
 import com.cabinetms.notice.entity.CabinetmsNotice;
 import com.cabinetms.notice.service.CabinetmsNoticeService;
 import com.cabinetms.terminal.entity.CabinetmsTerminal;
@@ -13,6 +15,7 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,6 +42,9 @@ public class CabinetmsNoticeController extends BaseController {
 
     @Autowired
     private CabinetmsTerminalService terminalService;
+
+    @Autowired
+    private SimpMessagingTemplate template;
 
     @ModelAttribute
     public CabinetmsNotice get(@RequestParam(required = false) String id) {
@@ -117,7 +123,19 @@ public class CabinetmsNoticeController extends BaseController {
     @RequiresPermissions("notice:cabinetmsNotice:edit")
     @RequestMapping(value = "publish")
     public String publish(CabinetmsNotice cabinetmsNotice, Model model, RedirectAttributes redirectAttributes) {
-        cabinetmsNoticeService.publish(cabinetmsNotice);
+        List<CabinetmsTerminal> terminalList = cabinetmsNoticeService.publish(cabinetmsNotice);
+        MediaCommand mediaCommand = null;
+        for(CabinetmsTerminal terminal : terminalList){
+            mediaCommand = new MediaCommand();
+            mediaCommand.setCommand(Constants.SOCKET_COMMAND_NOCITE_PUBLISH);
+            mediaCommand.setClientIp(terminal.getTerminalIp());
+            String dest = Constants.SOCKET_QUEUE_PREFIX + terminal.getTerminalIp();
+            mediaCommand.setDestination(dest);
+            mediaCommand.setContent(cabinetmsNotice.getNoticeContent());
+            mediaCommand.setStartTime(cabinetmsNotice.getBeginDate().getTime());
+            mediaCommand.setEndTime(cabinetmsNotice.getEndDate().getTime());
+            template.convertAndSend(dest, mediaCommand);
+        }
         addMessage(redirectAttributes, "发布消息信息成功");
         return "redirect:" + Global.getAdminPath() + "/notice/cabinetmsNotice/?repage";
     }
@@ -133,7 +151,16 @@ public class CabinetmsNoticeController extends BaseController {
     @RequiresPermissions("notice:cabinetmsNotice:edit")
     @RequestMapping(value = "undoPublish")
     public String undoPublish(CabinetmsNotice cabinetmsNotice, Model model, RedirectAttributes redirectAttributes) {
-        cabinetmsNoticeService.undoPublish(cabinetmsNotice);
+        List<CabinetmsTerminal> terminalList = cabinetmsNoticeService.undoPublish(cabinetmsNotice);
+        MediaCommand mediaCommand = null;
+        for(CabinetmsTerminal terminal : terminalList){
+            mediaCommand = new MediaCommand();
+            mediaCommand.setCommand(Constants.SOCKET_COMMAND_NOCITE_UNDOPUBLISH);
+            mediaCommand.setClientIp(terminal.getTerminalIp());
+            String dest = Constants.SOCKET_QUEUE_PREFIX + terminal.getTerminalIp();
+            mediaCommand.setDestination(dest);
+            template.convertAndSend(dest, mediaCommand);
+        }
         addMessage(redirectAttributes, "撤销消息信息成功");
         return "redirect:" + Global.getAdminPath() + "/notice/cabinetmsNotice/?repage";
     }

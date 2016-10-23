@@ -5,17 +5,51 @@ package com.cabinetms.common;
  */
 public class Constants {
 
+	/**
+	 * socket队列名前缀
+	 */
+	public static final String SOCKET_QUEUE_PREFIX = "/queue/";
+
+	/**
+	 * socket命令-ping
+	 */
+	public static final String SOCKET_COMMAND_PING = "ping";
+
+	/**
+	 * socket命令-发布消息
+	 */
+	public static final String SOCKET_COMMAND_NOCITE_PUBLISH = "np";
+
+	/**
+	 * socket命令-撤销消息
+	 */
+	public static final String SOCKET_COMMAND_NOCITE_UNDOPUBLISH = "nup";
+
     /**
      * 消息状态-未发布
      */
-    public static String NOTICE_STATUS_UNPUBLISHED = "1";
+    public static final String NOTICE_STATUS_UNPUBLISHED = "1";
 
     /**
      * 消息状态-发布中
      */
-    public static String NOTICE_STATUS_PUBLISHING = "2";
-    
-    
+    public static final String NOTICE_STATUS_PUBLISHING = "2";
+
+	/**
+	 * 终端状态-空闲中
+	 */
+	public static final String TERMINAL_STATUS_FREE = "1";
+
+	/**
+	 * 终端状态-播放中
+	 */
+	public static final String TERMINAL_STATUS_PLAYING = "2";
+
+	/**
+	 * 终端状态-关闭中
+	 */
+	public static final String TERMINAL_STATUS_CLOSED = "3";
+
 	// 节目策略-待提交
 	public static final String STATUS_WAIT_SUBMIT = "1";
 	

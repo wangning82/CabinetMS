@@ -11,9 +11,11 @@ import com.cabinetms.terminal.service.CabinetmsTerminalService;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -58,20 +60,20 @@ public class CabinetmsNoticeService extends CrudService<CabinetmsNoticeDao, Cabi
 	 * @param cabinetmsNotice
      */
     @Transactional(readOnly = false)
-    public void publish(CabinetmsNotice cabinetmsNotice){
+    public List<CabinetmsTerminal> publish(CabinetmsNotice cabinetmsNotice){
         // 修改消息状态
 		cabinetmsNotice.setStatus(Constants.NOTICE_STATUS_PUBLISHING);
 		cabinetmsNoticeDao.update(cabinetmsNotice);
 
+		List<CabinetmsTerminal> terminalList = new ArrayList<CabinetmsTerminal>();
 		// 更新终端表
 		for(String terminalId : cabinetmsNotice.getTerminalIds()){
 			CabinetmsTerminal terminal = terminalService.get(terminalId);
 			terminal.setNotice(cabinetmsNotice);
 			terminalService.save(terminal);
-
-			// 发送终端播放指令 TODO
-
+			terminalList.add(terminal);
 		}
+		return terminalList;
     }
 
 	/**
@@ -79,7 +81,7 @@ public class CabinetmsNoticeService extends CrudService<CabinetmsNoticeDao, Cabi
 	 * @param cabinetmsNotice
 	 */
 	@Transactional(readOnly = false)
-	public void undoPublish(CabinetmsNotice cabinetmsNotice){
+	public List<CabinetmsTerminal> undoPublish(CabinetmsNotice cabinetmsNotice){
 		// 修改消息状态
 		cabinetmsNotice.setStatus(Constants.NOTICE_STATUS_UNPUBLISHED);
 		cabinetmsNotice.setBeginDate(null);
@@ -92,10 +94,8 @@ public class CabinetmsNoticeService extends CrudService<CabinetmsNoticeDao, Cabi
 		for(CabinetmsTerminal terminal : terminalList){
 			terminal.setNotice(null);
 			terminalService.save(terminal);
-
-			// 发送终端播放指令 TODO
-
 		}
+		return terminalList;
 
 	}
 	

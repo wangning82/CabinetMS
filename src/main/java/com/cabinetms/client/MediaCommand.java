@@ -15,8 +15,8 @@ public class MediaCommand implements Serializable{
     private String title; // 媒体标题
     private String content; // 媒体内容
     private String url; // 媒体地址
-    private String startTime; // 开始时间
-    private String endTime; // 结束时间
+    private Long startTime; // 开始时间
+    private Long endTime; // 结束时间
 
     public String getCommand() {
         return command;
@@ -80,5 +80,21 @@ public class MediaCommand implements Serializable{
 
     public void setMediaType(String mediaType) {
         this.mediaType = mediaType;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
     }
 }

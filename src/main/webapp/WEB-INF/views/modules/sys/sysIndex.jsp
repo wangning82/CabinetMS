@@ -141,13 +141,13 @@
 			setInterval(getNotifyNum, ${oaNotifyRemindInterval}); //</c:if>
 		});
 		// <c:if test="${tabmode eq '1'}"> 添加一个页签
-		function addTab($this, refresh){
+		function addTab($this, refresh, closeable){
 			$(".jericho_tab").show();
 			$("#mainFrame").hide();
 			$.fn.jerichoTab.addTab({
                 tabFirer: $this,
                 title: $this.text(),
-                closeable: true,
+                closeable: closeable == null ? true : false,
                 data: {
                     dataType: 'iframe',
                     dataLink: $this.attr('href')
@@ -221,7 +221,7 @@
 							<li><a href="${ctx}/sys/user/modifyPwd" target="mainFrame"><i class="icon-lock"></i>&nbsp;  修改密码</a></li>
 							<li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i class="icon-bell"></i>&nbsp;  我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
 							<li style="display: none;">
-								<a href="${ctx}/terminal/cabinetmsTerminal/statistics" target="mainFrame" onclick="javascript:addTab($(this), true);"><i class="icon-lock"></i>&nbsp; 首页</a>
+								<a href="${ctx}/terminal/cabinetmsTerminal/statistics" target="mainFrame" onclick="javascript:addTab($(this), true, false);"><i class="icon-lock"></i>&nbsp; 首页</a>
 							</li>
 						</ul>
 						</li>

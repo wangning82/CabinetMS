@@ -5,12 +5,15 @@
     <script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="${ctxStatic}/websocket/sockjs-0.3.4.js"></script>
     <script type="text/javascript" src="${ctxStatic}/websocket/stomp.js"></script>
-    <script type="text/javascript" src="${ctxStatic}/video.js-5.10.4/ie8/videojs-ie8.min.js"></script>
-    <script type="text/javascript" src="${ctxStatic}/video.js-5.10.4/video.min.js"></script>
-    <link href="${ctxStatic}/video.js-5.10.4/video-js.min.css" rel="stylesheet">
+    <script type="text/javascript" src="${ctxStatic}/jquery-marquee/1.4.0/jquery.marquee.min.js"></script>
     <title>展示机客户端</title>
     <style>
-
+        .marquee {
+            width: 300px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background: #ccc;
+        }
     </style>
     <script type="text/javascript">
 
@@ -24,11 +27,15 @@
                     var command = decodeURIComponent(JSON.parse(message.body).command);
                     if(command == "ping"){
                         sendStatus();
+                    }else if(command == "np"){
+                        notice_publish();
+                    }else if(command == "nup"){
+                        notice_undo_publish();
                     }
                 });
             });
         }
-        
+
         function sendStatus() {
             // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
             stompClient.send("/cabinet/queue", {}, JSON.stringify({
@@ -37,8 +44,22 @@
             }));
         }
 
+        var $mq = $(".marquee").marquee();
+        function notice_publish() {
+            // 消息发布
+            var myDate = new Date();
+            myDate.getTime();
+            $mq.marquee("resume");
+        }
+
+        function notice_undo_publish() {
+            // 消息撤销
+            $mq.marquee("pause");
+        }
+
         $(function () {
             connect();
+
         });
 
 
@@ -46,14 +67,6 @@
 </head>
 <body>
 <input type="text" name="id" value="${ip}">
-<marquee direction="right" loop="40" width="640px"><span style="color: black">滚动新闻</span></marquee>
-<video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="640px" height="264px"
-       data-setup="{}" autoplay loop>
-    <source src="http://vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
-    <source src="http://vjs.zencdn.net/v/oceans.webm" type="video/webm">
-    <source src="http://vjs.zencdn.net/v/oceans.ogv" type="video/ogg">
-</video>
-
-
+<div class="marquee">jQuery marquee is the best marquee plugin in the world</div>
 </body>
 </html>

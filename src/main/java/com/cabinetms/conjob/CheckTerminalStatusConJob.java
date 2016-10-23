@@ -1,6 +1,7 @@
 package com.cabinetms.conjob;
 
 import com.cabinetms.client.MediaCommand;
+import com.cabinetms.common.Constants;
 import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.cabinetms.terminal.service.CabinetmsTerminalService;
 import org.quartz.JobExecutionContext;
@@ -23,23 +24,20 @@ public class CheckTerminalStatusConJob extends QuartzJobBean {
     @Autowired
     private SimpMessagingTemplate template;
 
-    private String queuePrefix = "/queue/";
-
-    private String COMMAND_PING = "ping";
-
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         List<CabinetmsTerminal> list = terminalService.findList(new CabinetmsTerminal());
+        MediaCommand mediaCommand = null;
         for(CabinetmsTerminal terminal : list){
-            terminal.setStatus("3"); // 关闭
+            terminal.setStatus(Constants.TERMINAL_STATUS_CLOSED);
             terminalService.updateStatus(terminal);
 
-            String dest = queuePrefix + terminal.getTerminalIp();
-            MediaCommand mediaCommand = new MediaCommand();
-            mediaCommand.setCommand(COMMAND_PING);
+            String dest = Constants.SOCKET_QUEUE_PREFIX + terminal.getTerminalIp();
+            mediaCommand = new MediaCommand();
+            mediaCommand.setCommand(Constants.SOCKET_COMMAND_PING);
             mediaCommand.setClientIp(terminal.getTerminalIp());
             mediaCommand.setDestination(dest);
-            this.template.convertAndSend(dest, mediaCommand);
+            template.convertAndSend(dest, mediaCommand);
         }
     }
 }
