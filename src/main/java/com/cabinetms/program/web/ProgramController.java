@@ -34,9 +34,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URLDecoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 节目管理Controller
@@ -120,20 +118,43 @@ public class ProgramController extends BaseController {
 		String templateContent = FileUtils.readFileToString(new File(templateFilePath));
 
 		String programFileRoot = request.getSession().getServletContext().getRealPath("/");
-		String programFile = program.getProgramFile().substring(program.getProgramFile().indexOf("userfiles"));
 
-
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<String, Object>();
 		String programFileContent = "";
 		if (org.apache.commons.lang3.StringUtils.equals("txt", program.getModelName())) {
+			String programFile = program.getProgramFile().substring(program.getProgramFile().indexOf("userfiles"));
 			programFileContent = FileUtils.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
+
 		} if (org.apache.commons.lang3.StringUtils.equals("video", program.getModelName())) {
 			programFileContent = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
+
 		} else if (org.apache.commons.lang3.StringUtils.equals("image", program.getModelName())) {
 			String imageStr = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
 			String[] nameArr = imageStr.split("\\|");
 			map.put("imageList", nameArr);
+
+		} else if (org.apache.commons.lang3.StringUtils.equals("mix", program.getModelName())) {
+			String nameStr = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
+			String[] nameArr = nameStr.split("\\|");
+
+			List<String> imageList = new ArrayList<String>();
+			for (String url : nameArr) {
+				if (org.apache.commons.lang3.StringUtils.contains(url, "txt")) {
+					String programFile = url.substring(url.indexOf("userfiles"));
+					programFileContent = FileUtils.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
+					map.put("txtContent", programFileContent);
+				}
+				if (org.apache.commons.lang3.StringUtils.contains(url, "mp4")) {
+					programFileContent = URLDecoder.decode(url, "utf-8");
+					map.put("videoContent", programFileContent);
+				}
+				if (org.apache.commons.lang3.StringUtils.contains(url, "jpg")) {
+					imageList.add(url);
+				}
+			}
+			map.put("imageList", imageList);
 		}
+
 		map.put("ctxStatic", request.getContextPath());
 		map.put("title", program.getTitle());
 		map.put("content", programFileContent);
