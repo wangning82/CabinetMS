@@ -17,16 +17,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.cabinetms.common.Constants;
-import com.cabinetms.common.func.FuncUtil;
+import com.cabinetms.program.entity.Program;
+import com.cabinetms.program.service.ProgramService;
 import com.cabinetms.programtactic.entity.CabinetmsProgramTactic;
 import com.cabinetms.programtactic.service.CabinetmsProgramTacticService;
 import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.cabinetms.terminal.service.CabinetmsTerminalService;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 
 /**
  * 节目策略Controller
@@ -42,6 +43,9 @@ public class CabinetmsProgramTacticController extends BaseController {
 	
 	@Autowired
 	private CabinetmsTerminalService cabinetmsTerminalService;
+	
+	@Autowired
+	private ProgramService	programService;
 	
 	@ModelAttribute
 	public CabinetmsProgramTactic get(@RequestParam(required=false) String id) {
@@ -66,7 +70,9 @@ public class CabinetmsProgramTacticController extends BaseController {
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:view")
 	@RequestMapping(value = "form")
 	public String form(CabinetmsProgramTactic cabinetmsProgramTactic, Model model) throws InstantiationException, IllegalAccessException {
-		List<?> programList = FuncUtil.getAll(FuncUtil.PROGRAM_KEY_NAME);
+		Program program = new Program();
+		program.setStatus(Constants.PROGRAM_STATUS_SUBMITED);
+		List<Program> programList = programService.findList(program);
 		model.addAttribute("programList", programList);
 		model.addAttribute("cabinetmsProgramTactic", cabinetmsProgramTactic);
 		return "cabinetms/programtactic/cabinetmsProgramTacticForm";
@@ -116,14 +122,6 @@ public class CabinetmsProgramTacticController extends BaseController {
 			if (StringUtils.equals(orgStatus, Constants.STATUS_WAIT_SUBMIT)&&StringUtils.equals(status, Constants.STATUS_WAIT_RELEASE)) {
 				addMessage(redirectAttributes, "策略信息提交成功");
 			}
-			//原始状态是待发布，更新后的状态是已发布，就提示发布成功
-			if (StringUtils.equals(orgStatus, Constants.STATUS_WAIT_RELEASE)&&StringUtils.equals(status, Constants.STATUS_RELEASED)) {
-				addMessage(redirectAttributes, "策略信息发布成功");
-			}
-			//原始状态是已发布，更新后的状态是待发布，就提示撤销成功
-			if (StringUtils.equals(orgStatus, Constants.STATUS_RELEASED)&&StringUtils.equals(status, Constants.STATUS_WAIT_RELEASE)) {
-				addMessage(redirectAttributes, "策略信息撤销成功");
-			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -132,14 +130,6 @@ public class CabinetmsProgramTacticController extends BaseController {
 			if (StringUtils.equals(orgStatus, Constants.STATUS_WAIT_SUBMIT)&&StringUtils.equals(status, Constants.STATUS_WAIT_RELEASE)) {
 				addMessage(redirectAttributes, "策略信息提交失败");
 			}
-			//原始状态是待发布，更新后的状态是已发布，就提示发布失败
-			if (StringUtils.equals(orgStatus, Constants.STATUS_WAIT_RELEASE)&&StringUtils.equals(status, Constants.STATUS_RELEASED)) {
-				addMessage(redirectAttributes, "策略信息发布失败");
-			}
-			//原始状态是已发布，更新后的状态是待发布，就提示撤销失败
-			if (StringUtils.equals(orgStatus, Constants.STATUS_RELEASED)&&StringUtils.equals(status, Constants.STATUS_WAIT_RELEASE)) {
-				addMessage(redirectAttributes, "策略信息撤销失败");
-			}
 		}
 		return "redirect:" + Global.getAdminPath() + "/programtactic/cabinetmsProgramTactic/list?repage";
 	}
@@ -147,7 +137,17 @@ public class CabinetmsProgramTacticController extends BaseController {
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:view")
 	@RequestMapping(value = {"termList"})
 	public String termList(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, HttpServletResponse response, Model model){
-		Page<CabinetmsTerminal> page = cabinetmsTerminalService.findPage(new Page<CabinetmsTerminal>(), new CabinetmsTerminal());
+		Page<CabinetmsTerminal> page = cabinetmsTerminalService.findPage(new Page<CabinetmsTerminal>(request, response), new CabinetmsTerminal());
+		model.addAttribute("page", page);
+		return "cabinetms/programtactic/cabinetmsProgramTacticSelectTerm";
+	}
+	
+	@RequiresPermissions("programtactic:cabinetmsProgramTactic:view")
+	@RequestMapping(value = {"termListOnly"})
+	public String termListOnly(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, HttpServletResponse response, Model model){
+		CabinetmsTerminal cabinetmsTerminal = new CabinetmsTerminal();
+		cabinetmsTerminal.setProgramTactic(cabinetmsProgramTactic);
+		Page<CabinetmsTerminal> page = cabinetmsTerminalService.findPage(new Page<CabinetmsTerminal>(request, response), cabinetmsTerminal);
 		model.addAttribute("page", page);
 		return "cabinetms/programtactic/cabinetmsProgramTacticSelectTerm";
 	}
@@ -163,6 +163,20 @@ public class CabinetmsProgramTacticController extends BaseController {
 			e.printStackTrace();
 			addMessage(redirectAttributes, "发布节目策略失败");
 		}
-		return "cabinetms/programtactic/cabinetmsProgramTacticSelectTerm";
+		return "redirect:" + Global.getAdminPath() + "/programtactic/cabinetmsProgramTactic/list?repage";
+	}
+	
+	@RequiresPermissions("programtactic:cabinetmsProgramTactic:edit")
+	@RequestMapping(value = {"cancel"})
+	public String cancel(CabinetmsProgramTactic cabinetmsProgramTactic, Model model,
+			RedirectAttributes redirectAttributes){
+		try {
+			cabinetmsProgramTacticService.cancel(cabinetmsProgramTactic);
+			addMessage(redirectAttributes, "撤销节目策略成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			addMessage(redirectAttributes, "撤销节目策略失败");
+		}
+		return "redirect:" + Global.getAdminPath() + "/programtactic/cabinetmsProgramTactic/list?repage";
 	}
 }

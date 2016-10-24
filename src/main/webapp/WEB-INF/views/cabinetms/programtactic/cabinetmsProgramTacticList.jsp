@@ -14,9 +14,75 @@
 			$("#searchForm").submit();
         	return false;
         }
+		
+		function seeTerm(id){
+			// 正常打开	
+			top.$.jBox.open("iframe:${ctx}/programtactic/cabinetmsProgramTactic/termListOnly", "选择终端", $(top.document).width()-200,$(top.document).height()-240, {
+				ajaxData:{id: id},buttons:{"确定":"ok" }, submit:function(v, h, f){
+					if(v == 'ok'){
+						top.$.jBox.close(true);
+						return false;
+					}
+				}, loaded:function(h){
+					$(".jbox-content", top.document).css("overflow-y","hidden");
+				}
+			});
+		}
+		
+		function CabinetmsProgramTactic(id,termList){
+			this.id = id;
+			this.termList = termList;
+		}
+		
+		function release(id){
+			// 正常打开	
+			top.$.jBox.open("iframe:${ctx}/programtactic/cabinetmsProgramTactic/termList", "选择终端", $(top.document).width()-200,$(top.document).height()-240, {
+				ajaxData:{id: id},buttons:{"确定":"ok","取消":"cancel" }, submit:function(v, h, f){
+					if(v == 'ok'){
+						
+						loading('正在提交，请稍等...');
+						
+						/***************invoice array Start***************/
+						var termList = h.find("iframe")[0].contentWindow.getData();
+						/***************invoice array end***************/
+						
+						var cabinetmsProgramTactic = new CabinetmsProgramTactic(id,termList);
+						
+						var saveTermListTpl = $("#saveTermListTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+						
+						$("#releaseForm").append(Mustache.render(saveTermListTpl, {
+							row: cabinetmsProgramTactic
+						}));
+						
+						//alert($("#releaseForm").html())
+						
+						// 执行保存
+						$("#releaseForm").submit();
+						return true;
+					}
+					else if(v == 'cancel'){
+						top.$.jBox.close(true);
+						return false;
+					}
+				}, loaded:function(h){
+					$(".jbox-content", top.document).css("overflow-y","hidden");
+				}
+			});
+		}
 	</script>
 </head>
 <body>
+	<form:form id="releaseForm" modelAttribute="cabinetmsProgramTactic" action="${ctx}/programtactic/cabinetmsProgramTactic/release" method="post" class="form-horizontal">
+		<script type="text/template" id="saveTermListTpl">
+		//<!--
+		<input type="text" name="id" id="id" value="{{row.id}}">
+		{{#row.termList}}
+			<input name="termList[{{idx}}].id" type="text" value="{{id}}"/>
+		{{/row.termList}}
+		//-->
+		</script>	
+	</form:form>
+	
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略列表</a></li>
 		<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><li><a href="${ctx}/programtactic/cabinetmsProgramTactic/form">节目策略添加</a></li></shiro:hasPermission>
@@ -95,12 +161,12 @@
 					</c:if>
 					<!-- 待发布状态可以发布 -->
 					<c:if test="${cabinetmsProgramTactic.status eq '2' }">
-    					<a href="${ctx}/programtactic/cabinetmsProgramTactic/updateStatus?id=${cabinetmsProgramTactic.id}&&status=3" onclick="return confirmx('确认要发布该节目策略吗？', this.href)">发布</a>
+    					<a href="#" onclick="release('${cabinetmsProgramTactic.id}')">发布</a>
 					</c:if>
 					<!-- 已发布状态可以撤销 和查看终端-->
 					<c:if test="${cabinetmsProgramTactic.status eq '3' }">
-						<a href="${ctx}/programtactic/cabinetmsProgramTactic/updateStatus?id=${cabinetmsProgramTactic.id}&&status=2" onclick="return confirmx('确认要撤销该节目策略吗？', this.href)">撤销</a>
-						<a href="${ctx}/programtactic/cabinetmsProgramTactic/seeTerm?id=${cabinetmsProgramTactic.id}">查看终端</a>
+						<a href="${ctx}/programtactic/cabinetmsProgramTactic/cancel?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要撤销该节目策略吗？', this.href)">撤销</a>
+						<a href="#" onclick="seeTerm('${cabinetmsProgramTactic.id}')">查看终端</a>
 					</c:if>
 					<a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">预览</a>
 				</td></shiro:hasPermission>

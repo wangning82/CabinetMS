@@ -4,6 +4,10 @@
 package com.cabinetms.programtactic.entity;
 
 import com.cabinetms.programtactic.entity.CabinetmsProgramTactic;
+import com.google.common.collect.Lists;
+
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 import com.cabinetms.program.entity.Program;
 
@@ -23,6 +27,8 @@ public class CabinetmsProgramTacticDetail extends DataEntity<CabinetmsProgramTac
 	private String programName;		// 节目名称
 	private String starttime;		// 开始时间
 	private String endtime;		// 结束时间
+	
+	private List<Program> programList = Lists.newArrayList();
 	
 	public CabinetmsProgramTacticDetail() {
 		super();
@@ -85,5 +91,14 @@ public class CabinetmsProgramTacticDetail extends DataEntity<CabinetmsProgramTac
 	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
+
+	public List<Program> getProgramList() {
+		return programList;
+	}
+
+	public void setProgramList(List<Program> programList) {
+		this.programList = programList;
+	}
+	
 	
 }

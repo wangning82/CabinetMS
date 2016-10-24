@@ -23,9 +23,9 @@
 				}
 			});
 		});
-		function addRow(list, idx, tpl, row){
+		function addRow(isAdd,list, idx, tpl, row){
 			$(list).append(Mustache.render(tpl, {
-				idx: idx, delBtn: true, row: row
+				idx: idx, delBtn: true, row: row,isAdd:isAdd
 			}));
 			$(list+idx).find("select").each(function(){
 				$(this).val($(this).attr("data-value"));
@@ -58,8 +58,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略一对多生成列表</a></li>
-		<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">节目策略一对多生成<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit">${not empty cabinetmsProgramTactic.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="programtactic:cabinetmsProgramTactic:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/programtactic/cabinetmsProgramTactic/">节目策略生成列表</a></li>
+		<li class="active"><a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">节目策略生成<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit">${not empty cabinetmsProgramTactic.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="programtactic:cabinetmsProgramTactic:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cabinetmsProgramTactic" action="${ctx}/programtactic/cabinetmsProgramTactic/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -109,10 +109,9 @@
 						<tbody id="cabinetmsProgramTacticDetailList">
 						</tbody>
 						<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><tfoot>
-							<tr><td colspan="8"><a href="javascript:" onclick="addRow('#cabinetmsProgramTacticDetailList', cabinetmsProgramTacticDetailRowIdx, cabinetmsProgramTacticDetailTpl);cabinetmsProgramTacticDetailRowIdx = cabinetmsProgramTacticDetailRowIdx + 1;" class="btn">新增</a></td></tr>
+							<tr><td colspan="8"><a href="javascript:" onclick="addRow('Y','#cabinetmsProgramTacticDetailList', cabinetmsProgramTacticDetailRowIdx, cabinetmsProgramTacticDetailTpl);cabinetmsProgramTacticDetailRowIdx = cabinetmsProgramTacticDetailRowIdx + 1;" class="btn">新增</a></td></tr>
 						</tfoot></shiro:hasPermission>
 					</table>
-					
 					<script type="text/template" id="cabinetmsProgramTacticDetailTpl">//<!--
 						<tr id="cabinetmsProgramTacticDetailList{{idx}}">
 							<td class="hide">
@@ -122,9 +121,16 @@
 							<td>
 								<select id="cabinetmsProgramTacticDetailList{{idx}}_program" data-value="{{row.program.id}}" name="cabinetmsProgramTacticDetailList[{{idx}}].program.id" class="input-medium ">
 									<option value="">请选择</option>
-									<c:forEach items="${programList }" var="program">
-										<option value="${program.id }">${program.name }</option>
-									</c:forEach>
+									{{^isAdd}}
+										{{#row.programList}}
+											<option value="{{id}}">{{name}}</option>
+                                    	{{/row.programList}}
+									{{/isAdd}}
+									{{#isAdd}}
+										<c:forEach items="${programList }" var="program">
+											<option value="${program.id}">${program.name}</option>
+										</c:forEach>
+									{{/isAdd}}
 								</select>
 							</td>
 							<td>
@@ -145,7 +151,7 @@
 						$(document).ready(function() {
 							var data = ${fns:toJson(cabinetmsProgramTactic.cabinetmsProgramTacticDetailList)};
 							for (var i=0; i<data.length; i++){
-								addRow('#cabinetmsProgramTacticDetailList', cabinetmsProgramTacticDetailRowIdx, cabinetmsProgramTacticDetailTpl, data[i]);
+								addRow(null,'#cabinetmsProgramTacticDetailList', cabinetmsProgramTacticDetailRowIdx, cabinetmsProgramTacticDetailTpl, data[i]);
 								cabinetmsProgramTacticDetailRowIdx = cabinetmsProgramTacticDetailRowIdx + 1;
 							}
 						});

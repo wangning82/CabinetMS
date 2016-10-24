@@ -14,6 +14,21 @@
 			$("#searchForm").submit();
         	return false;
         }
+		
+		function Term(id,idx){
+			this.id = id;
+			this.idx = idx;
+		}
+		
+		function getData(){
+			var dataArray = new Array();
+			$('input[name="termIds"]:checked').each(function(index){
+				var termId = $(this).val();
+				var term = new Term(termId,index);
+				dataArray.push(term);
+			});
+			return dataArray;
+		}
 	</script>
 </head>
 <body>
@@ -36,7 +51,7 @@
 			<tbody>
 			<c:forEach items="${page.list}" var="term" varStatus="status">
 				<tr>
-					<td><input type="checkbox" name="termList[${status.index }].id" value="${term.id }"/></td>
+					<td><input type="checkbox" name="termIds" value="${term.id }"/></td>
 					<td>
 						${term.terminalName}
 					</td>
