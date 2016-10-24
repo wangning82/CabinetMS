@@ -123,12 +123,20 @@ public class ProgramController extends BaseController {
 		String programFile = program.getProgramFile().substring(program.getProgramFile().indexOf("userfiles"));
 
 
+		Map map = new HashMap();
 		String programFileContent = "";
 		if (org.apache.commons.lang3.StringUtils.equals("txt", program.getModelName())) {
 			programFileContent = FileUtils.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
 		} if (org.apache.commons.lang3.StringUtils.equals("video", program.getModelName())) {
 			programFileContent = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
+		} else if (org.apache.commons.lang3.StringUtils.equals("image", program.getModelName())) {
+			String imageStr = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
+			String[] nameArr = imageStr.replaceAll("|", ";").split(";");
+			map.put("imageList", nameArr);
 		}
+		map.put("ctxStatic", request.getContextPath());
+		map.put("title", program.getTitle());
+		map.put("content", programFileContent);
 
 		Configuration configuration = new Configuration();
 		StringTemplateLoader stringLoader = new StringTemplateLoader();
@@ -137,13 +145,8 @@ public class ProgramController extends BaseController {
 		configuration.setTemplateLoader(stringLoader);
 
 		Template temp = configuration.getTemplate("myTemplate","utf-8");
-        /* 创建数据模型 */
-		Map map = new HashMap();
-		map.put("ctxStatic", request.getContextPath());
-		map.put("title", program.getTitle());
-		map.put("content", programFileContent);
-
 		temp.process(map, response.getWriter());
+
 //		System.out.println(writer.toString().replaceAll("[\\n\\r]", ""));
 		response.flushBuffer();
 	}
