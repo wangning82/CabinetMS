@@ -34,8 +34,8 @@
             }
         };
 
+        $("#jssor_div").width($(top.document).width()).height($(top.document).height());
         var jssor_slider1 = new $JssorSlider$("slider1_container", options);
-
     });
 </script>
 <!-- Jssor Slider Begin -->
@@ -54,7 +54,7 @@
     </div>
 
     <!-- Slides Container -->
-    <div u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 600px; height: 300px;
+    <div id="jssor_div" u="slides" style="cursor: move; position: absolute; left: 0px; top: 0px; width: 600px; height: 300px;
             overflow: hidden;">
         <#list imageList as image>
             <div>

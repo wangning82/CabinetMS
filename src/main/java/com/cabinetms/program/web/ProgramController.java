@@ -131,7 +131,7 @@ public class ProgramController extends BaseController {
 			programFileContent = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
 		} else if (org.apache.commons.lang3.StringUtils.equals("image", program.getModelName())) {
 			String imageStr = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
-			String[] nameArr = imageStr.replaceAll("|", ";").split(";");
+			String[] nameArr = imageStr.split("\\|");
 			map.put("imageList", nameArr);
 		}
 		map.put("ctxStatic", request.getContextPath());
