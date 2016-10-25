@@ -81,7 +81,7 @@ public class ProgramController extends BaseController {
 		if (!beanValidator(model, program)){
 			return form(program, model);
 		}
-		program.setStatus("0");
+		program.setStatus("1");
 		programService.save(program);
 		addMessage(redirectAttributes, "保存节目管理成功");
 		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
