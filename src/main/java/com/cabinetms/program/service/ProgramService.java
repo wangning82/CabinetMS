@@ -3,16 +3,32 @@
  */
 package com.cabinetms.program.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+
+import freemarker.cache.StringTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
 import com.cabinetms.program.entity.Program;
 import com.cabinetms.common.Constants;
 import com.cabinetms.program.dao.ProgramDao;
@@ -98,5 +114,74 @@ public class ProgramService extends CrudService<ProgramDao, Program> {
 	 */
 	public List<Program> findProgramForAdd(){
 		return findProgramForEdit(null);
+	}
+	
+	public void getProgramHTMLStream(Program program, HttpServletRequest request, Writer writer)
+			throws IOException, TemplateException {
+		
+		String path = request.getSession().getServletContext().getRealPath("/WEB-INF/views/cabinetms/program/template");
+		String templateFilePath = path + File.separator + program.getModelName() + ".ftl";
+		String templateContent = FileUtils.readFileToString(new File(templateFilePath));
+
+		String programFileRoot = request.getSession().getServletContext().getRealPath("/");
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		String programFileContent = "";
+		if (org.apache.commons.lang3.StringUtils.equals("txt", program.getModelName())) {
+			String programFile = program.getProgramFile().substring(program.getProgramFile().indexOf("userfiles"));
+			programFileContent = FileUtils
+					.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
+
+		}
+		if (org.apache.commons.lang3.StringUtils.equals("video", program.getModelName())) {
+			programFileContent = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
+
+		} else if (org.apache.commons.lang3.StringUtils.equals("image", program.getModelName())) {
+			String imageStr = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
+			String[] nameArr = imageStr.split("\\|");
+			map.put("imageList", nameArr);
+
+		} else if (org.apache.commons.lang3.StringUtils.equals("mix", program.getModelName())) {
+			String nameStr = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
+			String[] nameArr = nameStr.split("\\|");
+
+			List<String> imageList = new ArrayList<String>();
+			for (String url : nameArr) {
+				if (org.apache.commons.lang3.StringUtils.contains(url, "txt")) {
+					String programFile = url.substring(url.indexOf("userfiles"));
+					programFileContent = FileUtils.readFileToString(
+							new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
+					map.put("txtContent", programFileContent);
+				}
+				if (org.apache.commons.lang3.StringUtils.contains(url, "mp4")) {
+					programFileContent = URLDecoder.decode(url, "utf-8");
+					map.put("videoContent", programFileContent);
+				}
+				if (org.apache.commons.lang3.StringUtils.contains(url, "jpg")) {
+					imageList.add(url);
+				}
+			}
+			map.put("imageList", imageList);
+		}
+
+		map.put("ctxStatic", request.getContextPath());
+		map.put("title", program.getTitle());
+		map.put("content", programFileContent);
+
+		Configuration configuration = new Configuration();
+		StringTemplateLoader stringLoader = new StringTemplateLoader();
+		stringLoader.putTemplate("myTemplate", templateContent);
+
+		configuration.setTemplateLoader(stringLoader);
+
+		Template temp = configuration.getTemplate("myTemplate", "utf-8");
+		temp.process(map, writer);
+	}
+	
+	public String getProgramHTML(Program program, HttpServletRequest request) throws IOException, TemplateException {
+		StringWriter writer = new StringWriter();
+		getProgramHTMLStream(program, request, writer);
+		String html = writer.toString();
+		return html;
 	}
 }
