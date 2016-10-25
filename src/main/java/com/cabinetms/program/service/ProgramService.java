@@ -63,7 +63,13 @@ public class ProgramService extends CrudService<ProgramDao, Program> {
 	public void delete(Program program) {
 		super.delete(program);
 	}
-	
+
+	@Transactional(readOnly = false)
+	public void submit(Program program) {
+		program.setStatus(Constants.PROGRAM_STATUS_SUBMITED);
+		super.save(program);
+	}
+
 	/**
 	 * 为节目策略写的查询节目方法，如果是编辑则传id进来，
 	 * 首先先查所有已提交的节目，判断编辑的节目id是否在已提交的节目集合中，

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cabinetms.common.Constants;
 import com.cabinetms.program.entity.Program;
 import com.cabinetms.program.service.ProgramService;
 import com.thinkgem.jeesite.common.config.Global;
@@ -74,7 +75,7 @@ public class ProgramController extends BaseController {
 		if (!beanValidator(model, program)){
 			return form(program, model);
 		}
-		program.setStatus("0");
+		program.setStatus(Constants.PROGRAM_STATUS_WAIT_SUBMIT);
 		programService.save(program);
 		addMessage(redirectAttributes, "保存节目管理成功");
 		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
@@ -85,6 +86,14 @@ public class ProgramController extends BaseController {
 	public String delete(Program program, RedirectAttributes redirectAttributes) {
 		programService.delete(program);
 		addMessage(redirectAttributes, "删除节目管理成功");
+		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
+	}
+
+	@RequiresPermissions("program:program:edit")
+	@RequestMapping(value = "submit")
+	public String submit(Program program, RedirectAttributes redirectAttributes) {
+		programService.submit(program);
+		addMessage(redirectAttributes, "提交节目管理成功");
 		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
 	}
 
