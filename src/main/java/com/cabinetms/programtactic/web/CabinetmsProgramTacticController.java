@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -46,6 +47,9 @@ public class CabinetmsProgramTacticController extends BaseController {
 	
 	@Autowired
 	private ProgramService	programService;
+	
+	@Autowired
+	private SimpMessagingTemplate template;
 	
 	@ModelAttribute
 	public CabinetmsProgramTactic get(@RequestParam(required=false) String id) {
@@ -154,10 +158,10 @@ public class CabinetmsProgramTacticController extends BaseController {
 	
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:edit")
 	@RequestMapping(value = {"release"})
-	public String release(CabinetmsProgramTactic cabinetmsProgramTactic, Model model,
+	public String release(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, Model model,
 			RedirectAttributes redirectAttributes){
 		try {
-			cabinetmsProgramTacticService.release(cabinetmsProgramTactic);
+			cabinetmsProgramTacticService.release(cabinetmsProgramTactic,request,template);
 			addMessage(redirectAttributes, "发布节目策略成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -168,10 +172,10 @@ public class CabinetmsProgramTacticController extends BaseController {
 	
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:edit")
 	@RequestMapping(value = {"cancel"})
-	public String cancel(CabinetmsProgramTactic cabinetmsProgramTactic, Model model,
+	public String cancel(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, Model model,
 			RedirectAttributes redirectAttributes){
 		try {
-			cabinetmsProgramTacticService.cancel(cabinetmsProgramTactic);
+			cabinetmsProgramTacticService.cancel(cabinetmsProgramTactic,request,template);
 			addMessage(redirectAttributes, "撤销节目策略成功");
 		} catch (Exception e) {
 			e.printStackTrace();

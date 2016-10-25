@@ -3,15 +3,13 @@
  */
 package com.cabinetms.program.web;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import freemarker.cache.StringTemplateLoader;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,19 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.cabinetms.program.entity.Program;
 import com.cabinetms.program.service.ProgramService;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.net.URLDecoder;
-import java.util.*;
+import freemarker.template.TemplateException;
 
 /**
  * 节目管理Controller
@@ -112,62 +105,7 @@ public class ProgramController extends BaseController {
 	@RequestMapping(value = "preview")
 	@ResponseBody
 	public void preview(Program program, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateException {
-
-		String path = request.getSession().getServletContext().getRealPath("/WEB-INF/views/cabinetms/program/template");
-		String templateFilePath = path + File.separator + program.getModelName() + ".ftl";
-		String templateContent = FileUtils.readFileToString(new File(templateFilePath));
-
-		String programFileRoot = request.getSession().getServletContext().getRealPath("/");
-
-		Map<String, Object> map = new HashMap<String, Object>();
-		String programFileContent = "";
-		if (org.apache.commons.lang3.StringUtils.equals("txt", program.getModelName())) {
-			String programFile = program.getProgramFile().substring(program.getProgramFile().indexOf("userfiles"));
-			programFileContent = FileUtils.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
-
-		} if (org.apache.commons.lang3.StringUtils.equals("video", program.getModelName())) {
-			programFileContent = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
-
-		} else if (org.apache.commons.lang3.StringUtils.equals("image", program.getModelName())) {
-			String imageStr = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
-			String[] nameArr = imageStr.split("\\|");
-			map.put("imageList", nameArr);
-
-		} else if (org.apache.commons.lang3.StringUtils.equals("mix", program.getModelName())) {
-			String nameStr = URLDecoder.decode(program.getProgramFile().substring(1), "utf-8");
-			String[] nameArr = nameStr.split("\\|");
-
-			List<String> imageList = new ArrayList<String>();
-			for (String url : nameArr) {
-				if (org.apache.commons.lang3.StringUtils.contains(url, "txt")) {
-					String programFile = url.substring(url.indexOf("userfiles"));
-					programFileContent = FileUtils.readFileToString(new File(programFileRoot + "/" + URLDecoder.decode(programFile, "utf-8")));
-					map.put("txtContent", programFileContent);
-				}
-				if (org.apache.commons.lang3.StringUtils.contains(url, "mp4")) {
-					programFileContent = URLDecoder.decode(url, "utf-8");
-					map.put("videoContent", programFileContent);
-				}
-				if (org.apache.commons.lang3.StringUtils.contains(url, "jpg")) {
-					imageList.add(url);
-				}
-			}
-			map.put("imageList", imageList);
-		}
-
-		map.put("ctxStatic", request.getContextPath());
-		map.put("title", program.getTitle());
-		map.put("content", programFileContent);
-
-		Configuration configuration = new Configuration();
-		StringTemplateLoader stringLoader = new StringTemplateLoader();
-		stringLoader.putTemplate("myTemplate", templateContent);
-
-		configuration.setTemplateLoader(stringLoader);
-
-		Template temp = configuration.getTemplate("myTemplate","utf-8");
-		temp.process(map, response.getWriter());
-
+		programService.getProgramHTMLStream(program, request, response.getWriter());
 //		System.out.println(writer.toString().replaceAll("[\\n\\r]", ""));
 		response.flushBuffer();
 	}

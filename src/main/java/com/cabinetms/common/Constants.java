@@ -25,6 +25,16 @@ public class Constants {
 	 */
 	public static final String SOCKET_COMMAND_NOCITE_UNDOPUBLISH = "nup";
 
+	/**
+	 * socket命令-节目策略发布消息
+	 */
+	public static final String SOCKET_COMMAND_TACIC_PUBLISH = "tp";
+
+	/**
+	 * socket命令-节目策略撤销消息
+	 */
+	public static final String SOCKET_COMMAND_TACIC_UNDOPUBLISH = "tup";
+	
     /**
      * 消息状态-未发布
      */

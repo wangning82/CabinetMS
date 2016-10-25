@@ -29,6 +29,33 @@
 			});
 		}
 		
+		var index = 0;
+		var idArray;
+		
+		function preview(id){
+			var programIdArray = new Array();
+			var detailList = ${fns:toJson(cabinetmsProgramTactic.cabinetmsProgramTacticDetailList)};
+			for(var i = 0;i<detailList.length;i++){
+				var programId = detailList[i].program.id;
+				alert(programId);
+				programIdArray.push(programId)
+			}
+			
+			idArray = programIdArray;
+			
+			// 正常打开	
+			top.$.jBox.open("post:${ctx}/program/program/preview", "策略预览", $(top.document).width()-200,$(top.document).height()-240, {
+				ajaxData:{id: idArray[index++]},buttons:{"确定":"ok" }, submit:function(v, h, f){
+					if(v == 'ok'){
+						top.$.jBox.close(true);
+						return false;
+					}
+				}, loaded:function(h){
+					$(".jbox-content", top.document).css("overflow-y","hidden");
+				}
+			});
+		}
+		
 		function CabinetmsProgramTactic(id,termList){
 			this.id = id;
 			this.termList = termList;
@@ -168,7 +195,7 @@
 						<a href="${ctx}/programtactic/cabinetmsProgramTactic/cancel?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要撤销该节目策略吗？', this.href)">撤销</a>
 						<a href="#" onclick="seeTerm('${cabinetmsProgramTactic.id}')">查看终端</a>
 					</c:if>
-					<a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">预览</a>
+					<a href="#" onclick="preview('${cabinetmsProgramTactic.id}')">预览</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
