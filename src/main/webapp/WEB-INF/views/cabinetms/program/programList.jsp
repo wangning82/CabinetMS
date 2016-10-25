@@ -108,8 +108,15 @@
 					${program.remarks}
 				</td>
 				<shiro:hasPermission name="program:program:edit"><td>
-    				<a href="${ctx}/program/program/form?id=${program.id}">修改</a>
-					<a href="${ctx}/program/program/delete?id=${program.id}" onclick="return confirmx('确认要删除该节目管理吗？', this.href)">删除</a>
+    				<c:if test="${program.status == '1'}">
+						<a href="${ctx}/program/program/form?id=${program.id}">修改</a>
+					</c:if>
+					<c:if test="${program.status == '1' || program.status == '2'}">
+						<a href="${ctx}/program/program/delete?id=${program.id}" onclick="return confirmx('确认要删除该节目管理吗？', this.href)">删除</a>
+					</c:if>
+					<c:if test="${program.status == '1'}">
+						<a href="${ctx}/program/program/submit?id=${program.id}" onclick="return confirmx('确认要提交该节目管理吗？', this.href)">提交</a>
+					</c:if>
 					<a href="${ctx}/program/program/preview?id=${program.id}">预览</a>
 					<a href="javascript:openPreview('${program.id}');">弹出预览</a>
 				</td></shiro:hasPermission>

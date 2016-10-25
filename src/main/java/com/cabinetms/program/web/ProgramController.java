@@ -6,6 +6,7 @@ package com.cabinetms.program.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cabinetms.common.Constants;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -35,6 +36,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URLDecoder;
 import java.util.*;
+import java.util.logging.ConsoleHandler;
 
 /**
  * 节目管理Controller
@@ -81,7 +83,7 @@ public class ProgramController extends BaseController {
 		if (!beanValidator(model, program)){
 			return form(program, model);
 		}
-		program.setStatus("1");
+		program.setStatus(Constants.PROGRAM_STATUS_WAIT_SUBMIT);
 		programService.save(program);
 		addMessage(redirectAttributes, "保存节目管理成功");
 		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
@@ -92,6 +94,14 @@ public class ProgramController extends BaseController {
 	public String delete(Program program, RedirectAttributes redirectAttributes) {
 		programService.delete(program);
 		addMessage(redirectAttributes, "删除节目管理成功");
+		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
+	}
+
+	@RequiresPermissions("program:program:edit")
+	@RequestMapping(value = "submit")
+	public String submit(Program program, RedirectAttributes redirectAttributes) {
+		programService.submit(program);
+		addMessage(redirectAttributes, "提交节目管理成功");
 		return "redirect:"+Global.getAdminPath()+"/program/program/?repage";
 	}
 
