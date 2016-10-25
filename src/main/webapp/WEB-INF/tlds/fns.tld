@@ -19,6 +19,13 @@
     <example>${fns:getAdminPath()}</example>
   </function>
   <function>
+    <description>获取客户端路径</description>
+    <name>getClientPath</name>
+    <function-class>com.thinkgem.jeesite.common.config.Global</function-class>
+    <function-signature>java.lang.String getClientPath()</function-signature>
+    <example>${fns:getClientPath()}</example>
+  </function>
+  <function>
     <description>获取网站路径</description>
     <name>getFrontPath</name>
     <function-class>com.thinkgem.jeesite.common.config.Global</function-class>

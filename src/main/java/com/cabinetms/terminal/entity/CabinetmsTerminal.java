@@ -24,6 +24,7 @@ public class CabinetmsTerminal extends DataEntity<CabinetmsTerminal> {
 	private Office office;		// 机构ID
 	private CabinetmsProgramTactic programTactic;		// 节目策略ID
 	private CabinetmsNotice notice;		// 消息ID
+	private String screenshot;
 	private String status;		// 终端状态
 	
 	public CabinetmsTerminal() {
@@ -85,7 +86,6 @@ public class CabinetmsTerminal extends DataEntity<CabinetmsTerminal> {
 		this.notice = notice;
 	}
 	
-	@Length(min=0, max=1, message="终端状态长度必须介于 0 和 1 之间")
 	public String getStatus() {
 		return status;
 	}
@@ -93,5 +93,12 @@ public class CabinetmsTerminal extends DataEntity<CabinetmsTerminal> {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
+	public String getScreenshot() {
+		return screenshot;
+	}
+
+	public void setScreenshot(String screenshot) {
+		this.screenshot = screenshot;
+	}
 }

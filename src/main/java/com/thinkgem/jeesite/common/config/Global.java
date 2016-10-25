@@ -58,6 +58,11 @@ public class Global {
 	 * 上传文件基础虚拟路径
 	 */
 	public static final String USERFILES_BASE_URL = "/userfiles/";
+
+	/**
+	 * 屏幕截图基础虚拟路径
+	 */
+	public static final String SCREENSHOT_BASE_URL = "/screenshot/";
 	
 	/**
 	 * 获取当前对象实例
@@ -84,6 +89,10 @@ public class Global {
 	 */
 	public static String getAdminPath() {
 		return getConfig("adminPath");
+	}
+
+	public static String getClientPath(){
+		return getConfig("clientPath");
 	}
 	
 	/**
@@ -146,6 +155,21 @@ public class Global {
 			dir += "/";
 		}
 //		System.out.println("userfiles.basedir: " + dir);
+		return dir;
+	}
+
+	public static String getScreenshotBaseDir(){
+		String dir = getConfig("screenshot.basedir");
+		if (StringUtils.isBlank(dir)){
+			try {
+				dir = ServletContextFactory.getServletContext().getRealPath("/");
+			} catch (Exception e) {
+				return "";
+			}
+		}
+		if(!dir.endsWith("/")) {
+			dir += "/";
+		}
 		return dir;
 	}
 	

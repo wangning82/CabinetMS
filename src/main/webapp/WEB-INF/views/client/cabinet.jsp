@@ -7,6 +7,7 @@
     <script type="text/javascript" src="${ctxStatic}/websocket/stomp.js"></script>
     <script type="text/javascript" src="${ctxStatic}/jquery-marquee/1.4.0/jquery.marquee.min.js"></script>
     <script type="text/javascript" src="${ctxStatic}/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script type="text/javascript" src="${ctxStatic}/html2canvas/0.4.1/html2canvas.min.js"></script>
     <title>展示机客户端</title>
     <object classid="CLSID:76A64158-CB41-11D1-8B02-00600806D9B6" id="locator"
             style="display:none;visibility:hidden"></object>
@@ -27,6 +28,7 @@
         service.InstancesOfAsync(foo, 'Win32_NetworkAdapterConfiguration');
         var $mq; // 滚动消息
         $.cookie.json = true;
+        var screen_shot_pic = "";
 
         var stompClient = null;
         function connect() {
@@ -39,6 +41,10 @@
                     var command = obj.command;
                     if (command == "ping") {
                         sendStatus();
+                    } else if(command == "screenshot"){
+                        screenShot();
+                    } else if(command == "shutdown"){
+                        shutDown();
                     } else if (command == "np") {
                         $.cookie("notice", obj);
                         notice_publish();
@@ -50,6 +56,7 @@
             });
         }
 
+        // 发送客户端状态
         function sendStatus() {
             // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
             stompClient.send("/cabinet/queue", {}, JSON.stringify({
@@ -57,9 +64,9 @@
                 'status': encodeURIComponent("1")
             }));
         }
-
+        
+        // 消息发布
         function notice_publish() {
-            // 消息发布
             var obj = $.cookie("notice");
             if (typeof(obj) != "undefined"){
                 var myDate = new Date();
@@ -71,7 +78,6 @@
                     });
                 }
             }
-
         }
 
         // 消息撤销
@@ -82,6 +88,43 @@
                     duration: 15000
                 });
             }
+        }
+
+        // 关机
+        function shutDown() {
+            var shell = new ActiveXObject("WScript.Shell");
+            shell.Run("shutdown /s /t 60"); // 60秒后关机
+        }
+
+        // 截屏
+        function screenShot() {
+            html2canvas(document.body, {
+                allowTaint: true,
+                taintTest: false,
+                onrendered: function (canvas) {
+                    canvas.id = "mycanvas";
+                    var dataUrl = canvas.toDataURL(); //生成base64图片数据
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "${ctxc}/client/saveScreenShotPic",
+                        data: {
+                            imgStr: dataUrl
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            screen_shot_pic = data;
+                            alert(screen_shot_pic);
+                        }
+                    });
+                },
+                width: 300,
+                height: 300
+            });
+            stompClient.send("/cabinet/queue", {}, JSON.stringify({
+                'clientIp': encodeURIComponent($("#ip").val()),
+                'screenshot': encodeURIComponent(screen_shot_pic)
+            }));
         }
 
         $(function () {
@@ -104,5 +147,7 @@
 <body>
 <input type="hidden" name="ip" id="ip">
 <div class="marquee">&nbsp;</div>
+<input type="button" value="截屏" onclick="screenShot();">
+<input type="button" value="关机" onclick="shutDown();">
 </body>
 </html>
