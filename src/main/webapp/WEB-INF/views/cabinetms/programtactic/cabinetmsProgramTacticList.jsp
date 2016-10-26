@@ -91,7 +91,7 @@
 			return false;
 		}
 		
-		function differenceHours(){
+		function differenceHours(date3){
 			
 			//计算出相差天数
 			var days=Math.floor(date3/(24*3600*1000))
@@ -110,6 +110,7 @@
 			
 			alert(" 相差 "+days+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒")
 			
+			return seconds;
 		}
 		
 		function differenceMinutes(){
