@@ -29,31 +29,154 @@
 			});
 		}
 		
-		var index = 0;
-		var idArray;
+		// 对Date的扩展，将 Date 转化为指定格式的String 
+		// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
+		// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
+		// 例子： 
+		// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
+		// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
+		Date.prototype.Format = function(fmt) 
+		{ //author: meizz 
+		  var o = { 
+		    "M+" : this.getMonth()+1,                 //月份 
+		    "d+" : this.getDate(),                    //日 
+		    "h+" : this.getHours(),                   //小时 
+		    "m+" : this.getMinutes(),                 //分 
+		    "s+" : this.getSeconds(),                 //秒 
+		    "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+		    "S"  : this.getMilliseconds()             //毫秒 
+		  }; 
+		  if(/(y+)/.test(fmt)) 
+		    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+		  for(var k in o) 
+		    if(new RegExp("("+ k +")").test(fmt)) 
+		  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
+		  return fmt; 
+		}
 		
-		function preview(id){
-			var programIdArray = new Array();
-			var detailList = ${fns:toJson(cabinetmsProgramTactic.cabinetmsProgramTacticDetailList)};
-			for(var i = 0;i<detailList.length;i++){
-				var programId = detailList[i].program.id;
-				alert(programId);
-				programIdArray.push(programId)
+		//全局节目列表索引
+		var globalProgramArrayindex = 0;
+		//全局节目列表数组
+		var globalProgramArray = new Array();
+		//全局节目列表数量
+		var globalProgramArrayLength = 0;
+		
+		function getDIYDate(time){
+			var hours = time.substring(0,2);
+			var minutes = time.substring(2,4);
+			var seconds = time.substring(4,6);
+			
+			var now = new Date();
+			now.setHours(hours);
+			now.setMinutes(minutes);
+			now.setSeconds(seconds);
+			now.setMilliseconds(0);
+			return now;
+		}
+		
+		/**
+			检查当前时间是否在开始时间和结束时间内
+		*/
+		function checkTime(startTime,endTime){
+			var newStartTime = getDIYDate(startTime);
+			var newEndTime = getDIYDate(endTime);
+			
+			var milliseconds=newEndTime.getTime()-newStartTime.getTime()
+			
+			var nowTime = new Date().Format("hhmmss");
+			alert("nowTime:"+nowTime+";startTime:"+startTime+";endTime:"+endTime)
+			if(parseInt(nowTime)>parseInt(endTime)){
+				return true;
 			}
+			return false;
+		}
+		
+		/*
+			预览方法
+		*/
+		function preview(tacticId){
 			
-			idArray = programIdArray;
+			//alert(tacticId)
+			/******重置全局变量 Start******/
+			globalProgramArrayindex = 0;
+			globalProgramArray = new Array();
+			globalProgramArrayLength = 0;
+			/******重置全局变量 End******/
 			
-			// 正常打开	
-			top.$.jBox.open("post:${ctx}/program/program/preview", "策略预览", $(top.document).width()-200,$(top.document).height()-240, {
-				ajaxData:{id: idArray[index++]},buttons:{"确定":"ok" }, submit:function(v, h, f){
-					if(v == 'ok'){
-						top.$.jBox.close(true);
-						return false;
-					}
-				}, loaded:function(h){
-					$(".jbox-content", top.document).css("overflow-y","hidden");
+			$.ajax({
+				type: 'POST',
+				async: false,
+				url: "${ctx}/programtactic/cabinetmsProgramTactic/getProgramList",
+				dataType: "json",
+				data: {
+					id: tacticId
+				},
+				success: function(data, textStatus) {
+					globalProgramArrayLength = data.length;
+					globalProgramArray = data;
 				}
 			});
+			
+			/* for(var i=0;i<globalProgramArray.length;i++){
+				alert(globalProgramArray[i].id+";"+globalProgramArray[i].starttime+";"+globalProgramArray[i].endtime);
+			} */
+			
+			if(globalProgramArrayLength>0){
+				var programObj = globalProgramArray[0];
+				var id = programObj.id;
+				var startTime = programObj.starttime;
+				var endTime = programObj.endtime;
+				
+				// 正常打开	
+				top.$.jBox.open("iframe:${ctx}/program/program/preview", "策略预览", $(top.document).width()-200,$(top.document).height()-240, {
+					ajaxData:{id: id},buttons:{"确定":"ok","百度":"next","搜狐":"prev" }, submit:function(v, h, f){
+						if(v == 'ok'){
+							top.$.jBox.close(true);
+							return false;
+						}
+						if(v == 'next'){
+							top.$.jBox.getIframe().src="http://www.baidu.com";
+							return false;
+						}
+						if(v == 'prev'){
+							top.$.jBox.getIframe().src="http://www.sohu.com";
+							return false;
+						}
+						
+					}, loaded:function(h){
+						$(".jbox-content", top.document).css("overflow-y","hidden");
+					}
+				});
+				
+				time(startTime,endTime); 
+		}
+		else{
+			top.$.jBox.alert("没有节目可以预览","提示");
+		}
+		
+		}
+		
+		function time(startTime,endTime){  
+			if(checkTime(startTime,endTime)){
+				alert(";startTime:"+startTime+";endTime:"+endTime)
+				if(globalProgramArrayindex == globalProgramArrayLength-1){
+					//top.$.jBox.close(true);
+					return;
+				}
+				var programObj = globalProgramArray[++globalProgramArrayindex];
+				
+				var id = programObj.id;
+				startTime = programObj.starttime;
+				endTime = programObj.endtime;
+				
+				top.$.jBox.getIframe().src="${ctx}/program/program/preview?id="+id;
+			}
+			window.setTimeout("time('"+startTime+"','"+endTime+"')", 100);
+			//time(startTime,endTime);
+		} 
+		
+		function toUrl(url){
+			top.$.jBox.getIframe().src=url;
 		}
 		
 		function CabinetmsProgramTactic(id,termList){
@@ -62,6 +185,7 @@
 		}
 		
 		function release(id){
+			
 			// 正常打开	
 			top.$.jBox.open("iframe:${ctx}/programtactic/cabinetmsProgramTactic/termList", "选择终端", $(top.document).width()-200,$(top.document).height()-240, {
 				ajaxData:{id: id},buttons:{"确定":"ok","取消":"cancel" }, submit:function(v, h, f){
@@ -136,6 +260,9 @@
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
+			<li class="btns"><input id="btnSubmit1" class="btn btn-primary" type="button" value="切换url1" onclick="toUrl('www.baidu.com')"/></li>
+			<li class="btns"><input id="btnSubmit2" class="btn btn-primary" type="button" value="切换url2" onclick="toUrl('www.sohu.com')"/></li>
+			
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>

@@ -28,7 +28,7 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 	private Date endCreateDate;		// 结束 创建时间
 	private List<CabinetmsProgramTacticDetail> cabinetmsProgramTacticDetailList = Lists.newArrayList();		// 子表列表
 	private List<CabinetmsTerminal> termList = Lists.newArrayList();//策略发布时使用的终端收集列表
-	
+	private String programJsonStr;
 	public CabinetmsProgramTactic() {
 		super();
 	}
@@ -111,5 +111,13 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 	public void setTermList(List<CabinetmsTerminal> termList) {
 		this.termList = termList;
 	}
-	
+
+	public String getProgramJsonStr() {
+		return programJsonStr;
+	}
+
+	public void setProgramJsonStr(String programJsonStr) {
+		this.programJsonStr = programJsonStr;
+	}
+
 }

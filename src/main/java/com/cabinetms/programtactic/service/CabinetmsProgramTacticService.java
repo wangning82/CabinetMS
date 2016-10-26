@@ -4,6 +4,7 @@
 package com.cabinetms.programtactic.service;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -312,4 +313,13 @@ public class CabinetmsProgramTacticService extends CrudService<CabinetmsProgramT
 		return termList;
 	}
 
+	/**
+	 * 获得节目列表
+	 * @param cabinetmsProgramTactic
+	 * @return
+	 */
+	public List<LinkedHashMap<String, Object>> getProgramList(CabinetmsProgramTactic cabinetmsProgramTactic){
+		CabinetmsProgramTacticDetail detail = new CabinetmsProgramTacticDetail(cabinetmsProgramTactic);
+		return cabinetmsProgramTacticDetailDao.findListForPreView(detail);
+	}
 }

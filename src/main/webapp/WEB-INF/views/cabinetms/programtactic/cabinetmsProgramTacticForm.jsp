@@ -134,12 +134,12 @@
 								</select>
 							</td>
 							<td>
-								<input id="cabinetmsProgramTacticDetailList{{idx}}_starttime" name="cabinetmsProgramTacticDetailList[{{idx}}].starttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-									value="{{row.starttime}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
+								<input id="cabinetmsProgramTacticDetailList{{idx}}_starttimeparam" name="cabinetmsProgramTacticDetailList[{{idx}}].starttimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+									value="{{row.starttimeparam}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 							</td>
 							<td>
-								<input id="cabinetmsProgramTacticDetailList{{idx}}_endtime" name="cabinetmsProgramTacticDetailList[{{idx}}].endtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-									value="{{row.endtime}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
+								<input id="cabinetmsProgramTacticDetailList{{idx}}_endtimeparam" name="cabinetmsProgramTacticDetailList[{{idx}}].endtimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+									value="{{row.endtimeparam}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 							</td>
 							<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><td class="text-center" width="10">
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#cabinetmsProgramTacticDetailList{{idx}}')" title="删除">&times;</span>{{/delBtn}}

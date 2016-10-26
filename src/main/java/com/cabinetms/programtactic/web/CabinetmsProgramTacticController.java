@@ -3,6 +3,7 @@
  */
 package com.cabinetms.programtactic.web;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cabinetms.common.Constants;
@@ -183,4 +185,13 @@ public class CabinetmsProgramTacticController extends BaseController {
 		}
 		return "redirect:" + Global.getAdminPath() + "/programtactic/cabinetmsProgramTactic/list?repage";
 	}
+	
+	@RequiresPermissions("programtactic:cabinetmsProgramTactic:view")
+	@RequestMapping(value = {"getProgramList"})
+	@ResponseBody
+	public List<LinkedHashMap<String, Object>> getProgramList(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, Model model,
+			RedirectAttributes redirectAttributes){
+		return cabinetmsProgramTacticService.getProgramList(cabinetmsProgramTactic);
+	}
+	
 }
