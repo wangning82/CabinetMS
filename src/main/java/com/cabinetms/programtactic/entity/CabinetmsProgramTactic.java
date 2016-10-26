@@ -11,6 +11,7 @@ import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.google.common.collect.Lists;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
  * 节目策略一对多生成Entity
@@ -21,14 +22,17 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 	private static final long serialVersionUID = 1L;
 	private String no;		// 策略编号
 	private String name;		// 策略名称
-	private String starttime;		// 开始时间
-	private String endtime;		// 结束时间
+	private Integer starttime;		// 开始时间
+	private Integer endtime;		// 结束时间
 	private String status;		// 策略状态
 	private Date beginCreateDate;		// 开始 创建时间
 	private Date endCreateDate;		// 结束 创建时间
 	private List<CabinetmsProgramTacticDetail> cabinetmsProgramTacticDetailList = Lists.newArrayList();		// 子表列表
 	private List<CabinetmsTerminal> termList = Lists.newArrayList();//策略发布时使用的终端收集列表
-	private String programJsonStr;
+	
+	private String starttimeparam;		// 开始时间
+	private String endtimeparam;		// 结束时间
+	
 	public CabinetmsProgramTactic() {
 		super();
 	}
@@ -55,19 +59,19 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 		this.name = name;
 	}
 	
-	public String getStarttime() {
+	public Integer getStarttime() {
 		return starttime;
 	}
 
-	public void setStarttime(String starttime) {
+	public void setStarttime(Integer starttime) {
 		this.starttime = starttime;
 	}
 	
-	public String getEndtime() {
+	public Integer getEndtime() {
 		return endtime;
 	}
 
-	public void setEndtime(String endtime) {
+	public void setEndtime(Integer endtime) {
 		this.endtime = endtime;
 	}
 	
@@ -112,12 +116,38 @@ public class CabinetmsProgramTactic extends DataEntity<CabinetmsProgramTactic> {
 		this.termList = termList;
 	}
 
-	public String getProgramJsonStr() {
-		return programJsonStr;
+	public String getStarttimeparam() {
+		
+		if(this.starttime!=null && this.starttime>0){
+			String startTimeStr = String.valueOf(this.starttime);
+			this.starttimeparam = startTimeStr.substring(0, 4)+"-"+startTimeStr.substring(4, 6)+"-"+startTimeStr.substring(6, 8);
+		}
+		
+		return starttimeparam;
 	}
 
-	public void setProgramJsonStr(String programJsonStr) {
-		this.programJsonStr = programJsonStr;
+	public void setStarttimeparam(String starttimeparam) {
+		this.starttimeparam = starttimeparam;
+		
+		if(StringUtils.isNotBlank(starttimeparam)){
+			setStarttime(Integer.parseInt(starttimeparam.replace("-", "")));	
+		}
+	}
+
+	public String getEndtimeparam() {
+		if(this.endtime!=null && this.endtime>0){
+			String endTimeStr = String.valueOf(this.endtime);
+			this.endtimeparam = endTimeStr.substring(0, 4)+"-"+endTimeStr.substring(4, 6)+"-"+endTimeStr.substring(6, 8);
+		}
+		
+		return endtimeparam;
+	}
+
+	public void setEndtimeparam(String endtimeparam) {
+		this.endtimeparam = endtimeparam;
+		if(StringUtils.isNotBlank(endtimeparam)){
+			setEndtime(Integer.parseInt(endtimeparam.replace("-", "")));	
+		}
 	}
 
 }

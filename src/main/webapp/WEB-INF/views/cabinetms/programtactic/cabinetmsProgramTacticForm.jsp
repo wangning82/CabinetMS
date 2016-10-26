@@ -74,16 +74,16 @@
 		<div class="control-group">
 			<label class="control-label">开始时间：</label>
 			<div class="controls">
-				<input name="starttime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="${cabinetmsProgramTactic.starttime}"
+				<input name="starttimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="${cabinetmsProgramTactic.starttimeparam}"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">结束时间：</label>
 			<div class="controls">
-				<input name="endtime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="${cabinetmsProgramTactic.endtime}"
+				<input name="endtimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="${cabinetmsProgramTactic.endtimeparam}"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</div>
 		</div>
