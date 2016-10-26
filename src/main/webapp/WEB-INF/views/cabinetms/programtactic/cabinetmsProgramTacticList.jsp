@@ -62,80 +62,37 @@
 		var globalProgramArrayLength = 0;
 		
 		function getDIYDate(time){
-			var hours = time.substring(0,2);
-			var minutes = time.substring(2,4);
-			var seconds = time.substring(4,6);
-			
+			var timeStr = time.toString();
+			var hours = timeStr.substring(0,2);
+			var minutes = timeStr.substring(2,4);
+			var seconds = timeStr.substring(4,6);
 			var now = new Date();
-			now.setHours(hours);
-			now.setMinutes(minutes);
-			now.setSeconds(seconds);
-			now.setMilliseconds(0);
-			return now;
+			var returnDate = new Date(now.getFullYear(),now.getMonth(),now.getDate(),hours,minutes,seconds);
+			//alert(returnDate.Format("yyyy-MM-dd hh:mm:ss"))
+			return returnDate;
 		}
 		
 		/**
-			检查当前时间是否在开始时间和结束时间内
+			检查是否走过了seconds秒
 		*/
-		function checkTime(startTime,endTime){
-			var newStartTime = getDIYDate(startTime);
-			var newEndTime = getDIYDate(endTime);
-			
-			var milliseconds=newEndTime.getTime()-newStartTime.getTime()
-			
-			var nowTime = new Date().Format("hhmmss");
-			alert("nowTime:"+nowTime+";startTime:"+startTime+";endTime:"+endTime)
-			if(parseInt(nowTime)>parseInt(endTime)){
+		function checkTime(seconds,startDateTime){
+			var now = new Date();
+			var startDate = new Date(startDateTime.substring(0,4),parseInt(startDateTime.substring(4,6))-1,startDateTime.substring(6,8),startDateTime.substring(8,10),startDateTime.substring(10,12),startDateTime.substring(12,14));
+			//alert("now:"+now.Format("yyyyMMddhhmmss")+";StartDate:"+startDate.Format("yyyyMMddhhmmss"))
+			//alert("now:"+now.getTime()+";StartDate:"+startDate.getTime())
+			//alert("cha:"+((now.getTime()-startDate.getTime())/1000))
+			var nowDifferenceSeconds = differenceSeconds(startDate,now);
+			//alert("nowSecond:"+nowDifferenceSeconds+";seconds:"+seconds)
+			if(nowDifferenceSeconds<=seconds){
 				return true;
 			}
 			return false;
 		}
 		
-		function differenceHours(date3){
-			
-			//计算出小时数
-			var leave1=date3%(24*3600*1000)    //计算天数后剩余的毫秒数
-			var hours=Math.floor(leave1/(3600*1000))
-			
-			return hours;
-			//计算相差分钟数
-			var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
-			var minutes=Math.floor(leave2/(60*1000))
-			
-			//计算相差秒数
-			var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
-			var seconds=Math.round(leave3/1000)
-			
-			alert(" 相差 "+days+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒")
-			
+		function differenceSeconds(startTime,endTime){
+			var milliseconds=endTime.getTime()-startTime.getTime();
+			var seconds=Math.round(milliseconds/1000);
 			return seconds;
-		}
-		
-		function differenceMinutes(){
-			//计算出小时数
-			var leave1=date3%(24*3600*1000)    //计算天数后剩余的毫秒数
-			
-			//计算相差分钟数
-			var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
-			
-			var minutes=Math.floor(leave2/(60*1000))
-			
-			return minutes;
-		}
-		
-		function differenceHours(){
-			//计算出小时数
-			var leave1=date3%(24*3600*1000)    //计算天数后剩余的毫秒数
-			var hours=Math.floor(leave1/(3600*1000))
-			
-			//计算相差分钟数
-			var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
-			var minutes=Math.floor(leave2/(60*1000))
-			//计算相差秒数
-			var leave3=leave2%(60*1000)      //计算分钟数后剩余的毫秒数
-			var seconds=Math.round(leave3/1000)
-			alert(" 相差 "+days+"天 "+hours+"小时 "+minutes+" 分钟"+seconds+" 秒")
-			
 		}
 		
 		/*
@@ -176,26 +133,21 @@
 				
 				// 正常打开	
 				top.$.jBox.open("iframe:${ctx}/program/program/preview", "策略预览", $(top.document).width()-200,$(top.document).height()-240, {
-					ajaxData:{id: id},buttons:{"确定":"ok","百度":"next","搜狐":"prev" }, submit:function(v, h, f){
+					ajaxData:{id: id},buttons:{"关闭":"ok" }, submit:function(v, h, f){
 						if(v == 'ok'){
 							top.$.jBox.close(true);
 							return false;
 						}
-						if(v == 'next'){
-							top.$.jBox.getIframe().src="http://www.baidu.com";
-							return false;
-						}
-						if(v == 'prev'){
-							top.$.jBox.getIframe().src="http://www.sohu.com";
-							return false;
-						}
-						
 					}, loaded:function(h){
 						$(".jbox-content", top.document).css("overflow-y","hidden");
 					}
 				});
 				
-				time(startTime,endTime); 
+				var newStartTime = getDIYDate(startTime);
+				var newEndTime = getDIYDate(endTime);
+				var seconds = differenceSeconds(newStartTime,newEndTime);
+				var now = new Date().Format("yyyyMMddhhmmss");
+				time(seconds,now); 
 		}
 		else{
 			top.$.jBox.alert("没有节目可以预览","提示");
@@ -203,24 +155,28 @@
 		
 		}
 		
-		function time(startTime,endTime){  
-			if(checkTime(startTime,endTime)){
-				alert(";startTime:"+startTime+";endTime:"+endTime)
+		function time(seconds,now){  
+			if(!checkTime(seconds,now)){
+				//alert(";startTime:"+startTime+";endTime:"+endTime)
 				if(globalProgramArrayindex == globalProgramArrayLength-1){
-					//top.$.jBox.close(true);
+					top.$.jBox.close(true);
 					return;
 				}
 				var programObj = globalProgramArray[++globalProgramArrayindex];
 				
 				var id = programObj.id;
-				startTime = programObj.starttime;
-				endTime = programObj.endtime;
+				var startTime = programObj.starttime;
+				var endTime = programObj.endtime;
+				
+				var newStartTime = getDIYDate(startTime);
+				var newEndTime = getDIYDate(endTime);
+				seconds = differenceSeconds(newStartTime,newEndTime);
+				now = new Date().Format("yyyyMMddhhmmss");
 				
 				top.$.jBox.getIframe().src="${ctx}/program/program/preview?id="+id;
 			}
-			window.setTimeout("time('"+startTime+"','"+endTime+"')", 100);
-			//time(startTime,endTime);
-		} 
+			window.setTimeout("time('"+seconds+"','"+now+"')", 100);
+		}
 		
 		function toUrl(url){
 			top.$.jBox.getIframe().src=url;
@@ -232,7 +188,6 @@
 		}
 		
 		function release(id){
-			
 			// 正常打开	
 			top.$.jBox.open("iframe:${ctx}/programtactic/cabinetmsProgramTactic/termList", "选择终端", $(top.document).width()-200,$(top.document).height()-240, {
 				ajaxData:{id: id},buttons:{"确定":"ok","取消":"cancel" }, submit:function(v, h, f){
@@ -307,9 +262,6 @@
 				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
-			<li class="btns"><input id="btnSubmit1" class="btn btn-primary" type="button" value="切换url1" onclick="toUrl('www.baidu.com')"/></li>
-			<li class="btns"><input id="btnSubmit2" class="btn btn-primary" type="button" value="切换url2" onclick="toUrl('www.sohu.com')"/></li>
-			
 			<li class="clearfix"></li>
 		</ul>
 	</form:form>
