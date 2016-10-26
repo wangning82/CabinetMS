@@ -188,7 +188,11 @@ public class CabinetmsProgramTacticService extends CrudService<CabinetmsProgramT
 		cabinetmsProgramTactic.preUpdate();
 		super.save(cabinetmsProgramTactic);
 
-		List<CabinetmsTerminal> termList = cabinetmsProgramTactic.getTermList();
+		CabinetmsTerminal queryTerm = new CabinetmsTerminal();
+		queryTerm.setProgramTactic(new CabinetmsProgramTactic(cabinetmsProgramTactic.getId()));
+		List<CabinetmsTerminal> termList = cabinetmsTerminalDao.findList(queryTerm);
+		
+//		List<CabinetmsTerminal> termList = cabinetmsProgramTactic.getTermList();
 		for (CabinetmsTerminal cabinetmsTerminal : termList) {
 			String termId = cabinetmsTerminal.getId();
 			CabinetmsTerminal editTerm = cabinetmsTerminalDao.get(termId);
