@@ -26,6 +26,7 @@ import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.cabinetms.terminal.service.CabinetmsTerminalService;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * 终端管理Controller
@@ -53,7 +54,7 @@ public class CabinetmsTerminalController extends BaseController {
 		}
 		return entity;
 	}
-	
+
 	@RequiresPermissions("terminal:cabinetmsTerminal:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CabinetmsTerminal cabinetmsTerminal, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -104,13 +105,14 @@ public class CabinetmsTerminalController extends BaseController {
 	@RequiresPermissions("terminal:cabinetmsTerminal:view")
 	@RequestMapping(value = "screenshot", method = RequestMethod.POST)
 	@ResponseBody
-	public void screenshot(CabinetmsTerminal cabinetmsTerminal){
+	public String screenshot(CabinetmsTerminal cabinetmsTerminal){
 		MediaCommand mediaCommand = new MediaCommand();
 		mediaCommand.setCommand(Constants.SOCKET_COMMAND_SCREENSHOT);
 		mediaCommand.setClientIp(cabinetmsTerminal.getTerminalIp());
 		String dest = Constants.SOCKET_QUEUE_PREFIX + cabinetmsTerminal.getTerminalIp();
 		mediaCommand.setDestination(dest);
 		template.convertAndSend(dest, mediaCommand);
+		return "发送截屏指令成功";
 	}
 
 	/**
@@ -120,34 +122,21 @@ public class CabinetmsTerminalController extends BaseController {
 	@RequiresPermissions("terminal:cabinetmsTerminal:view")
 	@RequestMapping(value = "shutdown", method = RequestMethod.POST)
 	@ResponseBody
-	public void shutdown(CabinetmsTerminal cabinetmsTerminal){
+	public String shutdown(CabinetmsTerminal cabinetmsTerminal){
 		MediaCommand mediaCommand = new MediaCommand();
 		mediaCommand.setCommand(Constants.SOCKET_COMMAND_SHUTDOWN);
 		mediaCommand.setClientIp(cabinetmsTerminal.getTerminalIp());
 		String dest = Constants.SOCKET_QUEUE_PREFIX + cabinetmsTerminal.getTerminalIp();
 		mediaCommand.setDestination(dest);
 		template.convertAndSend(dest, mediaCommand);
+		return "发送关机指令成功";
 	}
 
 	@RequiresPermissions("terminal:cabinetmsTerminal:view")
-	@RequestMapping(value = "getScreenShotPic")
-	public void getScreenShotPic(HttpServletResponse response) {
-		try {
-			File image = new File("");
-			FileInputStream inputStream = new FileInputStream(image);
-			int length = inputStream.available();
-			byte data[] = new byte[length];
-			response.setContentLength(length);
-			response.setContentType("image/jpeg");
-			inputStream.read(data);
-			OutputStream toClient = response.getOutputStream();
-			toClient.write(data);
-			toClient.flush();
-			IOUtils.closeQuietly(toClient);
-			IOUtils.closeQuietly(inputStream);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	@RequestMapping(value = "findTerminal", method = RequestMethod.POST)
+	@ResponseBody
+	public CabinetmsTerminal findTerminal(CabinetmsTerminal cabinetmsTerminal){
+		return cabinetmsTerminal;
 	}
 
 }

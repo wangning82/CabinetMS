@@ -165,8 +165,19 @@
 		WHERE id = #{id}
 	</update>
 
-	<update id="updateStatus">
-		UPDATE cabinetms_terminal SET status = #{status}, update_date = #{updateDate}
+	<update id="updateByIP">
+		UPDATE cabinetms_terminal
+		<set>
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			<if test="screenshot != null and screenshot != ''">
+				screenshot = #{screenshot},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+		</set>
 		WHERE terminal_ip = #{terminalIp}
 	</update>
 	

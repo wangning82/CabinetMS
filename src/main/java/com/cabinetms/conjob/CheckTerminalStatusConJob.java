@@ -30,7 +30,7 @@ public class CheckTerminalStatusConJob extends QuartzJobBean {
         MediaCommand mediaCommand = null;
         for(CabinetmsTerminal terminal : list){
             terminal.setStatus(Constants.TERMINAL_STATUS_CLOSED);
-            terminalService.updateStatus(terminal);
+            terminalService.updateByIP(terminal);
 
             String dest = Constants.SOCKET_QUEUE_PREFIX + terminal.getTerminalIp();
             mediaCommand = new MediaCommand();

@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,28 +37,42 @@ public class ClientController {
 
     /**
      * 更新终端状态
+     *
      * @param mediaCommand
      */
     @MessageMapping("/queue")
     public void updateTerminalStatus(MediaCommand mediaCommand) {
         CabinetmsTerminal terminal = new CabinetmsTerminal();
         terminal.setTerminalIp(mediaCommand.getClientIp());
-        if(mediaCommand.getStatus() != null){
+        if (mediaCommand.getStatus() != null) {
             terminal.setStatus(mediaCommand.getStatus());
         }
-        if(mediaCommand.getScreenshot() != null){
+        if (mediaCommand.getScreenshot() != null) {
             terminal.setScreenshot(mediaCommand.getScreenshot());
         }
         terminal.setUpdateDate(new Date());
-        terminalService.updateStatus(terminal);
+        terminalService.updateByIP(terminal);
     }
 
-    @RequestMapping(value = "${clientPath}/client/saveScreenShotPic")
+    /**
+     * 保存截图
+     *
+     * @param ip
+     * @param imgStr
+     * @param request
+     */
+    @RequestMapping(value = "${clientPath}/client/saveScreenShotPic", method = RequestMethod.POST)
     @ResponseBody
-    public String saveScreenShotPic(String imgStr){
+    public void saveScreenShotPic(String ip, String imgStr, HttpServletRequest request) {
         String realPath = Global.getScreenshotBaseDir() + Global.SCREENSHOT_BASE_URL;
         FileUtils.createDirectory(FileUtils.path(realPath));
         String image = imgStr.split(",")[1];
-        return Base64Util.generateImage(image, realPath);
+        String screenshot = Base64Util.generateImage(image, realPath);
+
+        CabinetmsTerminal terminal = new CabinetmsTerminal();
+        terminal.setTerminalIp(ip);
+        terminal.setScreenshot(request.getContextPath() + Global.SCREENSHOT_BASE_URL + screenshot);
+        terminal.setUpdateDate(new Date());
+        terminalService.updateByIP(terminal);
     }
 }

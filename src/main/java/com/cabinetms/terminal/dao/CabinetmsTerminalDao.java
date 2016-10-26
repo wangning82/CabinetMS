@@ -23,7 +23,7 @@ public interface CabinetmsTerminalDao extends CrudDao<CabinetmsTerminal> {
      * @param entity
      * @return
      */
-    int updateStatus(CabinetmsTerminal entity);
+    int updateByIP(CabinetmsTerminal entity);
 
     /**
      * 查找所有连接终端
