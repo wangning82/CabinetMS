@@ -28,7 +28,6 @@
         service.InstancesOfAsync(foo, 'Win32_NetworkAdapterConfiguration');
         var $mq; // 滚动消息
         $.cookie.json = true;
-        var screen_shot_pic = "";
 
         var stompClient = null;
         function connect() {
@@ -53,6 +52,8 @@
                         notice_undo_publish();
                     }
                 });
+            }, function () {
+                connect();
             });
         }
 
@@ -105,26 +106,21 @@
                     canvas.id = "mycanvas";
                     var dataUrl = canvas.toDataURL(); //生成base64图片数据
                     $.ajax({
-                        type: "POST",
+                        type: "post",
                         async: false,
                         url: "${ctxc}/client/saveScreenShotPic",
                         data: {
-                            imgStr: dataUrl
+                            imgStr: dataUrl,
+                            ip : $("#ip").val()
                         },
                         dataType: "json",
                         success: function (data) {
-                            screen_shot_pic = data;
-                            alert(screen_shot_pic);
+                            console.log(data);
                         }
                     });
-                },
-                width: 300,
-                height: 300
+                }
             });
-            stompClient.send("/cabinet/queue", {}, JSON.stringify({
-                'clientIp': encodeURIComponent($("#ip").val()),
-                'screenshot': encodeURIComponent(screen_shot_pic)
-            }));
+
         }
 
         $(function () {
@@ -147,7 +143,5 @@
 <body>
 <input type="hidden" name="ip" id="ip">
 <div class="marquee">&nbsp;</div>
-<input type="button" value="截屏" onclick="screenShot();">
-<input type="button" value="关机" onclick="shutDown();">
 </body>
 </html>

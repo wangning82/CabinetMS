@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.Length;
 import com.cabinetms.program.entity.Program;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
  * 节目策略一对多生成Entity
@@ -25,8 +26,11 @@ public class CabinetmsProgramTacticDetail extends DataEntity<CabinetmsProgramTac
 	private String programTacticName;		// 节目策略名称
 	private Program program;		// 节目ID
 	private String programName;		// 节目名称
-	private String starttime;		// 开始时间
-	private String endtime;		// 结束时间
+	private Integer starttime;		// 开始时间
+	private Integer endtime;		// 结束时间
+	
+	private String starttimeparam;
+	private String endtimeparam;
 	
 	private List<Program> programList = Lists.newArrayList();
 	
@@ -76,19 +80,19 @@ public class CabinetmsProgramTacticDetail extends DataEntity<CabinetmsProgramTac
 		this.programName = programName;
 	}
 	
-	public String getStarttime() {
+	public Integer getStarttime() {
 		return starttime;
 	}
 
-	public void setStarttime(String starttime) {
+	public void setStarttime(Integer starttime) {
 		this.starttime = starttime;
 	}
 	
-	public String getEndtime() {
+	public Integer getEndtime() {
 		return endtime;
 	}
 
-	public void setEndtime(String endtime) {
+	public void setEndtime(Integer endtime) {
 		this.endtime = endtime;
 	}
 
@@ -99,6 +103,41 @@ public class CabinetmsProgramTacticDetail extends DataEntity<CabinetmsProgramTac
 	public void setProgramList(List<Program> programList) {
 		this.programList = programList;
 	}
-	
+
+	public String getStarttimeparam() {
+		if(this.starttime!=null && this.starttime>0){
+			String startTimeStr = String.valueOf(this.starttime);
+			if(startTimeStr.length()<6){
+				startTimeStr = "0"+startTimeStr;
+			}
+			this.starttimeparam = startTimeStr.substring(0, 2)+":"+startTimeStr.substring(2, 4)+":"+startTimeStr.substring(4, 6);
+		}
+		return starttimeparam;
+	}
+
+	public void setStarttimeparam(String starttimeparam) {
+		this.starttimeparam = starttimeparam;
+		if(StringUtils.isNotBlank(starttimeparam)){
+			setStarttime(Integer.parseInt(starttimeparam.replace(":", "")));	
+		}
+	}
+
+	public String getEndtimeparam() {
+		if(this.endtime!=null && this.endtime>0){
+			String endTimeStr = String.valueOf(this.endtime);
+			if(endTimeStr.length()<6){
+				endTimeStr = "0"+endTimeStr;
+			}
+			this.endtimeparam = endTimeStr.substring(0, 2)+":"+endTimeStr.substring(2, 4)+":"+endTimeStr.substring(4, 6);
+		}
+		return endtimeparam;
+	}
+
+	public void setEndtimeparam(String endtimeparam) {
+		this.endtimeparam = endtimeparam;
+		if(StringUtils.isNotBlank(endtimeparam)){
+			setEndtime(Integer.parseInt(endtimeparam.replace(":", "")));	
+		}
+	}
 	
 }

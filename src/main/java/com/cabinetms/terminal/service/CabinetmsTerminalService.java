@@ -53,8 +53,8 @@ public class CabinetmsTerminalService extends CrudService<CabinetmsTerminalDao, 
 	}
 
 	@Transactional(readOnly = false)
-	public void updateStatus(CabinetmsTerminal cabinetmsTerminal){
-		cabinetmsTerminalDao.updateStatus(cabinetmsTerminal);
+	public void updateByIP(CabinetmsTerminal cabinetmsTerminal){
+		cabinetmsTerminalDao.updateByIP(cabinetmsTerminal);
 	}
 	
 }

@@ -18,7 +18,6 @@
         function screenshot(id) {
 			$.ajax({
 				type: "POST",
-				async: false,
 				url: "${ctx}/terminal/cabinetmsTerminal/screenshot",
 				data: {
 					id: id
@@ -28,6 +27,34 @@
 
 				}
 			});
+			var index = 0;
+			while(index < 3){
+				var picpath = getPic(id);
+				if(picpath != ""){
+					window.open(${pageContext.request.contextPath}picpath);
+					break;
+				}else{
+					index ++;
+				}
+			}
+
+		}
+
+		function getPic(id){
+			var screenshot = "";
+			$.ajax({
+				type: "POST",
+				url: "${ctx}/terminal/cabinetmsTerminal/findTerminal",
+				data: {
+					id: id
+				},
+				async: false,
+				dataType: "json",
+				success: function (data) {
+					screenshot = data.screenshot;
+				}
+			});
+			return screenshot;
 		}
 
 		function shutdown(id) {

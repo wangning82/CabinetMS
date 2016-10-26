@@ -42,7 +42,7 @@ public class Base64Util {
                     b[i] += 256;
                 }
             }
-            //生成jpeg图片
+            //生成PNG图片
             String imgName = IdGen.uuid() + ".png";
             String imgFilePath = path + File.separator + imgName;//新生成的图片
             OutputStream out = new FileOutputStream(imgFilePath);

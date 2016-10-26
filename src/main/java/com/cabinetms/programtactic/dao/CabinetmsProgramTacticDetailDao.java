@@ -3,9 +3,11 @@
  */
 package com.cabinetms.programtactic.dao;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import com.cabinetms.programtactic.entity.CabinetmsProgramTacticDetail;
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.cabinetms.programtactic.entity.CabinetmsProgramTacticDetail;
 
 /**
  * 节目策略一对多生成DAO接口
@@ -14,5 +16,5 @@ import com.cabinetms.programtactic.entity.CabinetmsProgramTacticDetail;
  */
 @MyBatisDao
 public interface CabinetmsProgramTacticDetailDao extends CrudDao<CabinetmsProgramTacticDetail> {
-	
+	public List<LinkedHashMap<String, Object>> findListForPreView(CabinetmsProgramTacticDetail cabinetmsProgramTacticDetail);
 }

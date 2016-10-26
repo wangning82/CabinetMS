@@ -4,6 +4,7 @@
 package com.cabinetms.programtactic.service;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -186,14 +187,17 @@ public class CabinetmsProgramTacticService extends CrudService<CabinetmsProgramT
 		cabinetmsProgramTactic.setStatus(Constants.STATUS_RELEASED);
 		cabinetmsProgramTactic.preUpdate();
 		super.save(cabinetmsProgramTactic);
-
+		
 		List<CabinetmsTerminal> termList = cabinetmsProgramTactic.getTermList();
-		for (CabinetmsTerminal cabinetmsTerminal : termList) {
+		for (int i = 0; i < termList.size(); i++) {
+			CabinetmsTerminal cabinetmsTerminal = termList.get(i);
 			String termId = cabinetmsTerminal.getId();
 			CabinetmsTerminal editTerm = cabinetmsTerminalDao.get(termId);
 			editTerm.setProgramTactic(cabinetmsProgramTactic);
 			editTerm.preUpdate();
 			cabinetmsTerminalDao.update(editTerm);
+			
+			termList.set(i, editTerm);
 		}
 
 		List<CabinetmsProgramTacticDetail> detailList = cabinetmsProgramTactic.getCabinetmsProgramTacticDetailList();
@@ -312,4 +316,13 @@ public class CabinetmsProgramTacticService extends CrudService<CabinetmsProgramT
 		return termList;
 	}
 
+	/**
+	 * 获得节目列表
+	 * @param cabinetmsProgramTactic
+	 * @return
+	 */
+	public List<LinkedHashMap<String, Object>> getProgramList(CabinetmsProgramTactic cabinetmsProgramTactic){
+		CabinetmsProgramTacticDetail detail = new CabinetmsProgramTacticDetail(cabinetmsProgramTactic);
+		return cabinetmsProgramTacticDetailDao.findListForPreView(detail);
+	}
 }
