@@ -16,6 +16,16 @@ public class Constants {
 	public static final String SOCKET_COMMAND_PING = "ping";
 
 	/**
+	 * socket命令-截屏
+	 */
+	public static final String SOCKET_COMMAND_SCREENSHOT = "screenshot";
+
+	/**
+	 * socket命令-关机
+	 */
+	public static final String SOCKET_COMMAND_SHUTDOWN = "shutdown";
+
+	/**
 	 * socket命令-发布消息
 	 */
 	public static final String SOCKET_COMMAND_NOCITE_PUBLISH = "np";

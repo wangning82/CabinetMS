@@ -3,6 +3,7 @@
  */
 package com.cabinetms.notice.service;
 
+import com.cabinetms.client.MediaCommand;
 import com.cabinetms.common.Constants;
 import com.cabinetms.notice.dao.CabinetmsNoticeDao;
 import com.cabinetms.notice.entity.CabinetmsNotice;
@@ -60,28 +61,41 @@ public class CabinetmsNoticeService extends CrudService<CabinetmsNoticeDao, Cabi
 	 * @param cabinetmsNotice
      */
     @Transactional(readOnly = false)
-    public List<CabinetmsTerminal> publish(CabinetmsNotice cabinetmsNotice){
+    public void publish(CabinetmsNotice cabinetmsNotice, SimpMessagingTemplate template){
         // 修改消息状态
 		cabinetmsNotice.setStatus(Constants.NOTICE_STATUS_PUBLISHING);
 		cabinetmsNoticeDao.update(cabinetmsNotice);
 
-		List<CabinetmsTerminal> terminalList = new ArrayList<CabinetmsTerminal>();
 		// 更新终端表
 		for(String terminalId : cabinetmsNotice.getTerminalIds()){
 			CabinetmsTerminal terminal = terminalService.get(terminalId);
 			terminal.setNotice(cabinetmsNotice);
 			terminalService.save(terminal);
-			terminalList.add(terminal);
+
+			sendMessage(cabinetmsNotice, terminal, template, Constants.SOCKET_COMMAND_NOCITE_PUBLISH);
 		}
-		return terminalList;
     }
+
+    private void sendMessage(CabinetmsNotice cabinetmsNotice, CabinetmsTerminal terminal, SimpMessagingTemplate template, String command){
+		MediaCommand mediaCommand = new MediaCommand();
+		mediaCommand.setCommand(command);
+		mediaCommand.setClientIp(terminal.getTerminalIp());
+		String dest = Constants.SOCKET_QUEUE_PREFIX + terminal.getTerminalIp();
+		mediaCommand.setDestination(dest);
+		if(Constants.SOCKET_COMMAND_NOCITE_PUBLISH.equals(command)){
+			mediaCommand.setContent(cabinetmsNotice.getNoticeContent());
+			mediaCommand.setStartTime(cabinetmsNotice.getBeginDate().getTime());
+			mediaCommand.setEndTime(cabinetmsNotice.getEndDate().getTime());
+		}
+		template.convertAndSend(dest, mediaCommand);
+	}
 
 	/**
 	 * 撤销发布消息
 	 * @param cabinetmsNotice
 	 */
 	@Transactional(readOnly = false)
-	public List<CabinetmsTerminal> undoPublish(CabinetmsNotice cabinetmsNotice){
+	public void undoPublish(CabinetmsNotice cabinetmsNotice, SimpMessagingTemplate template){
 		// 修改消息状态
 		cabinetmsNotice.setStatus(Constants.NOTICE_STATUS_UNPUBLISHED);
 		cabinetmsNotice.setBeginDate(null);
@@ -94,8 +108,9 @@ public class CabinetmsNoticeService extends CrudService<CabinetmsNoticeDao, Cabi
 		for(CabinetmsTerminal terminal : terminalList){
 			terminal.setNotice(null);
 			terminalService.save(terminal);
+
+			sendMessage(cabinetmsNotice, terminal, template, Constants.SOCKET_COMMAND_NOCITE_UNDOPUBLISH);
 		}
-		return terminalList;
 
 	}
 	

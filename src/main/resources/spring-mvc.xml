@@ -145,7 +145,7 @@
 
 	<bean id="checkTerminalStatusTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="checkTerminalStatusJob"/>
-		<property name="cronExpression" value="0 0/3 * * * ?"/><!-- 3分钟更新一次 -->
+		<property name="cronExpression" value="0 0/1 * * * ?"/><!-- 3分钟更新一次 -->
 	</bean>
 
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">

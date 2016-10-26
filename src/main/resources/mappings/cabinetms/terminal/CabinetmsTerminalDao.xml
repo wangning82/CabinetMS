@@ -10,6 +10,7 @@
 		a.office_id AS "office.id",
 		a.program_tactic_id AS "programTactic.id",
 		a.notice_id AS "notice.id",
+		a.screenshot AS "screenshot",
 		a.status AS "status",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -117,6 +118,7 @@
 			office_id,
 			program_tactic_id,
 			notice_id,
+			screenshot,
 			status,
 			create_by,
 			create_date,
@@ -131,6 +133,7 @@
 			#{office.id},
 			#{programTactic.id},
 			#{notice.id},
+			#{screenshot},
 			#{status},
 			#{createBy.id},
 			#{createDate},
@@ -148,6 +151,7 @@
 			office_id = #{office.id},
 			program_tactic_id = #{programTactic.id},
 			notice_id = #{notice.id},
+			screenshot = #{screenshot},
 			status = #{status},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
@@ -161,8 +165,19 @@
 		WHERE id = #{id}
 	</update>
 
-	<update id="updateStatus">
-		UPDATE cabinetms_terminal SET status = #{status}, update_date = #{updateDate}
+	<update id="updateByIP">
+		UPDATE cabinetms_terminal
+		<set>
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			<if test="screenshot != null and screenshot != ''">
+				screenshot = #{screenshot},
+			</if>
+			<if test="updateDate != null">
+				update_date = #{updateDate},
+			</if>
+		</set>
 		WHERE terminal_ip = #{terminalIp}
 	</update>
 	

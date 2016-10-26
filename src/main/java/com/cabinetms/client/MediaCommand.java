@@ -11,6 +11,7 @@ public class MediaCommand implements Serializable{
     private String clientIp; // 终端IP地址
     private String destination; // 终端队列地址
     private String status; // 终端状态
+    private String screenshot; // 截图
     private String mediaType; // 媒体类型
     private String title; // 媒体标题
     private String content; // 媒体内容
@@ -96,5 +97,13 @@ public class MediaCommand implements Serializable{
 
     public void setEndTime(Long endTime) {
         this.endTime = endTime;
+    }
+
+    public String getScreenshot() {
+        return screenshot;
+    }
+
+    public void setScreenshot(String screenshot) {
+        this.screenshot = screenshot;
     }
 }

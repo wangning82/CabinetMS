@@ -123,19 +123,7 @@ public class CabinetmsNoticeController extends BaseController {
     @RequiresPermissions("notice:cabinetmsNotice:edit")
     @RequestMapping(value = "publish")
     public String publish(CabinetmsNotice cabinetmsNotice, Model model, RedirectAttributes redirectAttributes) {
-        List<CabinetmsTerminal> terminalList = cabinetmsNoticeService.publish(cabinetmsNotice);
-        MediaCommand mediaCommand = null;
-        for(CabinetmsTerminal terminal : terminalList){
-            mediaCommand = new MediaCommand();
-            mediaCommand.setCommand(Constants.SOCKET_COMMAND_NOCITE_PUBLISH);
-            mediaCommand.setClientIp(terminal.getTerminalIp());
-            String dest = Constants.SOCKET_QUEUE_PREFIX + terminal.getTerminalIp();
-            mediaCommand.setDestination(dest);
-            mediaCommand.setContent(cabinetmsNotice.getNoticeContent());
-            mediaCommand.setStartTime(cabinetmsNotice.getBeginDate().getTime());
-            mediaCommand.setEndTime(cabinetmsNotice.getEndDate().getTime());
-            template.convertAndSend(dest, mediaCommand);
-        }
+        cabinetmsNoticeService.publish(cabinetmsNotice, template);
         addMessage(redirectAttributes, "发布消息信息成功");
         return "redirect:" + Global.getAdminPath() + "/notice/cabinetmsNotice/?repage";
     }
@@ -151,16 +139,7 @@ public class CabinetmsNoticeController extends BaseController {
     @RequiresPermissions("notice:cabinetmsNotice:edit")
     @RequestMapping(value = "undoPublish")
     public String undoPublish(CabinetmsNotice cabinetmsNotice, Model model, RedirectAttributes redirectAttributes) {
-        List<CabinetmsTerminal> terminalList = cabinetmsNoticeService.undoPublish(cabinetmsNotice);
-        MediaCommand mediaCommand = null;
-        for(CabinetmsTerminal terminal : terminalList){
-            mediaCommand = new MediaCommand();
-            mediaCommand.setCommand(Constants.SOCKET_COMMAND_NOCITE_UNDOPUBLISH);
-            mediaCommand.setClientIp(terminal.getTerminalIp());
-            String dest = Constants.SOCKET_QUEUE_PREFIX + terminal.getTerminalIp();
-            mediaCommand.setDestination(dest);
-            template.convertAndSend(dest, mediaCommand);
-        }
+        cabinetmsNoticeService.undoPublish(cabinetmsNotice, template);
         addMessage(redirectAttributes, "撤销消息信息成功");
         return "redirect:" + Global.getAdminPath() + "/notice/cabinetmsNotice/?repage";
     }

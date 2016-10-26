@@ -14,6 +14,62 @@
 			$("#searchForm").submit();
         	return false;
         }
+
+        function screenshot(id) {
+			$.ajax({
+				type: "POST",
+				url: "${ctx}/terminal/cabinetmsTerminal/screenshot",
+				data: {
+					id: id
+				},
+				dataType: "json",
+				success: function (data) {
+
+				}
+			});
+			var index = 0;
+			while(index < 3){
+				var picpath = getPic(id);
+				if(picpath != ""){
+					window.open(${pageContext.request.contextPath}picpath);
+					break;
+				}else{
+					index ++;
+				}
+			}
+
+		}
+
+		function getPic(id){
+			var screenshot = "";
+			$.ajax({
+				type: "POST",
+				url: "${ctx}/terminal/cabinetmsTerminal/findTerminal",
+				data: {
+					id: id
+				},
+				async: false,
+				dataType: "json",
+				success: function (data) {
+					screenshot = data.screenshot;
+				}
+			});
+			return screenshot;
+		}
+
+		function shutdown(id) {
+			$.ajax({
+				type: "POST",
+				url: "${ctx}/terminal/cabinetmsTerminal/shutdown",
+				data: {
+					id: id
+				},
+				dataType: "json",
+				success: function (data) {
+
+				}
+			});
+		}
 	</script>
 </head>
 <body>
@@ -95,10 +151,16 @@
 				<td>
 					${cabinetmsTerminal.remarks}
 				</td>
-				<shiro:hasPermission name="terminal:cabinetmsTerminal:edit"><td>
-    				<a href="${ctx}/terminal/cabinetmsTerminal/form?id=${cabinetmsTerminal.id}">修改</a>
-					<a href="${ctx}/terminal/cabinetmsTerminal/delete?id=${cabinetmsTerminal.id}" onclick="return confirmx('确认要删除该终端管理吗？', this.href)">删除</a>
-				</td></shiro:hasPermission>
+				<shiro:hasPermission name="terminal:cabinetmsTerminal:edit">
+					<td>
+						<a href="${ctx}/terminal/cabinetmsTerminal/form?id=${cabinetmsTerminal.id}">修改</a>&nbsp;
+						<a href="${ctx}/terminal/cabinetmsTerminal/delete?id=${cabinetmsTerminal.id}" onclick="return confirmx('确认要删除该终端管理吗？', this.href)">删除</a>
+						<c:if test="${cabinetmsTerminal.status != '3'}">
+							<a href="javascript:void(0)" onclick="screenshot('${cabinetmsTerminal.id}');">截屏</a>&nbsp;
+							<a href="javascript:void(0)" onclick="shutdown('${cabinetmsTerminal.id}');">关机</a>
+						</c:if>
+					</td>
+				</shiro:hasPermission>
 			</tr>
 		</c:forEach>
 		</tbody>

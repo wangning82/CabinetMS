@@ -6,13 +6,16 @@ package com.cabinetms.terminal.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.cabinetms.client.MediaCommand;
+import com.cabinetms.common.Constants;
+import com.cabinetms.common.tool.Base64Util;
+import org.apache.commons.io.IOUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
@@ -21,6 +24,9 @@ import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.cabinetms.terminal.service.CabinetmsTerminalService;
+
+import java.io.*;
+import java.util.List;
 
 /**
  * 终端管理Controller
@@ -33,6 +39,9 @@ public class CabinetmsTerminalController extends BaseController {
 
 	@Autowired
 	private CabinetmsTerminalService terminalService;
+
+	@Autowired
+	private SimpMessagingTemplate template;
 	
 	@ModelAttribute
 	public CabinetmsTerminal get(@RequestParam(required=false) String id) {
@@ -45,7 +54,7 @@ public class CabinetmsTerminalController extends BaseController {
 		}
 		return entity;
 	}
-	
+
 	@RequiresPermissions("terminal:cabinetmsTerminal:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(CabinetmsTerminal cabinetmsTerminal, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -67,6 +76,9 @@ public class CabinetmsTerminalController extends BaseController {
 		if (!beanValidator(model, cabinetmsTerminal)){
 			return form(cabinetmsTerminal, model);
 		}
+		if(cabinetmsTerminal.getStatus() == null){
+			cabinetmsTerminal.setStatus(Constants.TERMINAL_STATUS_CLOSED);
+		}
 		terminalService.save(cabinetmsTerminal);
 		addMessage(redirectAttributes, "保存终端管理成功");
 		return "redirect:"+Global.getAdminPath()+"/terminal/cabinetmsTerminal/?repage";
@@ -82,7 +94,49 @@ public class CabinetmsTerminalController extends BaseController {
 
 	@RequestMapping(value = "statistics")
 	public String statistics(Model model) {
+		// TODO 查询统计信息
 		return "cabinetms/terminal/cabinetmsStatistics";
+	}
+
+	/**
+	 * 发送截屏指令
+	 * @param cabinetmsTerminal
+	 */
+	@RequiresPermissions("terminal:cabinetmsTerminal:view")
+	@RequestMapping(value = "screenshot", method = RequestMethod.POST)
+	@ResponseBody
+	public String screenshot(CabinetmsTerminal cabinetmsTerminal){
+		MediaCommand mediaCommand = new MediaCommand();
+		mediaCommand.setCommand(Constants.SOCKET_COMMAND_SCREENSHOT);
+		mediaCommand.setClientIp(cabinetmsTerminal.getTerminalIp());
+		String dest = Constants.SOCKET_QUEUE_PREFIX + cabinetmsTerminal.getTerminalIp();
+		mediaCommand.setDestination(dest);
+		template.convertAndSend(dest, mediaCommand);
+		return "发送截屏指令成功";
+	}
+
+	/**
+	 * 发送关机指令
+	 * @param cabinetmsTerminal
+	 */
+	@RequiresPermissions("terminal:cabinetmsTerminal:view")
+	@RequestMapping(value = "shutdown", method = RequestMethod.POST)
+	@ResponseBody
+	public String shutdown(CabinetmsTerminal cabinetmsTerminal){
+		MediaCommand mediaCommand = new MediaCommand();
+		mediaCommand.setCommand(Constants.SOCKET_COMMAND_SHUTDOWN);
+		mediaCommand.setClientIp(cabinetmsTerminal.getTerminalIp());
+		String dest = Constants.SOCKET_QUEUE_PREFIX + cabinetmsTerminal.getTerminalIp();
+		mediaCommand.setDestination(dest);
+		template.convertAndSend(dest, mediaCommand);
+		return "发送关机指令成功";
+	}
+
+	@RequiresPermissions("terminal:cabinetmsTerminal:view")
+	@RequestMapping(value = "findTerminal", method = RequestMethod.POST)
+	@ResponseBody
+	public CabinetmsTerminal findTerminal(CabinetmsTerminal cabinetmsTerminal){
+		return cabinetmsTerminal;
 	}
 
 }
