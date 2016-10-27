@@ -231,9 +231,8 @@ public class CabinetmsProgramTacticService extends CrudService<CabinetmsProgramT
 			try {
 				TacticDetailMediaCommand tacticDetailMediaCommand = new TacticDetailMediaCommand();
 				Program program = cabinetmsProgramTacticDetail.getProgram();
-				String id = program.getId();
-				Program queryProgram = programDao.get(id);
-				tacticDetailMediaCommand.setContent(programService.getProgramHTML(queryProgram, request));
+				Program queryProgram = programDao.get(program.getId());
+				tacticDetailMediaCommand.setId(program.getId());
 				tacticDetailMediaCommand.setStartTime(cabinetmsProgramTacticDetail.getStarttime());
 				tacticDetailMediaCommand.setEndTime(cabinetmsProgramTacticDetail.getEndtime());
 				tacticDetailMediaCommand.setTitle(queryProgram.getTitle());

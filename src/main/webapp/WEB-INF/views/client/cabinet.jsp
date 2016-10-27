@@ -8,6 +8,8 @@
     <script type="text/javascript" src="${ctxStatic}/jquery-marquee/1.4.0/jquery.marquee.min.js"></script>
     <script type="text/javascript" src="${ctxStatic}/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script type="text/javascript" src="${ctxStatic}/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script type="text/javascript" src="${ctxStatic}/moment/moment.min.js"></script>
+
     <title>展示机客户端</title>
     <object classid="CLSID:76A64158-CB41-11D1-8B02-00600806D9B6" id="locator"
             style="display:none;visibility:hidden"></object>
@@ -28,6 +30,7 @@
         service.InstancesOfAsync(foo, 'Win32_NetworkAdapterConfiguration');
         var $mq; // 滚动消息
         $.cookie.json = true;
+        var status = "1"; // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
 
         var stompClient = null;
         function connect() {
@@ -50,6 +53,12 @@
                     } else if (command == "nup") {
                         $.removeCookie("notice");
                         notice_undo_publish();
+                    } else if(command == "tp"){
+                        $.cookie("tactic", obj);
+                        tactic_publish();
+                    } else if(command == "tup"){
+                        $.removeCookie("tactic");
+                        tactic_undo_publish();
                     }
                 });
             }, function () {
@@ -62,7 +71,7 @@
             // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
             stompClient.send("/cabinet/queue", {}, JSON.stringify({
                 'clientIp': encodeURIComponent($("#ip").val()),
-                'status': encodeURIComponent("1")
+                'status': encodeURIComponent(status)
             }));
         }
         
@@ -88,6 +97,38 @@
                 $mq = $(".marquee").marquee({
                     duration: 15000
                 });
+            }
+        }
+
+        // 策略发布
+        function tactic_publish(){
+            window.setInterval(function () {
+                monitor();
+            }, 60000);
+        }
+
+        // 监控节目时间
+        function monitor() {
+            var obj = $.cookie("tactic");
+            var myday = moment().format("YYYYMMDD");
+            var mytime = moment().format("Hms");
+            if(obj.startDate <= myday && obj.endDate >= myday){
+                for(var i = 0; i < obj.detailList.length; i ++){
+                    var program = obj.detailList[i];
+                    if(program.startTime <= mytime && program.endTime >= mytime){
+                        $("#mainFrame").src = "${ctx}/program/program/preview?id=" + program.id;
+                        $("#mainFrame").show();
+                        status = "2";
+                    }
+                }
+            }
+        }
+
+        // 策略撤销
+        function tactic_undo_publish() {
+            if (typeof($.cookie("tactic")) == "undefined"){
+                $("#mainFrame").src = "";
+                $("#mainFrame").hide();
             }
         }
 
@@ -122,11 +163,13 @@
             });
 
         }
-
+        
         $(function () {
             connect();
             notice_publish();
             notice_undo_publish();
+            tactic_publish();
+            tactic_undo_publish();
         });
 
     </script>
@@ -143,5 +186,6 @@
 <body>
 <input type="hidden" name="ip" id="ip">
 <div class="marquee">&nbsp;</div>
+<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe>
 </body>
 </html>
