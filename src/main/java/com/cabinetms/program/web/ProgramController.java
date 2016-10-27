@@ -106,7 +106,6 @@ public class ProgramController extends BaseController {
 		return program;
 	}
 
-	@RequiresPermissions("program:program:view")
 	@RequestMapping(value = "preview")
 	@ResponseBody
 	public void preview(Program program, Model model, HttpServletRequest request, HttpServletResponse response) throws IOException, TemplateException {

@@ -8,6 +8,8 @@
     <script type="text/javascript" src="${ctxStatic}/jquery-marquee/1.4.0/jquery.marquee.min.js"></script>
     <script type="text/javascript" src="${ctxStatic}/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script type="text/javascript" src="${ctxStatic}/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script type="text/javascript" src="${ctxStatic}/moment/moment.min.js"></script>
+
     <title>展示机客户端</title>
     <object classid="CLSID:76A64158-CB41-11D1-8B02-00600806D9B6" id="locator"
             style="display:none;visibility:hidden"></object>
@@ -50,6 +52,12 @@
                     } else if (command == "nup") {
                         $.removeCookie("notice");
                         notice_undo_publish();
+                    } else if(command == "tp"){
+                        $.cookie("tactic", obj);
+                        tactic_publish();
+                    } else if(command == "tup"){
+                        $.removeCookie("tactic");
+                        tactic_undo_publish();
                     }
                 });
             }, function () {
@@ -91,6 +99,37 @@
             }
         }
 
+        // 策略发布
+        function tactic_publish(){
+            window.setInterval(function () {
+                monitor();
+            }, 60000);
+        }
+
+        // 监控节目时间
+        function monitor() {
+            var obj = $.cookie("tactic");
+            var myday = moment().format("YYYYMMDD");
+            var mytime = moment().format("Hms");
+            if(obj.startDate <= myday && obj.endDate >= myday){
+                for(var i = 0; i < obj.detailList.length; i ++){
+                    var program = obj.detailList[i];
+                    if(program.startTime <= mytime && program.endTime >= mytime){
+                        $("#mainFrame").src = "${ctx}/program/program/preview?id=" + program.id;
+                        $("#mainFrame").show();
+                    }
+                }
+            }
+        }
+
+        // 策略撤销
+        function tactic_undo_publish() {
+            if (typeof($.cookie("tactic")) == "undefined"){
+                $("#mainFrame").src = "";
+                $("#mainFrame").hide();
+            }
+        }
+
         // 关机
         function shutDown() {
             var shell = new ActiveXObject("WScript.Shell");
@@ -122,11 +161,13 @@
             });
 
         }
-
+        
         $(function () {
             connect();
             notice_publish();
             notice_undo_publish();
+            tactic_publish();
+            tactic_undo_publish();
         });
 
     </script>
@@ -143,5 +184,7 @@
 <body>
 <input type="hidden" name="ip" id="ip">
 <div class="marquee">&nbsp;</div>
+<input type="button" value="时间" onclick="test();">
+<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe>
 </body>
 </html>

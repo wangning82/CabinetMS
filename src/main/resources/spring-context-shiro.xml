@@ -29,7 +29,7 @@
 				/cabinet/** = anon
 				/topic/** = anon
 				/queue/** = anon
-
+				${adminPath}/program/program/preview = anon
 			</value>
 		</constructor-arg>
 	</bean>

@@ -137,7 +137,7 @@
 					${cabinetmsTerminal.office.name}
 				</td>
 				<td>
-					${fns:getDictLabel(cabinetmsTerminal.programTactic.id, '', '')}
+					${cabinetmsTerminal.programTactic.name}
 				</td>
 				<td>
 					${cabinetmsTerminal.notice.noticeName}
