@@ -30,6 +30,7 @@
         service.InstancesOfAsync(foo, 'Win32_NetworkAdapterConfiguration');
         var $mq; // 滚动消息
         $.cookie.json = true;
+        var status = "1"; // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
 
         var stompClient = null;
         function connect() {
@@ -70,7 +71,7 @@
             // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
             stompClient.send("/cabinet/queue", {}, JSON.stringify({
                 'clientIp': encodeURIComponent($("#ip").val()),
-                'status': encodeURIComponent("1")
+                'status': encodeURIComponent(status)
             }));
         }
         
@@ -117,6 +118,7 @@
                     if(program.startTime <= mytime && program.endTime >= mytime){
                         $("#mainFrame").src = "${ctx}/program/program/preview?id=" + program.id;
                         $("#mainFrame").show();
+                        status = "2";
                     }
                 }
             }
