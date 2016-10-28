@@ -9,8 +9,14 @@
 			//$("#name").focus();
 			$("#inputForm").validate({
 				submitHandler: function(form){
-					loading('正在提交，请稍等...');
-					form.submit();
+					var programFile = $('#programFile').val();
+					if (programFile == '') {
+						top.$.jBox.info('请选择节目文件!', '提示', {closed:function() {
+						}});
+					} else {
+						loading('正在提交，请稍等...');
+						form.submit();
+					}
 				},
 				errorContainer: "#messageBox",
 				errorPlacement: function(error, element) {
@@ -54,24 +60,24 @@
 	<form:form id="inputForm" modelAttribute="program" action="${ctx}/program/program/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
-		<div class="control-group">
-			<label class="control-label">节目编号：</label>
-			<div class="controls">
-				<form:input path="no" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--<label class="control-label">节目编号：</label>--%>
+			<%--<div class="controls">--%>
+				<%--<form:input path="no" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+			<%--</div>--%>
+		<%--</div>--%>
 
 		<div class="control-group">
 			<label class="control-label">节目名称：</label>
 			<div class="controls">
-				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
 			</div>
 		</div>
 
 		<div class="control-group">
 			<label class="control-label">模版名称：</label>
 			<div class="controls">
-				<form:select path="modelName" class="input-xlarge ">
+				<form:select path="modelName" class="input-xlarge required">
 					<form:option value="" label="" />
 					<form:options items="${fns:getDictList('template_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
@@ -81,7 +87,7 @@
 		<div class="control-group">
 			<label class="control-label">节目标题：</label>
 			<div class="controls">
-				<form:input path="title" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="title" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
 			</div>
 		</div>
 
