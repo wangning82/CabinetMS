@@ -16,6 +16,7 @@
 			<value>
 				/static/** = anon
 				/userfiles/** = anon
+				${adminPath}/program/program/preview = anon
 				${adminPath}/cas = cas
 				${adminPath}/login = authc
 				${adminPath}/logout = logout
@@ -29,7 +30,6 @@
 				/cabinet/** = anon
 				/topic/** = anon
 				/queue/** = anon
-				${adminPath}/program/program/preview = anon
 			</value>
 		</constructor-arg>
 	</bean>

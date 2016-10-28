@@ -15,6 +15,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -109,7 +110,7 @@ public class ProgramService extends CrudService<ProgramDao, Program> {
 	 * 为节目策略写的查询节目方法，新增时调用此方法，
 	 * 查所有已提交的节目返回即可
 	 * 
-	 * @param id
+	 *
 	 * @return
 	 */
 	public List<Program> findProgramForAdd(){
@@ -166,6 +167,7 @@ public class ProgramService extends CrudService<ProgramDao, Program> {
 
 		map.put("ctxStatic", request.getContextPath());
 		map.put("title", program.getTitle());
+		map.put("image_idle", DictUtils.getDictValue("图片轮播时间", "image_idle", "1500"));
 		map.put("content", programFileContent);
 
 		Configuration configuration = new Configuration();

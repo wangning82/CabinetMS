@@ -31,6 +31,7 @@
         var $mq; // 滚动消息
         $.cookie.json = true;
         var status = "1"; // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
+        var programId = "";
 
         var stompClient = null;
         function connect() {
@@ -48,13 +49,13 @@
                     } else if(command == "shutdown"){
                         shutDown();
                     } else if (command == "np") {
-                        $.cookie("notice", obj);
+                        $.cookie("notice", obj, { expires: 7 });
                         notice_publish();
                     } else if (command == "nup") {
                         $.removeCookie("notice");
                         notice_undo_publish();
                     } else if(command == "tp"){
-                        $.cookie("tactic", obj);
+                        $.cookie("tactic", obj, { expires: 7 });
                         tactic_publish();
                     } else if(command == "tup"){
                         $.removeCookie("tactic");
@@ -102,9 +103,7 @@
 
         // 策略发布
         function tactic_publish(){
-            window.setInterval(function () {
-                monitor();
-            }, 60000);
+            window.setInterval(monitor, 20000);
         }
 
         // 监控节目时间
@@ -112,13 +111,18 @@
             var obj = $.cookie("tactic");
             var myday = moment().format("YYYYMMDD");
             var mytime = moment().format("Hms");
-            if(obj.startDate <= myday && obj.endDate >= myday){
-                for(var i = 0; i < obj.detailList.length; i ++){
-                    var program = obj.detailList[i];
-                    if(program.startTime <= mytime && program.endTime >= mytime){
-                        $("#mainFrame").src = "${ctx}/program/program/preview?id=" + program.id;
-                        $("#mainFrame").show();
-                        status = "2";
+            if(typeof(obj) != "undefined" && obj != null){
+                if(obj.startDate <= myday && obj.endDate >= myday){
+                    for(var i = 0; i < obj.detailList.length; i ++){
+                        var program = obj.detailList[i];
+                        if(program.startTime <= mytime && program.endTime >= mytime){
+                            if(programId != program.id){
+                                $('#mainFrame').attr("src", "${ctx}/program/program/preview?id=" + program.id);
+                            }
+                            $("#mainFrame").show();
+                            status = "2";
+                            break;
+                        }
                     }
                 }
             }
@@ -127,7 +131,7 @@
         // 策略撤销
         function tactic_undo_publish() {
             if (typeof($.cookie("tactic")) == "undefined"){
-                $("#mainFrame").src = "";
+                $('#mainFrame').attr("src", "");
                 $("#mainFrame").hide();
             }
         }

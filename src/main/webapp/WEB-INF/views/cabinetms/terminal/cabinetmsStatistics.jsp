@@ -66,15 +66,15 @@
         <td width="20%">
             <div style=" background:url(${ctxStatic}/cabinet/images/tubiao1.png); height:260px; width:272px; margin:0 auto;">
                 <div style=" height:45px;"></div>
-                <div class="yuan" style="margin-left:220px;">1235</div>
+                <div class="yuan" style="margin-left:220px;">${free}</div>
             </div>
-            <div style=" line-height:45px; color:#FFFFFF; font-size:24px;">在线终端</div>
+            <div style=" line-height:45px; color:#FFFFFF; font-size:24px;">空闲终端</div>
         </td>
         <td width="15%">&nbsp;</td>
         <td width="16%">
             <div style=" background:url(${ctxStatic}/cabinet/images/tubiao2.png); height:260px; width:272px; margin:0 auto;">
                 <div style=" height:45px;"></div>
-                <div class="yuan1" style="margin-left:220px;">1235</div>
+                <div class="yuan1" style="margin-left:220px;">${playing}</div>
             </div>
             <div style=" line-height:45px; color:#FFFFFF; font-size:24px;">播放终端</div>
         </td>
@@ -83,7 +83,7 @@
         <td width="20%">
             <div style=" background:url(${ctxStatic}/cabinet/images/tubiao3.png); height:260px; width:272px; margin:0 auto;">
                 <div style=" height:45px;"></div>
-                <div class="yuan2" style="margin-left:220px;">1235</div>
+                <div class="yuan2" style="margin-left:220px;">${closed}</div>
             </div>
             <div style=" line-height:45px; color:#FFFFFF; font-size:24px;">关闭终端</div>
         </td>
