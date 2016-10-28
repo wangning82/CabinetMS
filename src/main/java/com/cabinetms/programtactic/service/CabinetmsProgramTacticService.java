@@ -278,7 +278,7 @@ public class CabinetmsProgramTacticService extends CrudService<CabinetmsProgramT
 	 */
 	@Transactional(readOnly = false)
 	public void cancel(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request,SimpMessagingTemplate template) {
-		cabinetmsProgramTactic.setStatus(Constants.STATUS_WAIT_RELEASE);
+		cabinetmsProgramTactic.setStatus(Constants.STATUS_WAIT_SUBMIT);
 		cabinetmsProgramTactic.preUpdate();
 		super.save(cabinetmsProgramTactic);
 

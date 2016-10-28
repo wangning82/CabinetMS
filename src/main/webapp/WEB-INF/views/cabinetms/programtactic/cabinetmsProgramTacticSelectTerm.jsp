@@ -15,11 +15,13 @@
         	return false;
         }
 		
+		//终端对象
 		function Term(id,idx){
 			this.id = id;
 			this.idx = idx;
 		}
 		
+		//父窗口调用收集数据方法
 		function getData(){
 			var dataArray = new Array();
 			$('input[name="termIds"]:checked').each(function(index){

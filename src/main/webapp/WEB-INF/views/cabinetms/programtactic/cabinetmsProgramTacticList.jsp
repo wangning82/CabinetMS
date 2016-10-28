@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.cabinetms.common.Constants"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -15,6 +15,7 @@
         	return false;
         }
 		
+		//查看终端
 		function seeTerm(id){
 			// 正常打开	
 			top.$.jBox.open("iframe:${ctx}/programtactic/cabinetmsProgramTactic/termListOnly", "选择终端", $(top.document).width()-200,$(top.document).height()-240, {
@@ -29,31 +30,6 @@
 			});
 		}
 		
-		// 对Date的扩展，将 Date 转化为指定格式的String 
-		// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
-		// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
-		// 例子： 
-		// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
-		// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
-		Date.prototype.Format = function(fmt) 
-		{ //author: meizz 
-		  var o = { 
-		    "M+" : this.getMonth()+1,                 //月份 
-		    "d+" : this.getDate(),                    //日 
-		    "h+" : this.getHours(),                   //小时 
-		    "m+" : this.getMinutes(),                 //分 
-		    "s+" : this.getSeconds(),                 //秒 
-		    "q+" : Math.floor((this.getMonth()+3)/3), //季度 
-		    "S"  : this.getMilliseconds()             //毫秒 
-		  }; 
-		  if(/(y+)/.test(fmt)) 
-		    fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
-		  for(var k in o) 
-		    if(new RegExp("("+ k +")").test(fmt)) 
-		  fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
-		  return fmt; 
-		}
-		
 		//全局节目列表索引
 		var globalProgramArrayindex = 0;
 		//全局节目列表数组
@@ -61,6 +37,7 @@
 		//全局节目列表数量
 		var globalProgramArrayLength = 0;
 		
+		//根据时间部分组织一个date对象，用于后面算时间差
 		function getDIYDate(time){
 			var timeStr = time.toString();
 			var hours = timeStr.substring(0,2);
@@ -89,6 +66,7 @@
 			return false;
 		}
 		
+		//算时间差，秒为单位
 		function differenceSeconds(startTime,endTime){
 			var milliseconds=endTime.getTime()-startTime.getTime();
 			var seconds=Math.round(milliseconds/1000);
@@ -101,6 +79,7 @@
 		function preview(tacticId){
 			
 			//alert(tacticId)
+			
 			/******重置全局变量 Start******/
 			globalProgramArrayindex = 0;
 			globalProgramArray = new Array();
@@ -148,13 +127,13 @@
 				var seconds = differenceSeconds(newStartTime,newEndTime);
 				var now = new Date().Format("yyyyMMddhhmmss");
 				time(seconds,now); 
-		}
-		else{
-			top.$.jBox.alert("没有节目可以预览","提示");
+			}
+			else{
+				top.$.jBox.alert("没有节目可以预览","提示");
+			}
 		}
 		
-		}
-		
+		//js函数递归调用，每隔100毫秒检查一次时间，用于切换预览内容
 		function time(seconds,now){  
 			if(!checkTime(seconds,now)){
 				//alert(";startTime:"+startTime+";endTime:"+endTime)
@@ -178,15 +157,13 @@
 			window.setTimeout("time('"+seconds+"','"+now+"')", 100);
 		}
 		
-		function toUrl(url){
-			top.$.jBox.getIframe().src=url;
-		}
-		
+		//策略对象
 		function CabinetmsProgramTactic(id,termList){
 			this.id = id;
 			this.termList = termList;
 		}
 		
+		//发布函数
 		function release(id){
 			// 正常打开	
 			top.$.jBox.open("iframe:${ctx}/programtactic/cabinetmsProgramTactic/termList", "选择终端", $(top.document).width()-200,$(top.document).height()-240, {
@@ -301,23 +278,23 @@
 				</td>
 				<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><td>
 					<!-- 待提交状态可以编辑 -->
-					<c:if test="${cabinetmsProgramTactic.status eq '1' }">
+					<c:if test="${cabinetmsProgramTactic.status eq Constants.STATUS_WAIT_SUBMIT }">
     					<a href="${ctx}/programtactic/cabinetmsProgramTactic/form?id=${cabinetmsProgramTactic.id}">修改</a>
 					</c:if>
 					<!-- 待提交状态和待发布状态可以删除 -->
-					<c:if test="${cabinetmsProgramTactic.status eq '1' or cabinetmsProgramTactic.status eq '2'}">
+					<c:if test="${cabinetmsProgramTactic.status eq Constants.STATUS_WAIT_SUBMIT or cabinetmsProgramTactic.status eq Constants.STATUS_WAIT_RELEASE}">
     					<a href="${ctx}/programtactic/cabinetmsProgramTactic/delete?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要删除该节目策略吗？', this.href)">删除</a>
 					</c:if>
 					<!-- 待提交状态可以提交 -->
-					<c:if test="${cabinetmsProgramTactic.status eq '1' }">
+					<c:if test="${cabinetmsProgramTactic.status eq Constants.STATUS_WAIT_SUBMIT }">
     					<a href="${ctx}/programtactic/cabinetmsProgramTactic/updateStatus?id=${cabinetmsProgramTactic.id}&&status=2" onclick="return confirmx('确认要提交该节目策略吗？', this.href)">提交</a>
 					</c:if>
 					<!-- 待发布状态可以发布 -->
-					<c:if test="${cabinetmsProgramTactic.status eq '2' }">
+					<c:if test="${cabinetmsProgramTactic.status eq Constants.STATUS_WAIT_RELEASE }">
     					<a href="#" onclick="release('${cabinetmsProgramTactic.id}')">发布</a>
 					</c:if>
 					<!-- 已发布状态可以撤销 和查看终端-->
-					<c:if test="${cabinetmsProgramTactic.status eq '3' }">
+					<c:if test="${cabinetmsProgramTactic.status eq Constants.STATUS_RELEASED }">
 						<a href="${ctx}/programtactic/cabinetmsProgramTactic/cancel?id=${cabinetmsProgramTactic.id}" onclick="return confirmx('确认要撤销该节目策略吗？', this.href)">撤销</a>
 						<a href="#" onclick="seeTerm('${cabinetmsProgramTactic.id}')">查看终端</a>
 					</c:if>

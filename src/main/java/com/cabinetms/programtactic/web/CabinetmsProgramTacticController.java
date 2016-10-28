@@ -140,14 +140,32 @@ public class CabinetmsProgramTacticController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/programtactic/cabinetmsProgramTactic/list?repage";
 	}
 	
+	/**
+	 * 查询终端
+	 * @param cabinetmsProgramTactic
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:view")
 	@RequestMapping(value = {"termList"})
 	public String termList(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, HttpServletResponse response, Model model){
-		Page<CabinetmsTerminal> page = cabinetmsTerminalService.findPage(new Page<CabinetmsTerminal>(request, response), new CabinetmsTerminal());
+		CabinetmsTerminal cabinetmsTerminal = new CabinetmsTerminal();
+		cabinetmsTerminal.setStatus(Constants.TERMINAL_STATUS_FREE);
+		Page<CabinetmsTerminal> page = cabinetmsTerminalService.findPage(new Page<CabinetmsTerminal>(request, response), cabinetmsTerminal);
 		model.addAttribute("page", page);
 		return "cabinetms/programtactic/cabinetmsProgramTacticSelectTerm";
 	}
 	
+	/**
+	 * 根据策略id查询终端（仅查看）
+	 * @param cabinetmsProgramTactic
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:view")
 	@RequestMapping(value = {"termListOnly"})
 	public String termListOnly(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, HttpServletResponse response, Model model){
@@ -158,6 +176,14 @@ public class CabinetmsProgramTacticController extends BaseController {
 		return "cabinetms/programtactic/cabinetmsProgramTacticSelectTerm";
 	}
 	
+	/**
+	 * 发布方法
+	 * @param cabinetmsProgramTactic
+	 * @param request
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:edit")
 	@RequestMapping(value = {"release"})
 	public String release(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, Model model,
@@ -172,6 +198,14 @@ public class CabinetmsProgramTacticController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/programtactic/cabinetmsProgramTactic/list?repage";
 	}
 	
+	/**
+	 * 撤销方法
+	 * @param cabinetmsProgramTactic
+	 * @param request
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:edit")
 	@RequestMapping(value = {"cancel"})
 	public String cancel(CabinetmsProgramTactic cabinetmsProgramTactic, HttpServletRequest request, Model model,
@@ -186,6 +220,14 @@ public class CabinetmsProgramTacticController extends BaseController {
 		return "redirect:" + Global.getAdminPath() + "/programtactic/cabinetmsProgramTactic/list?repage";
 	}
 	
+	/**
+	 * 获得节目列表
+	 * @param cabinetmsProgramTactic
+	 * @param request
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("programtactic:cabinetmsProgramTactic:view")
 	@RequestMapping(value = {"getProgramList"})
 	@ResponseBody

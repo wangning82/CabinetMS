@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" import="com.cabinetms.common.Constants"%>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
@@ -9,6 +9,11 @@
 			//$("#name").focus();
 			$("#inputForm").validate({
 				submitHandler: function(form){
+					var rowSize = $('#cabinetmsProgramTacticDetailList tr').size();
+					if(rowSize<=0){
+						top.$.jBox.alert("请填写节目后提交","提示");
+						return;
+					}
 					loading('正在提交，请稍等...');
 					form.submit();
 				},
@@ -63,18 +68,18 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="cabinetmsProgramTactic" action="${ctx}/programtactic/cabinetmsProgramTactic/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<input type="hidden" name="status" value="1"/>
+		<input type="hidden" name="status" value="<%=Constants.STATUS_WAIT_SUBMIT%>"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">策略名称：</label>
 			<div class="controls">
-				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge required"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">开始时间：</label>
 			<div class="controls">
-				<input name="starttimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+				<input name="starttimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
 					value="${cabinetmsProgramTactic.starttimeparam}"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</div>
@@ -82,7 +87,7 @@
 		<div class="control-group">
 			<label class="control-label">结束时间：</label>
 			<div class="controls">
-				<input name="endtimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+				<input name="endtimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
 					value="${cabinetmsProgramTactic.endtimeparam}"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 			</div>
@@ -100,10 +105,10 @@
 						<thead>
 							<tr>
 								<th class="hide"></th>
-								<th>节目</th>
-								<th>开始时间</th>
-								<th>结束时间</th>
-								<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
+								<th style="width: 30%">节目</th>
+								<th style="width: 30%">开始时间</th>
+								<th style="width: 30%">结束时间</th>
+								<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><th style="width: 5%">&nbsp;</th></shiro:hasPermission>
 							</tr>
 						</thead>
 						<tbody id="cabinetmsProgramTacticDetailList">
@@ -119,7 +124,7 @@
 								<input id="cabinetmsProgramTacticDetailList{{idx}}_delFlag" name="cabinetmsProgramTacticDetailList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
-								<select id="cabinetmsProgramTacticDetailList{{idx}}_program" data-value="{{row.program.id}}" name="cabinetmsProgramTacticDetailList[{{idx}}].program.id" class="input-medium ">
+								<select id="cabinetmsProgramTacticDetailList{{idx}}_program" data-value="{{row.program.id}}" name="cabinetmsProgramTacticDetailList[{{idx}}].program.id" class="input-medium required">
 									<option value="">请选择</option>
 									{{^isAdd}}
 										{{#row.programList}}
@@ -134,11 +139,11 @@
 								</select>
 							</td>
 							<td>
-								<input id="cabinetmsProgramTacticDetailList{{idx}}_starttimeparam" name="cabinetmsProgramTacticDetailList[{{idx}}].starttimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+								<input id="cabinetmsProgramTacticDetailList{{idx}}_starttimeparam" name="cabinetmsProgramTacticDetailList[{{idx}}].starttimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
 									value="{{row.starttimeparam}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 							</td>
 							<td>
-								<input id="cabinetmsProgramTacticDetailList{{idx}}_endtimeparam" name="cabinetmsProgramTacticDetailList[{{idx}}].endtimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+								<input id="cabinetmsProgramTacticDetailList{{idx}}_endtimeparam" name="cabinetmsProgramTacticDetailList[{{idx}}].endtimeparam" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate required"
 									value="{{row.endtimeparam}}" onclick="WdatePicker({dateFmt:'HH:mm:ss',isShowClear:false});"/>
 							</td>
 							<shiro:hasPermission name="programtactic:cabinetmsProgramTactic:edit"><td class="text-center" width="10">
