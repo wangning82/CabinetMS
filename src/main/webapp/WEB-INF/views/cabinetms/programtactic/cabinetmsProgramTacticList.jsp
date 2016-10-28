@@ -287,7 +287,7 @@
 					</c:if>
 					<!-- 待提交状态可以提交 -->
 					<c:if test="${cabinetmsProgramTactic.status eq Constants.STATUS_WAIT_SUBMIT }">
-    					<a href="${ctx}/programtactic/cabinetmsProgramTactic/updateStatus?id=${cabinetmsProgramTactic.id}&&status=2" onclick="return confirmx('确认要提交该节目策略吗？', this.href)">提交</a>
+    					<a href="${ctx}/programtactic/cabinetmsProgramTactic/updateStatus?id=${cabinetmsProgramTactic.id}&&status=<%=Constants.STATUS_WAIT_RELEASE %>" onclick="return confirmx('确认要提交该节目策略吗？', this.href)">提交</a>
 					</c:if>
 					<!-- 待发布状态可以发布 -->
 					<c:if test="${cabinetmsProgramTactic.status eq Constants.STATUS_WAIT_RELEASE }">
