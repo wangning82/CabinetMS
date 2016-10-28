@@ -131,7 +131,7 @@
         // 策略撤销
         function tactic_undo_publish() {
             if (typeof($.cookie("tactic")) == "undefined"){
-                $("#mainFrame").src = "";
+                $('#mainFrame').attr("src", "");
                 $("#mainFrame").hide();
             }
         }
