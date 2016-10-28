@@ -79,6 +79,9 @@ public class CabinetmsNoticeController extends BaseController {
         if (!beanValidator(model, cabinetmsNotice)) {
             return form(cabinetmsNotice, model);
         }
+        if(cabinetmsNotice.getStatus() == null){
+            cabinetmsNotice.setStatus(Constants.NOTICE_STATUS_UNPUBLISHED);
+        }
         cabinetmsNoticeService.save(cabinetmsNotice);
         addMessage(redirectAttributes, "保存消息信息成功");
         return "redirect:" + Global.getAdminPath() + "/notice/cabinetmsNotice/?repage";

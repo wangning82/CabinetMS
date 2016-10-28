@@ -27,9 +27,11 @@
 <ul class="ul-form">
     <li><label>播放时间：</label>
         <input id="beginDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-               value="<fmt:formatDate value='${notice.beginDate}' pattern='yyyy-MM-dd HH:mm:ss'/>" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/> -
+               value="<fmt:formatDate value='${notice.beginDate}' pattern='yyyy-MM-dd HH:mm:ss'/>"
+               <c:if test="${type == 'edit'}">onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"</c:if> /> -
         <input id="endDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate"
-               value="<fmt:formatDate value='${notice.endDate}' pattern='yyyy-MM-dd HH:mm:ss'/>" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+               value="<fmt:formatDate value='${notice.endDate}' pattern='yyyy-MM-dd HH:mm:ss'/>"
+               <c:if test="${type == 'edit'}">onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"</c:if> />
     </li>
 </ul>
 <table class="table table-striped table-bordered table-condensed">

@@ -46,15 +46,6 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">消息状态：</label>
-			<div class="controls">
-				<form:select path="status" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('notice_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">
 				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>

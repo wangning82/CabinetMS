@@ -94,7 +94,17 @@ public class CabinetmsTerminalController extends BaseController {
 
 	@RequestMapping(value = "statistics")
 	public String statistics(Model model) {
-		// TODO 查询统计信息
+		CabinetmsTerminal param = new CabinetmsTerminal();
+
+		param.setStatus(Constants.TERMINAL_STATUS_FREE);
+		model.addAttribute("free", terminalService.findList(param).size());
+
+		param.setStatus(Constants.TERMINAL_STATUS_PLAYING);
+		model.addAttribute("playing", terminalService.findList(param).size());
+
+		param.setStatus(Constants.TERMINAL_STATUS_CLOSED);
+		model.addAttribute("closed", terminalService.findList(param).size());
+
 		return "cabinetms/terminal/cabinetmsStatistics";
 	}
 

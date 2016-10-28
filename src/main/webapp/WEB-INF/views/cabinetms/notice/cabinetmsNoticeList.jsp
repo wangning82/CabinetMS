@@ -119,14 +119,20 @@
     <c:forEach items="${page.list}" var="cabinetmsNotice">
         <tr>
             <td>
-                <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">
-                    ${cabinetmsNotice.noticeName}
-                </a>
+                <c:if test="${cabinetmsNotice.status == '1'}">
+                    <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">
+                            ${cabinetmsNotice.noticeName}
+                    </a>
+                </c:if>
+                <c:if test="${cabinetmsNotice.status == '2'}">${cabinetmsNotice.noticeName}</c:if>
             </td>
             <td>
-                <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">
-                    ${cabinetmsNotice.noticeContent}
-                </a>
+                <c:if test="${cabinetmsNotice.status == '1'}">
+                    <a href="${ctx}/notice/cabinetmsNotice/form?id=${cabinetmsNotice.id}">
+                        ${cabinetmsNotice.noticeContent}
+                    </a>
+                </c:if>
+                <c:if test="${cabinetmsNotice.status == '2'}">${cabinetmsNotice.noticeContent}</c:if>
             </td>
             <td>
                     ${fns:getDictLabel(cabinetmsNotice.status, 'notice_status', '')}
