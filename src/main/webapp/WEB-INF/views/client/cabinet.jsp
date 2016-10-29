@@ -17,7 +17,7 @@
             style="display:none;visibility:hidden"></object>
     <style>
         .marquee {
-            width: 300px;
+            width: 100%;
             overflow: hidden;
             border: 1px solid #ccc;
             background: #ccc;
@@ -83,7 +83,7 @@
                 if(obj.startTime <= currTime && obj.endTime >= currTime){
                     $(".marquee").html(obj.content);
                     $mq = $(".marquee").marquee({
-                        duration: 15000
+                        duration: 25000
                     });
                 }
             }
@@ -94,36 +94,41 @@
             if (typeof($.cookie("notice")) == "undefined"){
                 $(".marquee").html("&nbsp;");
                 $mq = $(".marquee").marquee({
-                    duration: 15000
+                    duration: 25000
                 });
             }
         }
 
         // 策略发布
         function tactic_publish(){
-            window.setInterval(monitor, 10000); // 10秒刷新一次
+            window.setInterval(monitor, 2000); // 2秒刷新一次
         }
 
         // 监控节目时间
         function monitor() {
             var obj = $.cookie("tactic");
             var myday = moment().format("YYYYMMDD");
-            var mytime = moment().format("Hmmss");
+            var mytime = moment().format("HHmmss");
             if(typeof(obj) != "undefined" && obj != null){
                 if(obj.startDate <= myday && obj.endDate >= myday){
+                    var playing = false;
                     for(var i = 0; i < obj.detailList.length; i ++){
                         var program = obj.detailList[i];
                         if(program.startTime <= mytime && program.endTime >= mytime){
                             if(programId != program.id){
                                 $('#mainFrame').attr("src", "${ctx}/program/program/preview?id=" + program.id);
+                                programId = program.id;
                             }
+                            playing = true;
                             $("#mainFrame").show();
                             status = "2";
-                        }else{
-                            $('#mainFrame').attr("src", "");
-                            $("#mainFrame").hide();
-                            status = "1";
+                            break;
                         }
+                    }
+                    if(!playing){
+                        $("#mainFrame").attr("src", "");
+                        $("#mainFrame").hide();
+                        status = "1";
                     }
                 }else{
                     status = "1";
@@ -134,8 +139,9 @@
         // 策略撤销
         function tactic_undo_publish() {
             if (typeof($.cookie("tactic")) == "undefined"){
-                $('#mainFrame').attr("src", "");
+                $("#mainFrame").attr("src", "");
                 $("#mainFrame").hide();
+                status = "1";
             }
         }
 
@@ -170,7 +176,18 @@
             });
 
         }
-        
+
+        // 获取时分秒
+        function getMoment(date, time) {
+            var year = parseInt(date.substring(0, 4));
+            var month = parseInt(date.substring(4, 6));
+            var day = parseInt(date.substring(6, 8));
+            var hour = parseInt(time.substring(0, 2));
+            var minute = parseInt(time.substring(2, 4));
+            var second = parseInt(time.substring(4, 6));
+            return moment([year, month, day, hour, minute, second]);
+        }
+
         $(function () {
             connect();
             notice_publish();
