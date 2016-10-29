@@ -42,9 +42,7 @@
                 stompClient.subscribe("/queue/" + $("#ip").val(), function (message) {
                     var obj = JSON.parse(message.body);
                     var command = obj.command;
-                    if (command == "ping") {
-                        sendStatus();
-                    } else if(command == "screenshot"){
+                    if(command == "screenshot"){
                         screenShot();
                     } else if(command == "shutdown"){
                         shutDown();
@@ -103,14 +101,14 @@
 
         // 策略发布
         function tactic_publish(){
-            window.setInterval(monitor, 20000);
+            window.setInterval(monitor, 10000); // 10秒刷新一次
         }
 
         // 监控节目时间
         function monitor() {
             var obj = $.cookie("tactic");
             var myday = moment().format("YYYYMMDD");
-            var mytime = moment().format("Hms");
+            var mytime = moment().format("Hmmss");
             if(typeof(obj) != "undefined" && obj != null){
                 if(obj.startDate <= myday && obj.endDate >= myday){
                     for(var i = 0; i < obj.detailList.length; i ++){
@@ -121,9 +119,14 @@
                             }
                             $("#mainFrame").show();
                             status = "2";
-                            break;
+                        }else{
+                            $('#mainFrame').attr("src", "");
+                            $("#mainFrame").hide();
+                            status = "1";
                         }
                     }
+                }else{
+                    status = "1";
                 }
             }
         }
@@ -174,6 +177,7 @@
             notice_undo_publish();
             tactic_publish();
             tactic_undo_publish();
+            window.setInterval(sendStatus, 30000);
         });
 
     </script>
@@ -190,6 +194,6 @@
 <body>
 <input type="hidden" name="ip" id="ip">
 <div class="marquee">&nbsp;</div>
-<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650"></iframe>
+<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="100%"></iframe>
 </body>
 </html>
