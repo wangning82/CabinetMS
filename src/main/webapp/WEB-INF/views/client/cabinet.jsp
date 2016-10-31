@@ -30,7 +30,7 @@
         service.InstancesOfAsync(foo, 'Win32_NetworkAdapterConfiguration');
         var $mq; // 滚动消息
         $.cookie.json = true;
-        var status = "1"; // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
+        var status = "1"; // 终端状态根据数据字典定义，1：空闲，2：播放，3：策略，4：关闭
         var programId = "";
 
         var stompClient = null;
@@ -67,7 +67,7 @@
 
         // 发送客户端状态
         function sendStatus() {
-            // 终端状态根据数据字典定义，1：空闲，2：播放，3：关闭
+            // 终端状态根据数据字典定义，1：空闲，2：播放，3：策略，4：关闭
             stompClient.send("/cabinet/queue", {}, JSON.stringify({
                 'clientIp': encodeURIComponent($("#ip").val()),
                 'status': encodeURIComponent(status)
@@ -128,7 +128,7 @@
                     if(!playing){
                         $("#mainFrame").attr("src", "");
                         $("#mainFrame").hide();
-                        status = "1";
+                        status = "3";
                     }
                 }else{
                     status = "1";

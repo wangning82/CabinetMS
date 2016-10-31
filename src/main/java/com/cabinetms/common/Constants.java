@@ -66,9 +66,14 @@ public class Constants {
 	public static final String TERMINAL_STATUS_PLAYING = "2";
 
 	/**
+	 * 终端状态-策略中
+	 */
+	public static final String TERMINAL_STATUS_TACTIC = "3";
+
+	/**
 	 * 终端状态-关闭中
 	 */
-	public static final String TERMINAL_STATUS_CLOSED = "3";
+	public static final String TERMINAL_STATUS_CLOSED = "4";
 
 	// 节目策略-待提交
 	public static final String STATUS_WAIT_SUBMIT = "1";
