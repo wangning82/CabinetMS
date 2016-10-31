@@ -98,7 +98,7 @@
 		<include refid="cabinetmsTerminalJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			AND a.status1 != '3'
+			AND a.status1 != '4'
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
