@@ -11,7 +11,7 @@
 		a.program_tactic_id AS "programTactic.id",
 		a.notice_id AS "notice.id",
 		a.screenshot AS "screenshot",
-		a.status AS "status",
+		a.status1 AS "status",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
@@ -60,7 +60,7 @@
 				AND a.notice_id = #{notice.id}
 			</if>
 			<if test="status != null and status != ''">
-				AND a.status = #{status}
+				AND a.status1 = #{status}
 			</if>
 		</where>
 		<choose>
@@ -98,7 +98,7 @@
 		<include refid="cabinetmsTerminalJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
-			AND a.status != '3'
+			AND a.status1 != '3'
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -119,7 +119,7 @@
 			program_tactic_id,
 			notice_id,
 			screenshot,
-			status,
+			status1,
 			create_by,
 			create_date,
 			update_by,
@@ -152,7 +152,7 @@
 			program_tactic_id = #{programTactic.id},
 			notice_id = #{notice.id},
 			screenshot = #{screenshot},
-			status = #{status},
+			status1 = #{status},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks}
@@ -169,7 +169,7 @@
 		UPDATE cabinetms_terminal
 		<set>
 			<if test="status != null and status != ''">
-				status = #{status},
+				status1 = #{status},
 			</if>
 			<if test="screenshot != null and screenshot != ''">
 				screenshot = #{screenshot},

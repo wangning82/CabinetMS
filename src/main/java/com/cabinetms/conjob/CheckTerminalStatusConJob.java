@@ -1,15 +1,16 @@
 package com.cabinetms.conjob;
 
-import com.cabinetms.client.MediaCommand;
 import com.cabinetms.common.Constants;
 import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.cabinetms.terminal.service.CabinetmsTerminalService;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,23 +22,32 @@ public class CheckTerminalStatusConJob extends QuartzJobBean {
     @Autowired
     private CabinetmsTerminalService terminalService;
 
-    @Autowired
-    private SimpMessagingTemplate template;
+    private String minute;
+
+    public String getMinute() {
+        return minute;
+    }
+
+    public void setMinute(String minute) {
+        this.minute = minute;
+    }
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         List<CabinetmsTerminal> list = terminalService.findList(new CabinetmsTerminal());
-        MediaCommand mediaCommand = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         for(CabinetmsTerminal terminal : list){
-            terminal.setStatus(Constants.TERMINAL_STATUS_CLOSED);
-            terminalService.updateByIP(terminal);
+            Calendar nowTime = Calendar.getInstance();
+            nowTime.setTime(new Date());
+            Calendar lastTime = Calendar.getInstance();
+            lastTime.add(Calendar.MINUTE, Integer.parseInt(minute));
+            System.out.println("终端IP=" + terminal.getTerminalIp() + ";上次更新时间" + sdf.format(lastTime.getTime()) + ";现在时间：" + sdf.format(nowTime.getTime()));
+            if(nowTime.compareTo(lastTime) > 0){
+                terminal.setStatus(Constants.TERMINAL_STATUS_CLOSED);
+                terminal.setUpdateDate(new Date());
+                terminalService.updateByIP(terminal);
+            }
 
-            String dest = Constants.SOCKET_QUEUE_PREFIX + terminal.getTerminalIp();
-            mediaCommand = new MediaCommand();
-            mediaCommand.setCommand(Constants.SOCKET_COMMAND_PING);
-            mediaCommand.setClientIp(terminal.getTerminalIp());
-            mediaCommand.setDestination(dest);
-            template.convertAndSend(dest, mediaCommand);
         }
     }
 }

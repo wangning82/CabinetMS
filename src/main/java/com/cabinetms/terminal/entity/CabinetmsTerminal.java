@@ -3,12 +3,11 @@
  */
 package com.cabinetms.terminal.entity;
 
-import org.hibernate.validator.constraints.Length;
-import com.thinkgem.jeesite.modules.sys.entity.Office;
-import com.cabinetms.programtactic.entity.CabinetmsProgramTactic;
 import com.cabinetms.notice.entity.CabinetmsNotice;
-
+import com.cabinetms.programtactic.entity.CabinetmsProgramTactic;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 终端管理Entity
@@ -26,7 +25,7 @@ public class CabinetmsTerminal extends DataEntity<CabinetmsTerminal> {
 	private CabinetmsNotice notice;		// 消息ID
 	private String screenshot;
 	private String status;		// 终端状态
-	
+
 	public CabinetmsTerminal() {
 		super();
 	}
@@ -101,4 +100,5 @@ public class CabinetmsTerminal extends DataEntity<CabinetmsTerminal> {
 	public void setScreenshot(String screenshot) {
 		this.screenshot = screenshot;
 	}
+
 }

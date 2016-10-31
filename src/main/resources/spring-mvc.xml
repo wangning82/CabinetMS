@@ -141,6 +141,11 @@
 	<bean id="checkTerminalStatusJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<property name="jobClass" value="com.cabinetms.conjob.CheckTerminalStatusConJob"/>
 		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="minute" value="3"/>
+			</map>
+		</property>
 	</bean>
 
 	<bean id="checkTerminalStatusTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
