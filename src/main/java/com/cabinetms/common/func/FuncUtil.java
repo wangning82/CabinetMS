@@ -10,9 +10,13 @@ public class FuncUtil {
 	@SuppressWarnings("rawtypes")
 	private static final Map<String, AbstractCache> map = new LinkedHashMap<>();
 	public static final String PROGRAM_KEY_NAME="program";
+	public static final String PROGRAM_TACTIC_KEY_NAME="programTactic";
+	public static final String OFFICE_KEY_NAME="office";
 	
 	static {
 		map.put(PROGRAM_KEY_NAME, new ProgramFunc());
+		map.put(OFFICE_KEY_NAME, new OfficeFunc());
+		map.put(PROGRAM_TACTIC_KEY_NAME, new ProgramTacticFunc());
 	}
 
 	/**

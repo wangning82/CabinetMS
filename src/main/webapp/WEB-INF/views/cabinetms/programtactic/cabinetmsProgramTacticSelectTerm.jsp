@@ -58,17 +58,25 @@
 						${term.terminalName}
 					</td>
 					<td>
-						${term.office.code}
+						<c:if test="${not empty term.office.id }">
+							<c:set value="${fns:getEntity('office',term.office.id)}" var="office"></c:set>
+							<c:if test="${not empty office }">
+								${office.name }
+							</c:if>
+						</c:if>
 					</td>
 					<td>
 						${term.terminalIp}
 					</td>
 					<td>
-						${term.status }
+						${fns:getDictLabel(term.status,'terminal_status','') }
 					</td>
 					<td>
 						<c:if test="${not empty term.programTactic.id }">
-							策略中
+							<c:set value="${fns:getEntity('programTactic',term.programTactic.id) }" var="tactic"></c:set>
+							<c:if test="${not empty tactic }">
+								${tactic.name }
+							</c:if>
 						</c:if>
 					</td>
 				</tr>
