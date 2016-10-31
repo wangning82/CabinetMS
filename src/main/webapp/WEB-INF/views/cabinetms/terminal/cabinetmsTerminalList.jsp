@@ -155,7 +155,7 @@
 					<td>
 						<a href="${ctx}/terminal/cabinetmsTerminal/form?id=${cabinetmsTerminal.id}">修改</a>&nbsp;
 						<a href="${ctx}/terminal/cabinetmsTerminal/delete?id=${cabinetmsTerminal.id}" onclick="return confirmx('确认要删除该终端管理吗？', this.href)">删除</a>
-						<c:if test="${cabinetmsTerminal.status != '3'}">
+						<c:if test="${cabinetmsTerminal.status != '4'}">
 							<a href="javascript:void(0)" onclick="screenshot('${cabinetmsTerminal.id}');">截屏</a>&nbsp;
 							<a href="javascript:void(0)" onclick="shutdown('${cabinetmsTerminal.id}');">关机</a>
 						</c:if>
