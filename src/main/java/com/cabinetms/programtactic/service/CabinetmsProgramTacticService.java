@@ -194,6 +194,7 @@ public class CabinetmsProgramTacticService extends CrudService<CabinetmsProgramT
 			String termId = cabinetmsTerminal.getId();
 			CabinetmsTerminal editTerm = cabinetmsTerminalDao.get(termId);
 			editTerm.setProgramTactic(cabinetmsProgramTactic);
+			editTerm.setStatus(Constants.TERMINAL_STATUS_TACTIC);
 			editTerm.preUpdate();
 			cabinetmsTerminalDao.update(editTerm);
 			
@@ -308,6 +309,7 @@ public class CabinetmsProgramTacticService extends CrudService<CabinetmsProgramT
 			String termId = cabinetmsTerminal.getId();
 			CabinetmsTerminal editTerm = cabinetmsTerminalDao.get(termId);
 			editTerm.setProgramTactic(null);
+			editTerm.setStatus(Constants.TERMINAL_STATUS_FREE);
 			editTerm.preUpdate();
 			cabinetmsTerminalDao.update(editTerm);
 		}
