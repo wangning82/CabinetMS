@@ -40,7 +40,7 @@ public class CheckTerminalStatusConJob extends QuartzJobBean {
             Calendar nowTime = Calendar.getInstance();
             nowTime.setTime(new Date());
             Calendar lastTime = Calendar.getInstance();
-            lastTime.add(Calendar.MINUTE, Integer.parseInt(minute));
+            lastTime.setTime(terminal.getUpdateDate());
             System.out.println("终端IP=" + terminal.getTerminalIp() + ";上次更新时间" + sdf.format(lastTime.getTime()) + ";现在时间：" + sdf.format(nowTime.getTime()));
             if(nowTime.compareTo(lastTime) > 0){
                 terminal.setStatus(Constants.TERMINAL_STATUS_CLOSED);
