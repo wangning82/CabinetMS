@@ -123,6 +123,10 @@
                             $("#mainFrame").show();
                             status = "2";
                             break;
+                        }else{
+                            $("#mainFrame").attr("src", "");
+                            $("#mainFrame").hide();
+                            status = "3";
                         }
                     }
                     if(!playing){
