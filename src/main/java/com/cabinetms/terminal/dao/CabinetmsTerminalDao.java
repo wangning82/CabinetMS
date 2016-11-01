@@ -32,11 +32,4 @@ public interface CabinetmsTerminalDao extends CrudDao<CabinetmsTerminal> {
      */
     List<CabinetmsTerminal> findAllConnectedList(CabinetmsTerminal entity);
 
-    /**
-     * 查找所有播放的终端
-     * @param entity
-     * @return
-     */
-    List<CabinetmsTerminal> findAllPublishedList(CabinetmsTerminal entity);
-
 }
