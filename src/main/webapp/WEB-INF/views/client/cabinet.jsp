@@ -151,36 +151,30 @@
             shell.Run("shutdown /s /t 60"); // 60秒后关机
         }
 
-        function getBase64Image(img) {
-            var canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
-            var dataURL = canvas.toDataURL("image/" + ext);
-            return dataURL;
-        }
-
         // 截屏
         function screenShot() {
-            var myDate = new Date();
-            var shell = new ActiveXObject("WScript.Shell");
-            var pic = "c:\\" + myDate.getTime() + ".png";
-            shell.Run("phantomjs rasterize.js http://localhost:8080/c/client/index.do " + pic);
-            $.ajax({
-                type: "post",
-                async: false,
-                url: "${ctxc}/client/saveScreenShotPic",
-                data: {
-                    imgStr: getBase64Image(pic),
-                    ip: $("#ip").val()
-                },
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
+            html2canvas(document.body, {
+                allowTaint: true,
+                taintTest: false,
+                onrendered: function (canvas) {
+                    canvas.id = "mycanvas";
+                    var dataUrl = canvas.toDataURL(); //生成base64图片数据
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "${ctxc}/client/saveScreenShotPic",
+                        data: {
+                            imgStr: dataUrl,
+                            ip : $("#ip").val()
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+                        }
+                    });
                 }
             });
+
         }
 
         // 获取时分秒
