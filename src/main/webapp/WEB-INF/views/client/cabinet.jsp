@@ -226,6 +226,6 @@
 <body>
 <input type="hidden" name="ip" id="ip">
 <div class="marquee">&nbsp;</div>
-<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="100%"></iframe>
+<iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>
 </body>
 </html>
