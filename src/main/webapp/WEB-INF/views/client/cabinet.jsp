@@ -151,20 +151,44 @@
             shell.Run("shutdown /s /t 60"); // 60秒后关机
         }
 
+        function getBase64Image(img) {
+            var canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+            var ext = img.src.substring(img.src.lastIndexOf(".")+1).toLowerCase();
+            var dataURL = canvas.toDataURL("image/"+ext);
+            return dataURL;
+        }
+
+
         // 截屏
         function screenShot() {
-            html2canvas(document.body, {
-                allowTaint: true,
-                taintTest: false,
-                onrendered: function (canvas) {
-                    canvas.id = "mycanvas";
-                    var dataUrl = canvas.toDataURL(); //生成base64图片数据
+            var mytime = moment().format("YYYYMMDDHHmmss");
+            var shell = new ActiveXObject("WScript.Shell");
+            shell.Run("CmdCaptureWin /d c:/screenshot /f " + mytime + ".png");
+
+            window.setTimeout(function () {
+                var canvas = document.createElement("canvas");
+                var image = new Image();
+                image.setAttribute("crossOrigin", "anonymous");
+                image.onload = function () {
+                    canvas.width = this.width;
+                    canvas.height = this.height;
+                    var ctx = canvas.getContext("2d");
+                    ctx.drawImage(this, 0, 0, this.width, this.height);
+                    var ext = this.src.substring(this.src.lastIndexOf(".") + 1).toLowerCase();
+                    //var dataURL = canvas.toDataURL("image/" + ext);
+                    var dataURL = canvas.toDataURL();
+                    console.log(dataURL);
+
                     $.ajax({
                         type: "post",
                         async: false,
                         url: "${ctxc}/client/saveScreenShotPic",
                         data: {
-                            imgStr: dataUrl,
+                            imgStr: dataURL,
                             ip : $("#ip").val()
                         },
                         dataType: "json",
@@ -172,20 +196,10 @@
                             console.log(data);
                         }
                     });
-                }
-            });
+                };
+                image.src = "c:/screenshot/" + mytime + ".png";
+            }, 2000);
 
-        }
-
-        // 获取时分秒
-        function getMoment(date, time) {
-            var year = parseInt(date.substring(0, 4));
-            var month = parseInt(date.substring(4, 6));
-            var day = parseInt(date.substring(6, 8));
-            var hour = parseInt(time.substring(0, 2));
-            var minute = parseInt(time.substring(2, 4));
-            var second = parseInt(time.substring(4, 6));
-            return moment([year, month, day, hour, minute, second]);
         }
 
         $(function () {
@@ -195,6 +209,7 @@
             tactic_publish();
             tactic_undo_publish();
             window.setInterval(sendStatus, 30000);
+
         });
 
     </script>
