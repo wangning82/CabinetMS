@@ -159,7 +159,7 @@ public class Global {
 	}
 
 	public static String getScreenshotBaseDir(){
-		String dir = getConfig("screenshot.basedir");
+		String dir = getConfig("server.screenshot.basedir");
 		if (StringUtils.isBlank(dir)){
 			try {
 				dir = ServletContextFactory.getServletContext().getRealPath("/");

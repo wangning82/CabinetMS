@@ -1,12 +1,12 @@
 package com.cabinetms.client;
 
-import com.cabinetms.common.tool.Base64Util;
 import com.cabinetms.terminal.entity.CabinetmsTerminal;
 import com.cabinetms.terminal.service.CabinetmsTerminalService;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.utils.FileUtils;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -35,10 +35,23 @@ public class ClientController {
     @Autowired
     private CabinetmsTerminalService terminalService;
 
+    private String screenshotPath;
+
+    public String getScreenshotPath() {
+        return screenshotPath;
+    }
+
+    @Value("${client.screenshot.basedir}")
+    public void setScreenshotPath(String screenshotPath) {
+        this.screenshotPath = screenshotPath;
+    }
+
     @RequestMapping(value = "${clientPath}/client/index")
     public String index(HttpServletRequest request, HttpServletResponse response, Model model) {
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.addHeader("access-control-allow-credentials", "true");
+
+        model.addAttribute("screenshotPath", screenshotPath);
         return "client/cabinet";
     }
 
@@ -65,27 +78,23 @@ public class ClientController {
      * 保存截图
      *
      * @param ip
-     * @param imgStr
+     * @param filename
      * @param request
      * @deprecated
      */
     @RequestMapping(value = "${clientPath}/client/saveScreenShotPic", method = RequestMethod.POST)
     @ResponseBody
-    public void saveScreenShotPic(String ip, String imgStr, HttpServletRequest request) {
-        String realPath = Global.getScreenshotBaseDir() + Global.SCREENSHOT_BASE_URL;
-        FileUtils.createDirectory(FileUtils.path(realPath));
-        String image = imgStr.split(",")[1];
-        String screenshot = Base64Util.generateImage(image, realPath);
-
+    public void saveScreenShotPic(String ip, String filename, HttpServletRequest request) {
         CabinetmsTerminal terminal = new CabinetmsTerminal();
         terminal.setTerminalIp(ip);
-        terminal.setScreenshot(request.getContextPath() + Global.SCREENSHOT_BASE_URL + screenshot);
+        terminal.setScreenshot(request.getContextPath() + Global.SCREENSHOT_BASE_URL + filename);
         terminal.setUpdateDate(new Date());
         terminalService.updateByIP(terminal);
     }
 
     /**
      * 保存截图
+     *
      * @param ip
      * @param request
      */
