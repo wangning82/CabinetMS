@@ -73,7 +73,7 @@
                 'status': encodeURIComponent(status)
             }));
         }
-        
+
         // 消息发布
         function notice_publish() {
             var obj = $.cookie("notice");
@@ -175,17 +175,6 @@
                 }
             });
 
-        }
-
-        // 获取时分秒
-        function getMoment(date, time) {
-            var year = parseInt(date.substring(0, 4));
-            var month = parseInt(date.substring(4, 6));
-            var day = parseInt(date.substring(6, 8));
-            var hour = parseInt(time.substring(0, 2));
-            var minute = parseInt(time.substring(2, 4));
-            var second = parseInt(time.substring(4, 6));
-            return moment([year, month, day, hour, minute, second]);
         }
 
         $(function () {
