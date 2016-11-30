@@ -153,28 +153,23 @@
 
         // 截屏
         function screenShot() {
-            html2canvas(document.body, {
-                allowTaint: true,
-                taintTest: false,
-                onrendered: function (canvas) {
-                    canvas.id = "mycanvas";
-                    var dataUrl = canvas.toDataURL(); //生成base64图片数据
-                    $.ajax({
-                        type: "post",
-                        async: false,
-                        url: "${ctxc}/client/saveScreenShotPic",
-                        data: {
-                            imgStr: dataUrl,
-                            ip : $("#ip").val()
-                        },
-                        dataType: "json",
-                        success: function (data) {
-                            console.log(data);
-                        }
-                    });
+            var mytime = moment().format("YYYYMMDDHHmmss");
+            var shell = new ActiveXObject("WScript.Shell");
+            shell.Run("CmdCaptureWin /d ${screenshotPath} /f " + mytime + ".png");
+
+            $.ajax({
+                type: "post",
+                async: false,
+                url: "${ctxc}/client/saveScreenShotPic",
+                data: {
+                    filename: mytime + ".png",
+                    ip : $("#ip").val()
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
                 }
             });
-
         }
 
         $(function () {
