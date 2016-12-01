@@ -27,17 +27,13 @@
 
 				}
 			});
-			var index = 0;
-			while(index < 3){
+
+			window.setTimeout(function () {
 				var picpath = getPic(id);
 				if(picpath != ""){
 					window.open(${pageContext.request.contextPath}picpath);
-					break;
-				}else{
-					index ++;
 				}
-			}
-
+			}, 3000);
 		}
 
 		function getPic(id){
