@@ -115,7 +115,7 @@
                     for(var i = 0; i < obj.detailList.length; i ++){
                         var program = obj.detailList[i];
                         if(program.startTime <= mytime && program.endTime >= mytime){
-                            if(programId != program.id){
+                            if(programId != program.id || $("#mainFrame").attr("src") == ""){
                                 $('#mainFrame').attr("src", "${ctx}/program/program/preview?id=" + program.id);
                                 programId = program.id;
                             }
